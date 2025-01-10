@@ -74,7 +74,7 @@ export default function Header() {
     <>
       <Box>
         <LogoBox onClick={logoClick}>
-          <Logo src={logo} alt="Logo" />
+          <Logo src={"/images/logo.png"} alt="Logo" />
           <LogoName>Plan It Korea</LogoName>
         </LogoBox>
         <OptionBox>
