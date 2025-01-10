@@ -27,7 +27,7 @@ import {
   MainLi,
   Card,
   Error,
-} from "../../styles/myPage/Main";
+} from "./MyPageSt";
 import { NavLink, useNavigate } from "react-router-dom";
 import { Reservation, User } from "../../types/type";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";

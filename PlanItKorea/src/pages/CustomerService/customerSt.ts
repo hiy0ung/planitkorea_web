@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import theme from "../theme";
+import theme from "../../styles/theme";
 
 export const GroupLine = styled.span`
   border: 1px solid ${theme.palette.primary.light};

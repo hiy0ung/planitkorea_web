@@ -1,6 +1,6 @@
 import React, { ChangeEvent, useEffect, useState } from "react";
-import { ContentDiv } from "../../styles/customer/customer";
-import { ModalText } from "../../styles/Sign";
+import { ContentDiv } from "./customerSt";
+import { ModalText } from "../Login/SignSt";
 import { Inquiry, InquiryType } from "../../types/type";
 import Modal, { ModalButton, Overlay } from "../../component/Modal";
 import { NavLink, useLocation, useParams } from "react-router-dom";
@@ -23,10 +23,10 @@ import {
   Select,
   SelectCategoryDiv,
   TitleDiv,
-} from "../../styles/customer/Inquiry";
+} from "./InquirySt";
 import axios from "axios";
 import useAuthStore from "../../stores/use.auth.store";
-import { Error } from "../../styles/myPage/Main";
+import { Error } from "../MyPage/MyPageSt";
 import useIdStore from "../../stores/use.nexId.store";
 
 export default function InquiryCRUD() {

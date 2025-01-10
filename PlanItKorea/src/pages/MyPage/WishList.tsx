@@ -5,13 +5,11 @@ import {
   Card,
   Error,
   GroupLine,
-  MainDiv,
-  MainInner,
   NavDiv,
   NavInnerDiv,
   NavTitle,
   WishInner,
-} from "../../styles/myPage/Main";
+} from "./MyPageSt";
 import { NavLink, useNavigate } from "react-router-dom";
 import {
   Category,
@@ -21,7 +19,7 @@ import {
   ProductDiv,
   ProductImg,
   ProductName,
-} from "../../styles/product/AllProduct";
+} from "../Product/AllProductSt";
 import { Checkbox } from "@mui/material";
 import { Favorite, FavoriteBorder } from "@mui/icons-material";
 import ReactPaginate from "react-paginate";

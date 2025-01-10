@@ -4,7 +4,7 @@ import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import Typography from "@mui/material/Typography";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { ContentDiv, ContentInnerDiv, PageDiv } from "../../styles/customer/customer";
+import { ContentDiv, ContentInnerDiv, PageDiv } from "./customerSt";
 import { Announcement } from "../../types/type";
 import axios from "axios";
 import ReactPaginate from "react-paginate";

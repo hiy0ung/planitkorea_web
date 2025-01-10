@@ -18,7 +18,7 @@ import {
   MenuSingInButton,
   OptionBox,
   SingInButton,
-} from "../styles/component/HeaderStyle";
+} from "./HeaderSt";
 import useAuthStore from "../stores/use.auth.store";
 import useSelectStore from "../stores/use.select.store";
 

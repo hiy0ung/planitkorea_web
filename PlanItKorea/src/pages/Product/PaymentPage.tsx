@@ -12,14 +12,14 @@ import {
   RightDiv,
   SubTitle,
   Title,
-} from "../../styles/product/payment";
+} from "./paymentSt";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import KaKaoPay from "../../assets/images/payment_icon_yellow_medium.png"
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
-import { PersonBar, PriceBar, ProductName, ReservationBar } from "../../styles/product/Detail";
+import { PersonBar, PriceBar, ProductName, ReservationBar } from "./DetailSt";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCalendar, faWonSign } from "@fortawesome/free-solid-svg-icons";
-import { GroupLine } from "../../styles/customer/customer";
+import { GroupLine } from "../CustomerService/customerSt";
 import { Reservation, User } from "../../types/type";
 import axios from "axios";
 import { format } from "date-fns";

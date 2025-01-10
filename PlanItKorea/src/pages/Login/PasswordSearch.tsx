@@ -13,7 +13,7 @@ import {
   SearchDiv,
   InputPasswordField,
   ModalText,
-} from "../../styles/Sign";
+} from "./SignSt";
 import { Logo, LogoDIv, LogoName } from "../../styles/logo";
 import Modal from "../../component/Modal";
 import { NavLink } from "react-router-dom";

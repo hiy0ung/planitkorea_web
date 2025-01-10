@@ -7,7 +7,7 @@ import {
   MenuBox,
   TitleBox,
   TitleText,
-} from "../styles/customer/customer";
+} from "../pages/CustomerService/customerSt";
 import styled from "styled-components";
 import { NavLink } from "react-router-dom";
 import path from "path";
