@@ -43,14 +43,14 @@ import {
   RightImgDiv,
   RightInnerImgDiv,
   UserIdInfo,
-} from "../../styles/product/Detail";
+} from "./DetailSt";
 import MapIcon from "@mui/icons-material/Map";
 import DatePicker from "react-datepicker";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCalendar, faWonSign } from "@fortawesome/free-solid-svg-icons";
-import { GroupLine } from "../../styles/customer/customer";
-import { Button } from "../../styles/Sign";
+import { GroupLine } from "../CustomerService/customerSt";
+import { Button } from "../Login/SignSt";
 import ImageSlider from "./sliderImg/ImageSlider";
 import NaverMap from "../../component/NaverMap";
 import useSearchStore from "../../stores/use.search.store";

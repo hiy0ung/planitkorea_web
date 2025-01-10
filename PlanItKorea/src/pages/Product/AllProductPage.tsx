@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { GroupLine } from "../../styles/Sign";
+import { GroupLine } from "../Login/SignSt";
 import {
   AllDiv,
   AllProductDiv,
@@ -13,8 +13,8 @@ import {
   ProductImg,
   ProductName,
   ResetButton,
-} from "../../styles/product/AllProduct";
-import { PageDiv } from "../../styles/product/AllProduct";
+  PageDiv
+} from "../Product/AllProductSt";
 import ReactPaginate from "react-paginate";
 import {
   Checkbox,

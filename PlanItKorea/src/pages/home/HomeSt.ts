@@ -138,3 +138,17 @@ export const PriceDiv = styled.div`
   padding-top: 15px;
   font-weight: bold;
 `;
+
+export const ImgDiv = styled.div`
+  width: 100%;
+  height: 350px;
+  display: flex;
+  justify-content: center;
+  align-content: center;
+`;
+
+export const MainImg = styled.img`
+  width: 100%;
+  height: 100%;
+  border-radius: 5px;
+`;

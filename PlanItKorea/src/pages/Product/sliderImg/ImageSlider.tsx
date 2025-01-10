@@ -5,7 +5,7 @@ import styled from "styled-components";
 import {
   ImgPickDiv,
   ModalMain,
-} from "../../../styles/product/Detail";
+} from "../DetailSt";
 import theme from "../../../styles/theme";
 interface ImageSliderProps {
   images?: string[];

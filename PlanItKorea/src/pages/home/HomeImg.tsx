@@ -3,7 +3,7 @@ import springImg from "../../assets/images/mainImg/spring.jpg";
 import summerImg from "../../assets/images/mainImg/summer.jpg";
 import fallImg from "../../assets/images/mainImg/fall.jpg";
 import winterImg from "../../assets/images/mainImg/winter.jpg";
-import styled from "styled-components";
+import { ImgDiv, MainImg } from "./HomeSt";
 
 type Season = "spring" | "summer" | "fall" | "winter";
 
@@ -27,19 +27,7 @@ const images: { [key in Season]: string } = {
   winter: winterImg,
 };
 
-const ImgDiv = styled.div`
-  width: 100%;
-  height: 350px;
-  display: flex;
-  justify-content: center;
-  align-content: center;
-`;
 
-const MainImg = styled.img`
-  width: 100%;
-  height: 100%;
-  border-radius: 5px;
-`;
 
 export default function HomeImg() {
   const currentSeason = getSeason(new Date());

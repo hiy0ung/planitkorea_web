@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { ContentDiv } from "../../styles/customer/customer";
+import { ContentDiv } from "./customerSt";
 import {
   AcContentDiv,
   AccordionDiv,
@@ -11,7 +11,7 @@ import {
   InquiryBtn,
   UDButton,
   UserIdDiv,
-} from "../../styles/customer/Inquiry";
+} from "./InquirySt";
 import { NavLink } from "react-router-dom";
 import { Inquiry } from "../../types/type";
 import {

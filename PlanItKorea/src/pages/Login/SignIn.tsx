@@ -16,7 +16,7 @@ import {
   InputIdField,
   InputPasswordField,
   Form,
-} from "../../styles/Sign";
+} from "./SignSt";
 import axios from "axios";
 import { User } from "../../types/type";
 
