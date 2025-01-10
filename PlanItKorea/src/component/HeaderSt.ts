@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import theme from "../theme";
+import theme from "../styles/theme";
 
 export const Box = styled.div`
   padding: 0px 20px;

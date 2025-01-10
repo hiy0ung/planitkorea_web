@@ -11,7 +11,7 @@ import {
   InputPhoneField,
   ModalText,
   GroupLine,
-} from "../../styles/Sign";
+} from "./SignSt";
 import { Logo, LogoDIv, LogoName } from "../../styles/logo";
 import logoImg from "../../assets/images/logo.png";
 import styled from "styled-components";

@@ -12,7 +12,7 @@ import {
   GroupLine,
   SearchDiv,
   ModalText,
-} from "../../styles/Sign";
+} from "./SignSt";
 import { Logo, LogoDIv, LogoName } from "../../styles/logo";
 import Modal from "../../component/Modal";
 import { NavLink } from "react-router-dom";

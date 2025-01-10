@@ -5,7 +5,7 @@ import gapyeng from "../../assets/images/1/gapyeong.jpg";
 import busan from "../../assets/images/1/busan.jpg";
 import gyengju from "../../assets/images/1/gyengju.jpg";
 import seoul from "../../assets/images/1/seoul.jpg";
-import { City, CityImg, CityName, CityWarp, GroupLabel, GroupLine, HomeBox, MostTicket, MostTicketBox, MostUsed, MostUsedBox, PopularCityBox, PriceDiv, ProductCity, ProductDetail, ProductImg, ProductName } from "../../styles/home/Home";
+import { City, CityImg, CityName, CityWarp, GroupLabel, GroupLine, HomeBox, MostUsed, MostUsedBox, PopularCityBox, PriceDiv, ProductCity, ProductDetail, ProductImg, ProductName } from "./HomeSt";
 import { BerthProduct } from "../../types/type";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
