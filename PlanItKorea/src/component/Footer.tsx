@@ -1,9 +1,4 @@
-import React from "react";
-import styled from "styled-components";
-import theme from "../styles/theme";
 import { NavLink } from "react-router-dom";
-import { Palette } from "@mui/icons-material";
-import LogoImg from "../assets/images/logo.png"
 import GitHubImg from "../assets/images/github.png"
 import { BottomDiv, Caption, CaptionDIv, CustomerServiceButton, CustomerServiceButtonDiv, FooterDiv, GitHubBox, GitHubLogo, Logo, LogoBox, LogoLink, LogoName } from "./FooterSt";
 
@@ -33,7 +28,7 @@ export default function Footer() {
           <LogoBox>
           <p style={{marginBottom: '10px', fontSize:'12px',color:'white', paddingLeft: '10px'}}>© Plan It Korea. All rights reserved.</p>
           <LogoLink href="./">
-            <Logo src={LogoImg} alt="Logo" />
+            <Logo src={"/images/logo.png"} alt="Logo" />
             <LogoName>Plan It Korea</LogoName>
           </LogoLink>
           </LogoBox>

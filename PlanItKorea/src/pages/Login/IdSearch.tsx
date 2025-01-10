@@ -1,5 +1,4 @@
 import React, { ChangeEvent, useState } from "react";
-import logo from "../../assets/images/logo.png";
 import {
   AllDiv,
   InputContainer,
@@ -107,7 +106,7 @@ export default function IdSearch() {
       <AllDiv>
         <LogoDIv style={{ marginBottom: "100px", alignItems: "center" }}>
 
-          <Logo src={logo} alt="logo" />
+          <Logo src={"/images/logo.png"} alt="logo" />
           <LogoName>Plan It Korea</LogoName>
         </LogoDIv>
         <SearchDiv>
