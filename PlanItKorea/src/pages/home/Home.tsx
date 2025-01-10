@@ -1,15 +1,16 @@
 import React, { useEffect, useState } from "react";
-import HomeImg from "./HomeImg";
-import jeju from "../../assets/images/1/jeju.jpg";
-import gapyeng from "../../assets/images/1/gapyeong.jpg";
-import busan from "../../assets/images/1/busan.jpg";
-import gyengju from "../../assets/images/1/gyengju.jpg";
-import seoul from "../../assets/images/1/seoul.jpg";
+// import HomeImg from "./HomeImg";
+// import jeju from "../../assets/images/1/jeju.jpg";
+// import gapyeng from "../../assets/images/1/gapyeong.jpg";
+// import busan from "../../assets/images/1/busan.jpg";
+// import gyengju from "../../assets/images/1/gyengju.jpg";
+// import seoul from "../../assets/images/1/seoul.jpg";
 import { City, CityImg, CityName, CityWarp, GroupLabel, GroupLine, HomeBox, MostUsed, MostUsedBox, PopularCityBox, PriceDiv, ProductCity, ProductDetail, ProductImg, ProductName } from "./HomeSt";
 import { BerthProduct } from "../../types/type";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import useSearchStore, { SearchData } from "../../stores/use.search.store";
+import HomeImg from "./HomeImg";
 
 
 
@@ -56,23 +57,23 @@ export default function Home() {
         </GroupLine>
         <PopularCityBox>
           <City onClick={() => handleCityClick("제주도") }>
-            <CityImg src={jeju} />
+            <CityImg src={"/images/logo.png"} />
             <CityName>제주도</CityName>
           </City>
           <City onClick={() => handleCityClick('서울') }>
-            <CityImg src={seoul} />
+            <CityImg src={"/images/logo.png"} />
             <CityName>서울</CityName>
           </City>
           <City onClick={() => handleCityClick('부산') }>
-            <CityImg src={busan} />
+            <CityImg src={"/images/logo.png"} />
             <CityName>부산</CityName>
           </City>
           <City onClick={() => handleCityClick('가평') }>
-            <CityImg src={gapyeng} />
+            <CityImg src={"/images/logo.png"} />
             <CityName>가평</CityName>
           </City>
           <City onClick={() => handleCityClick('경주') }>
-            <CityImg src={gyengju} />
+            <CityImg src={"/images/logo.png"} />
             <CityName>경주</CityName>
           </City>
         </PopularCityBox>

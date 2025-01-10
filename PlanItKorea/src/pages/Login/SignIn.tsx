@@ -1,7 +1,6 @@
 import React, { ChangeEvent, useState } from "react";
 import styled from "styled-components";
 import { Logo, LogoDIv, LogoName } from "../../styles/logo";
-import logoImg from "../../assets/images/logo.png";
 import theme from "../../styles/theme";
 import { NavLink, useNavigate } from "react-router-dom";
 import useAuthStore from "../../stores/use.auth.store";
@@ -117,7 +116,7 @@ export default function SignIn() {
       <GroupLine />
       <AllDiv>
         <LogoDIv style={{ marginBottom: "40px", alignItems: "center" }}>
-          <Logo src={logoImg} alt="logo" />
+          <Logo src={"/images/logo.png"} alt="logo" />
           <LogoName>Plan It Korea</LogoName>
         </LogoDIv>
         <SignInDiv>

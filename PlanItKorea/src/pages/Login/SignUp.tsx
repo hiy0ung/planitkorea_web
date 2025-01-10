@@ -13,7 +13,6 @@ import {
   GroupLine,
 } from "./SignSt";
 import { Logo, LogoDIv, LogoName } from "../../styles/logo";
-import logoImg from "../../assets/images/logo.png";
 import styled from "styled-components";
 import theme from "../../styles/theme";
 import { NavLink, useNavigate } from "react-router-dom";
@@ -225,7 +224,7 @@ export default function SignUp() {
       <GroupLine />
       <AllDiv style={{ padding: "8% 10%" }}>
         <LogoDIv style={{ marginBottom: "20px", alignItems: "center" }}>
-          <Logo src={logoImg} alt="logo" />
+          <Logo src={"/images/logo.png"} alt="logo" />
           <LogoName>Plan It Korea</LogoName>
         </LogoDIv>
         <SignUpDiv>

@@ -157,7 +157,7 @@ export default function PasswordSearch() {
       <GroupLine />
       <AllDiv>
         <LogoDIv style={{ marginBottom: "20px", alignItems: "center" }}>
-          <Logo src={logo} alt="logo" />
+          <Logo src={"/images/logo.png"} alt="logo" />
           <LogoName>Plan It Korea</LogoName>
         </LogoDIv>
         <SearchDiv>
