@@ -11,6 +11,7 @@ import {
   InputPhoneField,
   ModalText,
   GroupLine,
+  Button,
 } from "./SignSt";
 import { Logo, LogoDIv, LogoName } from "../../styles/logo";
 import styled from "styled-components";
@@ -19,32 +20,29 @@ import { NavLink, useNavigate } from "react-router-dom";
 import Modal, { ModalButton, Overlay } from "../../component/Modal";
 import useAuthStore from "../../stores/use.auth.store";
 import axios from "axios";
-import { User } from "../../types/type";
-
-export const Button = styled.button`
-  border: none;
-  background-color: ${theme.palette.primary.main};
-  border-radius: 15px;
-  height: 47px;
-  max-width: 1500px;
-  width: 100%;
-  margin-bottom: 0px;
-  color: white;
-  margin-top: 15px;
-  &:hover {
-    background-color: ${theme.palette.primary.dark};
-  }
-`;
+import { NewUser, User } from "../../types/type";
 
 
+
+// 회원가입 정규식
+// 아이디 8~14자의 영문, 숫자 포함 입력
+const idRegex = /^[a-zA-Z0-9]{8,14}$/;
+const passwordRegex = /^(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
+const nameRegex = /^[가-힣A-Za-z]+$/;
+const birthDateRegex = /^\d{8}$/;
+const phoneNumberRegex = /^\d{9,11}$/;
+const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
 export default function SignUp() {
-  const [id, setId] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
-  const [passwordConfirm, setPasswordConfirm] = useState<string>("");
-  const [name, setName] = useState<string>("");
-  const [birthDate, setBirthDate] = useState<string>("");
-  const [phoneNumber, setPhoneNumber] = useState<string>("");
+  const [signUpData, setSignUpData] = useState<NewUser>({
+    userId: '',
+    password: '',
+    confirmPw: '',
+    username: '',
+    birthDate: '',
+    phoneNumber: '',
+    email: ''
+  });
 
   const [idError, setIdError] = useState<string>("");
   const [passwordError, setPasswordError] = useState<string>("");
@@ -52,164 +50,106 @@ export default function SignUp() {
   const [nameError, setNameError] = useState<string>("");
   const [birthDateError, setBirthDateError] = useState<string>("");
   const [phoneNumberError, setPhoneNumberError] = useState<string>("");
+  const [emailError, setEmailError] = useState<string>("");
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
   //# 전역 상태 예시 //
   const user = useAuthStore((state) => state.user);
   const navigate = useNavigate();
 
-  const handleIdChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const idValue = event.target.value;
-    setId(idValue);
-    if (!idValue) {
-      setIdError("아이디를 입력해주세요.");
-    } else {
-      setIdError("");
-    }
+  //& 회원가입 데이터 할당
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const element = e.target;
+
+    setSignUpData({
+      ...signUpData,
+      [element.name]: element.value,
+    });
   };
-
-  const handlePasswordChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const passwordValue = event.target.value;
-    setPassword(passwordValue);
-    const passwordRegex = /^(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
-
-    if (password && !passwordRegex.test(password)) {
-      setPasswordError("비밀번호는 8자 이상, 특수문자가 포함되어야 합니다.");
-    } else {
-      setPasswordError("");
-    }
-  };
-
-  const handlePasswordConfirmChange = (
-    event: ChangeEvent<HTMLInputElement>
-  ) => {
-    const passwordConfirmValue = event.target.value;
-    setPasswordConfirm(passwordConfirmValue);
-
-    if (passwordConfirmValue && password !== passwordConfirmValue) {
-      setPasswordConfirmError("비밀번호가 일치하지 않습니다.");
-    } else {
-      setPasswordConfirmError("");
-    }
-  };
-
-  const handleNameChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const nameValue = event.target.value;
-    setName(nameValue);
-    const nameRegex = /^[가-힣A-Za-z]+$/;
-
-    if (name && !nameRegex.test(name)) {
-      setNameError("한글, 영문 대/소문자 사용(특수기호, 공백 사용 불가)");
-    } else {
-      setNameError("");
-    }
-  };
-
-  const handleBirthDateChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const birthDateValue = event.target.value;
-    setBirthDate(birthDateValue);
-    const birthDateRegex = /^[0-9]{7}$/;
-
-    if (birthDate && !birthDateRegex.test(birthDate)) {
-      setBirthDateError("숫자 8자리 입력해주세요");
-    } else {
-      setBirthDateError("");
-    }
-  };
-
-  const handlePhoneNumberChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const phoneNumberValue = event.target.value;
-    setPhoneNumber(phoneNumberValue);
-    const phoneNumberRegex = /^\d{9,11}$/;
-
-    if (phoneNumber && !phoneNumberRegex.test(phoneNumber)) {
-      setPhoneNumberError("전화번호 8자리 입력해주세요");
-    } else {
-      setPhoneNumberError("");
-    }
-  };
-
+  
   const handleSubmit = async(event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
 
     let valid = true;
 
-    if (!id) {
+    if (!signUpData.userId) {
       setIdError("아이디를 입력해주세요.");
       valid = false;
+    } else if (!idRegex.test(signUpData.userId)) {
+      setIdError("아이디 8~14자의 영문, 숫자 포함 입력해주세요");
+      valid = false;
+    } else {
+      valid = true;
     }
-    if (!password) {
+    
+    if (!signUpData.password) {
+      setPasswordError("비밀번호는 8자 이상, 특수문자가 포함되어야 합니다.");
+      valid = false;
+    } else if (!passwordRegex.test(signUpData.password)) {
       setPasswordError("비밀번호는 8자 이상, 특수문자가 포함되어야 합니다.");
       valid = false;
     } else {
-      const passwordRegex = /^(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
-      if (!passwordRegex.test(password)) {
-        setPasswordError("비밀번호는 8자 이상, 특수문자가 포함되어야 합니다.");
-        valid = false;
-      }
+      valid = true;
     }
-
-    if (!passwordConfirm) {
+    
+    if (!signUpData.confirmPw) {
       setPasswordConfirmError("비밀번호 확인을 입력해주세요.");
       valid = false;
-    } else if (password !== passwordConfirm) {
+    } else if (signUpData.password !== signUpData.confirmPw) {
       setPasswordConfirmError("비밀번호가 일치하지 않습니다.");
       valid = false;
+    } else {
+      valid = true;
     }
-
-    if (!name) {
+    
+    if (!signUpData.username) {
       setNameError("이름을 입력해주세요.");
       valid = false;
+    } else if (!nameRegex.test(signUpData.username)) {
+      setNameError("한글, 영문 대/소문자 사용(특수기호, 공백 사용 불가)");
+      valid = false;
     } else {
-      const nameRegex = /^[가-힣A-Za-z]+$/;
-      if (!nameRegex.test(name)) {
-        setNameError("한글, 영문 대/소문자 사용(특수기호, 공백 사용 불가)");
-        valid = false;
-      }
+      valid = true;
     }
-
-    if (!birthDate) {
+    
+    if (!signUpData.birthDate) {
       setBirthDateError("생년월일을 입력해주세요.");
       valid = false;
-    } else {
-      const birthDateRegex = /^[0-9]{8}$/;
-      if (!birthDateRegex.test(birthDate)) {
-        setBirthDateError("숫자 8자리 입력해주세요");
-        valid = false;
-      }
-    }
-
-    if (!phoneNumber) {
-      setPhoneNumberError("핸드폰 번호를 입력해주세요.");
+    } else if (!birthDateRegex.test(signUpData.birthDate)) {
+      setBirthDateError("숫자 8자리 입력해주세요");
       valid = false;
     } else {
-      const phoneNumberRegex = /^\d{9,11}$/;
-      if (!phoneNumberRegex.test(phoneNumber)) {
-        setPhoneNumberError("핸드폰 번호는 9~11자리의 숫자로 입력해주세요.");
-        valid = false;
-      }
+      valid = true;
     }
-
+    
+    if (!signUpData.phoneNumber) {
+      setPhoneNumberError("핸드폰 번호를 입력해주세요.");
+      valid = false;
+    } else if (!phoneNumberRegex.test(signUpData.phoneNumber)) {
+      setPhoneNumberError("핸드폰 번호는 9~11자리의 숫자로 입력해주세요.");
+      valid = false;
+    } else {
+      valid = true;
+    }
+    
+    if (!signUpData.email) {
+      setEmailError("이메일을을 입력해주세요.");
+      valid = false;
+    } else if (!emailRegex.test(signUpData.email)) {
+      setEmailError("이메일 형식에 맞지 않습니다.");
+      valid = false;
+    } else {
+      valid = true;
+    }
+    
     if (valid) {
-      const signUpData = {
-        id,
-        password,
-        name,
-        birthDate,
-        phoneNumber,
-        wishList:[],
-        reservation:[]
-      };
-
+      console.log(signUpData);
       try {
-        await axios.post<User>("http://localhost:3001/users", signUpData)
+        await axios.post("http://localhost:3001/users", signUpData)
         setIsModalOpen(true);
       }catch(error) {
         console.error('회원정보 저장 실패',error);
       }
-      //! 회원가입 정보!!!
-      
-
     } else {
       return;
     }
@@ -231,10 +171,10 @@ export default function SignUp() {
           <InputContainer>
             <InputIdField
               type="text"
-              name="id"
+              name="userId"
               placeholder="아이디"
-              value={id}
-              onChange={handleIdChange}
+              value={signUpData.userId}
+              onChange={handleInputChange}
               hasIdError={!!idError}
               required
             />
@@ -245,8 +185,8 @@ export default function SignUp() {
               type="password"
               name="password"
               placeholder="비밀번호"
-              onChange={handlePasswordChange}
-              value={password}
+              onChange={handleInputChange}
+              value={signUpData.password}
               hasPasswordError={!!passwordError}
               required
             />
@@ -259,10 +199,10 @@ export default function SignUp() {
           <InputContainer>
             <InputPasswordField
               type="password"
-              name="password"
+              name="confirmPw"
               placeholder="비밀번호 확인"
-              onChange={handlePasswordConfirmChange}
-              value={passwordConfirm}
+              onChange={handleInputChange}
+              value={signUpData.confirmPw}
               hasPasswordError={!!passwordConfirmError}
               required
             />
@@ -273,10 +213,10 @@ export default function SignUp() {
           <InputContainer>
             <InputNameField
               type="text"
-              name="name"
+              name="username"
               placeholder="이름"
-              value={name}
-              onChange={handleNameChange}
+              value={signUpData.username}
+              onChange={handleInputChange}
               hasNameError={!!nameError}
               required
             />
@@ -285,10 +225,10 @@ export default function SignUp() {
           <InputContainer>
             <InputBirthDateField
               type="text"
-              name="name"
+              name="birthDate"
               placeholder="생년월일 8자리"
-              value={birthDate}
-              onChange={handleBirthDateChange}
+              value={signUpData.birthDate}
+              onChange={handleInputChange}
               hasBirthDateError={!!birthDateError}
               required
             />
@@ -301,15 +241,31 @@ export default function SignUp() {
           <InputContainer>
             <InputPhoneField
               type="text"
-              name="phone"
+              name="phoneNumber"
               placeholder="핸드폰 번호"
-              value={phoneNumber}
-              onChange={handlePhoneNumberChange}
+              value={signUpData.phoneNumber}
+              onChange={handleInputChange}
               hasPhoneError={!!phoneNumberError}
               required
             />
             {phoneNumberError ? (
               <ErrorMessage>{phoneNumberError}</ErrorMessage>
+            ) : (
+              <></>
+            )}
+          </InputContainer>
+          <InputContainer>
+            <InputPhoneField
+              type="email"
+              name="email"
+              placeholder="이메일"
+              value={signUpData.email}
+              onChange={handleInputChange}
+              hasPhoneError={!!emailError}
+              required
+            />
+            {emailError ? (
+              <ErrorMessage>{emailError}</ErrorMessage>
             ) : (
               <></>
             )}
