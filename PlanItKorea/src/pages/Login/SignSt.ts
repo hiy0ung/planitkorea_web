@@ -52,6 +52,8 @@ export const ErrorMessage = styled.div`
 `;
 
 
+
+
 export const InputIdField = styled.input<{ hasIdError: boolean }>`
   background-color: #f4f4f4;
   border-radius: 15px;

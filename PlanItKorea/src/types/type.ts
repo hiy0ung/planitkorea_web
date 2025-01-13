@@ -1,4 +1,5 @@
 //! 유저 타입(회원 가입 시)
+// 구
 export interface User {
   id: string;
   password: string;
@@ -8,6 +9,19 @@ export interface User {
   wishList: number[];
   reservation: Reservation[];
 }
+
+// 신
+export type NewUser = {
+  userId: string;
+  password: string;
+  confirmPw: string;
+  username: string;
+  birthDate: string;
+  phoneNumber: string;
+  email: string;
+}
+
+
 
 //! 예약할때 타입
 export interface Reservation {
