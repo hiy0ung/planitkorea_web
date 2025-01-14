@@ -15,18 +15,20 @@ export const SignInDiv = styled.div`
   margin-bottom: 20px;
 `;
 
-export const InputField = styled.input`
-  background-color: #f4f4f4f4;
-  border-radius: 15px;
-  border: none;
-  height: 47px;
-  max-width: 1500px;
+export const InputContainer = styled.div`
+  width: 50%;
+  max-width: 1000px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+`;
+
+export const InputContainer2 = styled.div`
   width: 100%;
-  padding-left: 5%;
-  margin-bottom: 20px;
-  &:hover {
-    background-color: #e0e0e0;
-  }
+  max-width: 1000px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
 `;
 
 export const InputLabel = styled.label`
@@ -37,22 +39,26 @@ export const InputLabel = styled.label`
   align-self: flex-start;
 `;
 
-export const InputContainer = styled.div`
-  width: 50%;
-  max-width: 1000px;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-`;
-
 export const ErrorMessage = styled.div`
   color: red;
   font-size: 12px;
   margin-bottom: 10px;
+  margin-left: 15px;
 `;
 
+export const SuccessMessage = styled.div`
+  color:#77b1fd;
+  font-size: 12px;
+  margin-bottom: 10px;
+  margin-left: 15px;
+  font-weight: bold;
+`;
 
-
+export const DuplicationContainer = styled.div`
+  display: flex;
+  width: 50%;
+  justify-content: space-between;
+`
 
 export const InputIdField = styled.input<{ hasIdError: boolean }>`
   background-color: #f4f4f4;
@@ -61,8 +67,8 @@ export const InputIdField = styled.input<{ hasIdError: boolean }>`
     props.hasIdError ? `2px solid ${theme.palette.secondary.main}` : "none"};
   height: 47px;
   max-width: 1500px;
-  width: 100%;
-  padding-left: 5%;
+  width: 95%;
+  padding-left: 6%;
   margin-bottom: 15px;
   &:hover {
     background-color: #e0e0e0;
@@ -73,6 +79,7 @@ export const InputIdField = styled.input<{ hasIdError: boolean }>`
     outline: none;
   }
 `;
+
 export const InputPasswordField = styled.input<{ hasPasswordError: boolean }>`
   background-color: #f4f4f4;
   border-radius: 15px;
@@ -96,6 +103,7 @@ export const InputPasswordField = styled.input<{ hasPasswordError: boolean }>`
     outline: none;
   }
 `;
+
 export const InputNameField = styled.input<{ hasNameError: boolean }>`
   background-color: #f4f4f4;
   border-radius: 15px;
@@ -159,6 +167,26 @@ export const InputPhoneField = styled.input<{ hasPhoneError: boolean }>`
       props.hasPhoneError
         ? `2px solid ${theme.palette.secondary.main}`
         : "none"};
+    outline: none;
+  }
+`;
+
+export const InputEmailField = styled.input<{ hasEmailError: boolean }>`
+  background-color: #f4f4f4;
+  border-radius: 15px;
+  border: ${(props) =>
+    props.hasEmailError ? `2px solid ${theme.palette.secondary.main}` : "none"};
+  height: 47px;
+  max-width: 100%;
+  width: 95%;
+  padding-left: 6%;
+  margin-bottom: 15px;
+  &:hover {
+    background-color: #e0e0e0;
+  }
+  &:focus {
+    border: ${(props) =>
+      props.hasEmailError ? `2px solid ${theme.palette.secondary.main}` : "none"};
     outline: none;
   }
 `;
