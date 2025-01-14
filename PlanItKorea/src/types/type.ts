@@ -13,14 +13,25 @@ export interface User {
 // 신
 export type NewUser = {
   userId: string;
-  password: string;
-  confirmPw: string;
-  username: string;
-  birthDate: string;
-  phoneNumber: string;
-  email: string;
+  userPassword: string;
+  checkPassword: string;
+  userName: string;
+  userBirthDate: string;
+  userPhone: string;
+  userEmail: string;
 }
 
+// 중복확인 에러 메세지 타입
+export type DuplicationError = {
+  userId: string,
+  userEmail: string
+}
+
+// 중복확인 성공 메세지 타입
+export type DuplicationSuccess = {
+  userId: string,
+  userEmail: string
+}
 
 
 //! 예약할때 타입
