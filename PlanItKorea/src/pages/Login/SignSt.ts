@@ -8,7 +8,7 @@ export const AllDiv = styled.div`
   overflow: auto;
 `;
 
-export const SignInDiv = styled.div`
+export const LoginDiv = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -69,6 +69,26 @@ export const InputIdField = styled.input<{ hasIdError: boolean }>`
   max-width: 1500px;
   width: 95%;
   padding-left: 6%;
+  margin-bottom: 15px;
+  &:hover {
+    background-color: #e0e0e0;
+  }
+  &:focus {
+    border: ${(props) =>
+      props.hasIdError ? `2px solid ${theme.palette.secondary.main}` : "none"};
+    outline: none;
+  }
+`;
+
+export const InputIdField2 = styled.input<{ hasIdError: boolean }>`
+  background-color: #f4f4f4;
+  border-radius: 15px;
+  border: ${(props) =>
+    props.hasIdError ? `2px solid ${theme.palette.secondary.main}` : "none"};
+  height: 47px;
+  max-width: 1500px;
+  width: 100%;
+  padding-left: 5%;
   margin-bottom: 15px;
   &:hover {
     background-color: #e0e0e0;
