@@ -7,7 +7,7 @@ import Footer from "./component/Footer";
 import CustomerBar from "./component/CustomerBar";
 
 import IndexHome from "./pages/home/Home";
-import SignIn from "./pages/Login/SignIn";
+import Login from "./pages/Login/Login";
 import SignUp from "./pages/Login/SignUp";
 import IdSearch from "./pages/Login/IdSearch";
 import PasswordSearch from "./pages/Login/PasswordSearch";
@@ -59,7 +59,7 @@ function App() {
         <MainContainer>
           <Routes>
             <Route path="/" element={<IndexHome />} />
-            <Route path="/signIn" element={<SignIn />} />
+            <Route path="/signIn" element={<Login />} />
             <Route path="/signUp" element={<SignUp />} />
             <Route path="/idSearch" element={<IdSearch />} />
             <Route path="/passwordSearch" element={<PasswordSearch />} />

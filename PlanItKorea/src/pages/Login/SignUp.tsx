@@ -1,7 +1,7 @@
 import React, { ChangeEvent, useState } from "react";
 import {
   AllDiv,
-  SignInDiv as SignUpDiv,
+  LoginDiv as SignUpDiv,
   InputContainer,
   ErrorMessage,
   InputIdField,
@@ -22,7 +22,6 @@ import styled from "styled-components";
 import theme from "../../styles/theme";
 import { NavLink, useNavigate } from "react-router-dom";
 import Modal, { ModalButton, Overlay } from "../../component/Modal";
-import useAuthStore from "../../stores/use.auth.store";
 import axios from "axios";
 import { DuplicationError, DuplicationSuccess, NewUser, User } from "../../types/type";
 
@@ -72,10 +71,6 @@ export default function SignUp() {
 
   //! submit 버튼 상태 관리
   const [isSubmit, setIsSubmit] = useState<boolean>(false);
-
-  //# 전역 상태 예시 //
-  const user = useAuthStore((state) => state.user);
-  const navigate = useNavigate();
 
   //& 중복확인
   const userIdDuplicationCheck = async () => {
@@ -313,10 +308,6 @@ export default function SignUp() {
     } 
   };
 
-  if (!user) {
-    navigate("/signIn");
-    return null;
-  }
   return (
     <>
       <GroupLine />

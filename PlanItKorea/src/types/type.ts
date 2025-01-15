@@ -33,6 +33,24 @@ export type DuplicationSuccess = {
   userEmail: string
 }
 
+// 로그인 요청 타입
+export type LoginInfo = {
+  userId: string,
+  userPassword: string
+};
+
+// 로그인 응답 타입
+export type LoginSuccessResponse = {
+  token: string;
+  exprTime: number;
+}
+
+// 로그인 에러 메세지 관리 타입
+export type ErorrMsg = {
+  userId: string,
+  userPassword: string
+}
+
 
 //! 예약할때 타입
 export interface Reservation {
