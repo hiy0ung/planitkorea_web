@@ -68,14 +68,14 @@ export const RightImgDiv = styled.div`
 export const RightInnerImgDiv = styled.div`
   width: 100%;
   height: 100%;
-  overflow: hidden; 
+  overflow: hidden;
   position: relative;
 `;
 
 export const MainDiv = styled.div`
   display: flex;
   flex-direction: row;
-  position: relative; 
+  position: relative;
   @media (max-width: 1160px) {
     flex-direction: column;
   }
@@ -150,7 +150,7 @@ export const ReservationBar = styled.div`
   background-color: white;
   border-radius: 15px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  padding: 5px; 
+  padding: 5px;
   margin-top: 50px;
   display: flex;
   flex-direction: column;
@@ -173,7 +173,7 @@ export const PersonInput = styled.input`
   border-radius: 0.375rem;
   transition: border-color 0.2s;
   &:focus {
-    border: 1px solid #82AEF5;
+    border: 1px solid #82aef5;
     outline: none;
   }
 `;
@@ -247,7 +247,6 @@ export const ModalHeader = styled.div`
 export const ModalMain = styled.div`
   width: 80%;
   height: 100%;
-  
 `;
 
 export const ImgPickDiv = styled.div`
@@ -294,7 +293,7 @@ export const ReviewDiv = styled.div`
 export const MapReviewDiv = styled.div`
   display: flex;
   flex-direction: column;
-  width: 100%;  
+  width: 100%;
   flex: 1;
 `;
 
@@ -370,10 +369,10 @@ export const ReviewContentInput = styled.textarea<{ isReadonly: boolean }>`
   height: 100%;
   border-radius: 10px;
   resize: none;
-  cursor: ${(props) => (props.isReadonly ? 'not-allowed' : 'text')};
+  cursor: ${(props) => (props.isReadonly ? "not-allowed" : "text")};
   &:focus {
-    outline: none; 
-    border-color: ${(props) => (props.isReadonly ? '#ccc' : '#007bff')}; 
+    outline: none;
+    border-color: ${(props) => (props.isReadonly ? "#ccc" : "#007bff")};
   }
 `;
 
@@ -381,5 +380,5 @@ export const PageDiv = styled.div`
   width: 100%;
   display: flex;
   justify-content: center;
-  margin-top: 20px; 
+  margin-top: 20px;
 `;

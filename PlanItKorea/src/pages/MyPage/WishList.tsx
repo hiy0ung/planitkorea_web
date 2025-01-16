@@ -5,7 +5,8 @@ import {
   Card,
   Error,
   GroupLine,
-  NavDiv,
+  NaviBox,
+  NavInnerBox,
   NavInnerDiv,
   NavTitle,
   WishInner,
@@ -51,56 +52,56 @@ export default function WishList() {
     navigate(`/detailProduct/${id}`);
   };
 
-  const toggleWishlist = async (id: number) => {
-    if (!isLoggedIn) {
-      alert("로그인이 필요한 시스템입니다.");
-      return;
-    }
-    try {
-      const response = await axios.get<User>(
-        `http://localhost:3001/users/${user.id}`
-      );
-      const userWishData = response.data;
-      const updatedWishList = userWishData.wishList.includes(id)
-        ? userWishData.wishList.filter((item) => item !== id)
-        : [...userWishData.wishList, id];
-      setUserWishList(updatedWishList);
-      await axios.put(`http://localhost:3001/users/${user.id}`, {
-        ...userWishData,
-        wishList: updatedWishList,
-      });
-      setWishNumber(updatedWishList);
+  // const toggleWishlist = async (id: number) => {
+  //   if (!isLoggedIn) {
+  //     alert("로그인이 필요한 시스템입니다.");
+  //     return;
+  //   }
+  //   try {
+  //     const response = await axios.get<User>(
+  //       `http://localhost:3001/users/${user.id}`
+  //     );
+  //     const userWishData = response.data;
+  //     const updatedWishList = userWishData.wishList.includes(id)
+  //       ? userWishData.wishList.filter((item) => item !== id)
+  //       : [...userWishData.wishList, id];
+  //     setUserWishList(updatedWishList);
+  //     await axios.put(`http://localhost:3001/users/${user.id}`, {
+  //       ...userWishData,
+  //       wishList: updatedWishList,
+  //     });
+  //     setWishNumber(updatedWishList);
 
-      console.log("위시리스트가 성공적으로 업데이트되었습니다.");
-    } catch (error) {
-      console.error("위시리스트 업데이트 중 오류 발생:", error);
-    }
-  };
+  //     console.log("위시리스트가 성공적으로 업데이트되었습니다.");
+  //   } catch (error) {
+  //     console.error("위시리스트 업데이트 중 오류 발생:", error);
+  //   }
+  // };
 
-  const fetchUserWishList = async () => {
-    try {
-      const response = await axios.get<User>(
-        `http://localhost:3001/users/${user.id}`
-      );
-      const userWishData = response.data.wishList;
-      setWishNumber(userWishData);
-      setUserWishList(userWishData);
+  // const fetchUserWishList = async () => {
+  //   try {
+  //     const response = await axios.get<User>(
+  //       `http://localhost:3001/users/${user.id}`
+  //     );
+  //     const userWishData = response.data.wishList;
+  //     setWishNumber(userWishData);
+  //     setUserWishList(userWishData);
 
-      const products = await Promise.all(
-        userWishData.map((id) =>
-          axios.get<BerthProduct>(`http://localhost:3001/BerthProduct/${id}`)
-        )
-      );
+  //     const products = await Promise.all(
+  //       userWishData.map((id) =>
+  //         axios.get<BerthProduct>(`http://localhost:3001/BerthProduct/${id}`)
+  //       )
+  //     );
 
-      setWishList(products.map((res) => res.data));
-    } catch (error) {
-      console.error("위시리스트 로드 중 오류 발생:", error);
-    }
-  };
+  //     setWishList(products.map((res) => res.data));
+  //   } catch (error) {
+  //     console.error("위시리스트 로드 중 오류 발생:", error);
+  //   }
+  // };
 
-  useEffect(() => {
-    fetchUserWishList();
-  }, [isLoggedIn, userWishList]);
+  // useEffect(() => {
+  //   fetchUserWishList();
+  // }, [isLoggedIn, userWishList]);
 
   console.log(wishNumber);
   const label = { inputProps: { "aria-label": "Checkbox demo" } };
@@ -111,23 +112,25 @@ export default function WishList() {
     <>
       <GroupLine />
       <AllDiv>
-        <NavDiv>
-          <NavLink to="/myPageMain">
-            <NavInnerDiv>
-              <NavTitle>계정 관리</NavTitle>
-            </NavInnerDiv>
-          </NavLink>
-          <NavLink to="/reservationCheck">
-            <NavInnerDiv>
-              <NavTitle>예약 확인</NavTitle>
-            </NavInnerDiv>
-          </NavLink>
-          <NavLink to="/wishList">
-            <NavInnerDiv style={{ backgroundColor: "#eee" }}>
-              <NavTitle>찜 목록</NavTitle>
-            </NavInnerDiv>
-          </NavLink>
-        </NavDiv>
+        <NaviBox>
+                  <NavInnerBox>
+                    <NavLink to="/myPageMain">
+                      <NavInnerDiv>
+                        <NavTitle>계정 관리</NavTitle>
+                      </NavInnerDiv>
+                    </NavLink>
+                    <NavLink to="/reservationCheck">
+                      <NavInnerDiv>
+                        <NavTitle>예약 확인</NavTitle>
+                      </NavInnerDiv>
+                    </NavLink>
+                    <NavLink to="/wishList">
+                      <NavInnerDiv style={{ backgroundColor: "#D8E8F9" }}>
+                        <NavTitle>찜 목록</NavTitle>
+                      </NavInnerDiv>
+                    </NavLink>
+                  </NavInnerBox>
+                </NaviBox>
 
           {currentItems.length === 0 ? (
 
@@ -153,7 +156,7 @@ export default function WishList() {
                     checked={userWishList.includes(product.id)}
                     onClick={(e) => {
                       e.stopPropagation();
-                      toggleWishlist(product.id);
+                      // toggleWishlist(product.id);
                     }}
                     sx={{ position: "relative" }}
                   />
