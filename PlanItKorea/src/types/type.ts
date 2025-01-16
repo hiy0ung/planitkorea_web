@@ -65,6 +65,21 @@ export interface Reservation {
   img: string[]; // 숙소이미지
 }
 
+//& 신 예약 정보 타입
+export type NewReservation = {
+  id: number;
+  userId: number;
+  productId: number;
+  subProductId: number;
+  person: number;
+  totalPrice: string;
+  startDate: Date;
+  endDate: Date;
+  reservationStatus: number;
+  productImg: string;
+  productName: string;
+}
+
 // 예약 확인
 // 예약번호, 체크인,체크아웃, 인원, 숙소 이미지, 제목, 가격
 

@@ -130,6 +130,7 @@ export const Button = styled.button`
   margin-bottom: 0px;
   color: white;
   margin-top: 15px;
+  border: none;
   &:hover {
     background-color: ${theme.palette.primary.dark};
   }

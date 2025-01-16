@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "./App.css";
 import { Route, Routes, useLocation } from "react-router-dom";
 import Header from "./component/Header";
@@ -23,11 +23,23 @@ import DetailProduct from "./pages/Product/DetailProduct"
 import PaymentPage from "./pages/Product/PaymentPage";
 import AppContainer from "./layouts/AppContainer";
 import MainContainer from "./layouts/MainContainer";
+import { useCookies } from "react-cookie";
+import useAuthStore from "./stores/use.auth.store";
 
 
 
 function App() {
   const location = useLocation();
+  const [cookies] = useCookies(["token"]);
+  const { login, logout } = useAuthStore();
+
+  useEffect(() => {
+    if (cookies.token) {
+      login(cookies.token);
+    } else {
+      logout();
+    }
+  }, [cookies.token, login, logout]);
 
   const noFooterRoutes = ["/signUp", "/idSearch", "/passwordSearch"];
   const showFooter = !noFooterRoutes.includes(location.pathname);
