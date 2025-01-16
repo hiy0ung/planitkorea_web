@@ -2,54 +2,78 @@ import styled from "styled-components";
 import theme from "../../styles/theme";
 
 export const AllDiv = styled.div`
+  position: relative;
   display: flex;
   flex-direction: row;
   justify-content: center;
-  align-items: flex-start;
   margin: 30px auto;
   width: 80%;
   padding: 20px;
-  overflow: hidden;
-  @media (max-width: 768px) {
+  height: 100%;
+  gap: 20px;
+  @media (max-width: 850px) {
     flex-direction: column;
     flex-wrap: wrap;
     align-items: center;
   }
 `;
 
-export const NavDiv = styled.div`
+export const NaviBox = styled.div`
   display: flex;
   flex-direction: column;
-  border-radius: 10px;
-  background-color: #fafafa;
-  padding: 20px;
   width: 20%;
-  max-width: 180px;
-  min-width: 120px;
-  margin-right: 20px;
-  @media (max-width: 768px) {
+  min-height: 600px;
+  height: auto;
+  flex-grow: 1;
+  @media (max-width: 850px) {
+    width: 100%;
+    min-height: 100px;
+    height: 100px;
+    align-items: center;
+  }
+`;
+
+export const NavInnerBox = styled.div`
+  box-sizing: border-box;
+  position: sticky;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  border-radius: 10px;
+  border: 1px solid #D8E8F9;
+  padding: 20px;
+  width: 100%;
+  height: 250px;
+  gap: 10px;
+  top: 100px;
+  @media (max-width: 850px) {
     flex-direction: row;
     justify-content: center;
     text-align: center;
     background-color: #fff;
     margin-right: 0;
     margin-bottom: 20px;
+    height: 100px;
     padding: 0;
   }
 `;
 
+
 export const NavInnerDiv = styled.ul`
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   border-radius: 10px;
+  width: 150px;
   cursor: pointer;
+  padding: 10px;
   &:hover {
-    background-color: #eee;
+    background-color: #D8E8F9;
   }
-  margin-bottom: 10px;
-  @media (max-width: 768px) {
+  @media (max-width: 850px) {
     flex-direction: row;
   }
 `;
@@ -58,13 +82,14 @@ export const MainDiv = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: center;
-  align-items: center;
-  background-color: #fafafa;
+  align-items: flex-start;
+  background-color: #fff;
   border-radius: 10px;
   width: 100%;
   margin-bottom: 20px;
+  border: 1px solid #D8E8F9;
   overflow: hidden;
-  @media (max-width: 768px) {
+  @media (max-width: 850px) {
     flex-direction: column;
     width: 100%;
   }
@@ -77,7 +102,7 @@ export const AllProductDiv = styled.div`
   width: 100%;
   padding: 0 10px 120px 10px;
   position: relative;
-  @media (max-width: 768px) {
+  @media (max-width: 850px) {
     display: grid;
     grid-template-columns: repeat(1, 1fr);
   }
@@ -86,8 +111,8 @@ export const AllProductDiv = styled.div`
 export const NavTitle = styled.li`
   font-size: 18px;
   font-weight: 700;
-  margin: 30px 20px;
-  @media (max-width: 768px) {
+  color: #2B6678;
+  @media (max-width: 850px) {
     font-size: 14px;
     width: 100px;
   }
@@ -206,7 +231,7 @@ export const WithdrawalDiv = styled.div`
   padding: 50px;
   margin: 20px 0;
   box-sizing: border-box;
-  @media (max-width: 768px) {
+  @media (max-width: 850px) {
     padding: 20px;
   }
 `;
@@ -250,8 +275,9 @@ export const ReserVationProductDiv = styled.div`
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  flex: 0 1 auto; 
-  min-width: 0;
+  width: 40%;
+  min-width: 320px;
+  padding: 0 20px;
   cursor: pointer;
   @media (max-width: 850px) {
     width: 100%;
@@ -263,10 +289,11 @@ export const ReserVationProductImgDiv = styled.div`
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   overflow: hidden;
+  width: 40%;
   min-width: 300px;
   margin: 20px;
   transition: transform 0.2s ease-in-out;
-  flex: 1 1 auto; 
+  flex: 1;
   max-width: 300px;
   &:hover {
     transform: scale(1.05);
@@ -300,13 +327,14 @@ export const ProductImage = styled.img`
 `;
 
 export const ReserVationDetail = styled.div`
+  width: 40%;
   padding: 0 10px;
+  min-width: 220px;
   display: flex;
   flex-direction: column;
   justify-content: space-around;
   align-items: flex-start;
   height: 100%;
-  cursor: pointer;
 `;
 
 export const ReservationNumber = styled.h3`
@@ -322,6 +350,7 @@ export const ProductName = styled.h2`
 export const DateDivWrap = styled.div`
   display: flex;
   flex-direction: row;
+  gap: 10px;
   flex-wrap: wrap;
   width: 100%;
 `;
@@ -331,23 +360,23 @@ export const DateColumn = styled.div`
   flex-direction: column;
   flex: 1; 
   min-width: 0;
+  max-width: 100px;
 `;
 
 export const DetailLabel = styled.h3`
   font-size: 14px;
   font-weight: 600;
-  color: #a9a9a9;
+  color: #2B6678;
 `;
 
 export const DateDiv = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: center;
-  background-color: #eee;
-  width: 150px;
-  max-width: 80px;
-  padding: 5px 0;
-  margin-right: 10px;
+  background-color: #D8E8F9;
+  width: 100px;
+  max-width: 200px;
+  padding: 5px 10px;
   border-radius: 10px;
   font-size: 14px;
   font-weight: bold;
@@ -356,7 +385,7 @@ export const DateDiv = styled.div`
 export const Person = styled.div`
   display: flex;
   justify-content: center;
-  background-color: #eee;
+  background-color: #D8E8F9;
   width: 80px;
   max-width: 120px;
   padding: 5px 0;
@@ -391,7 +420,7 @@ export const PriceBack = styled.div`
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  background-color: #eee;
+  background-color: #D8E8F9;
   width: 120px;
   max-width: 120px;
   padding: 5px 0;
@@ -421,6 +450,7 @@ export const CancelBtn = styled.div`
   max-width: 100px;
   min-width: 71px;
   color: white;
+  cursor: pointer;
   &:hover {
     background-color: ${theme.palette.error.dark};
   }
@@ -438,7 +468,7 @@ export const MapUl = styled.ul`
 export const MainLi = styled.li`
   display: flex;
   flex-direction: row;
-  background-color: #fafafa;
+  border: 1px solid #D8E8F9;
   border-radius: 10px;
   width: 100%;
   margin-bottom: 20px;
@@ -452,7 +482,7 @@ export const MainLi = styled.li`
 export const DetailLabelRe = styled.h3`
   font-size: 14px;
   font-weight: 600;
-  color: #a9a9a9;
+  color: #2B6678;
   display: flex;
   align-self: flex-start;
 `;
