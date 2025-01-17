@@ -18,22 +18,40 @@ export default function Notification() {
 
   
 
+  
+  const fetchQuestion = async () => {
+    const boardType = "자주묻는질문"
+    try {
+      const response = await axios.get(`http://localhost:4040/api/v1/boards/type/${boardType}`);
+  
+      const frequentlyQuestionResponse: Announcement[] = response.data.data;
+  
+      setFrequentlyQuestion(
+        frequentlyQuestionResponse.map((frequentlyQuestion: Announcement) => ({
+          id: frequentlyQuestion.id,
+          boardType: frequentlyQuestion.boardType,
+          boardTitle: frequentlyQuestion.boardTitle,
+          boardContent: frequentlyQuestion.boardContent,
+          author: frequentlyQuestion.author,
+          uploadDate: new Date(frequentlyQuestion.uploadDate),
+        }))
+      )
+    } catch (error) {
+      console.error("Failed to fetch frequently questions: ", error);
+    }
+  }
+  
+  React.useEffect(() => {
+    fetchQuestion();
+  },[])
+  
+  const handlePageChange = (event: { selected: number }) => {
+    setCurrentPage(event.selected);
+  };
+
   const handleExpansion =
     (panel: number) => (event: React.SyntheticEvent, isExpanded: boolean) => {
       setExpanded(isExpanded ? panel : false);
-    };
-
-    const fetchQuestion = async () => {
-      const response = await axios.get('http://localhost:3001/frequentlyQuestion')
-      setFrequentlyQuestion(response.data)
-    }
-
-    React.useEffect(() => {
-      fetchQuestion();
-    },[])
-
-    const handlePageChange = (event: { selected: number }) => {
-      setCurrentPage(event.selected);
     };
 
     const indexOfLastItem = (currentPage + 1) * ITEMS_PER_PAGE;
@@ -43,7 +61,6 @@ export default function Notification() {
   return (
     <ContentDiv>
       <ContentInnerDiv>
-
       {currentItems.map((item) => (
         <Accordion
           key={item.id}
@@ -57,6 +74,9 @@ export default function Notification() {
             "& .MuiAccordionDetails-root": {
               display: expanded === item.id ? "block" : "none",
             },
+            "&MuiPaper-root": {
+              borderRadius: "10px"
+            }
           }}
         >
           <AccordionSummary
@@ -64,17 +84,27 @@ export default function Notification() {
             aria-controls={`${item.id}-content`}
             id={`${item.id}-header`}
           >
-            <Typography sx={{ fontWeight: "bold" }}>{item.title}</Typography>
+            <Typography sx={{ fontWeight: "bold" }}>
+              [{item.boardTitle}]
+            </Typography>
           </AccordionSummary>
           <AccordionDetails
             sx={{
               wordWrap: "break-word",
               overflowWrap: "break-word",
               whiteSpace: "pre-wrap",
+              backgroundColor: "#e9e9e9",
             }}
           >
-            <Typography>{item.content}</Typography>
-            <Typography variant="caption">- {item.author}</Typography>
+            <Typography
+              sx={{
+                borderBottom: "1px solid #cccccc",
+                padding: "20px"
+              }}
+            >
+              {item.boardContent}
+            </Typography>
+            <Typography variant="caption" sx={{ padding: "10px"}}>- {item.author}</Typography>
           </AccordionDetails>
         </Accordion>
       ))}
