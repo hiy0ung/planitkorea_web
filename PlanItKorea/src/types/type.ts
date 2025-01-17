@@ -94,10 +94,14 @@ export interface SearchBarFilter {
 //! 공지사항
 export type Announcement = {
   id: number;
-  title: string;
-  content: string;
+  boardType: BoardType;
+  boardTitle: string;
+  boardContent: string;
   author: string;
+  uploadDate: Date;
 };
+
+export type BoardType = "공지사항" | "자주묻는질문";
 
 //! 문의 사항
 export type Inquiry = {

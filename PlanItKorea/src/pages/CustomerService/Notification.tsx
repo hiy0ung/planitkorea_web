@@ -5,10 +5,10 @@ import AccordionDetails from "@mui/material/AccordionDetails";
 import Typography from "@mui/material/Typography";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { ContentDiv, ContentInnerDiv, PageDiv } from "./customerSt";
-import { Announcement } from "../../types/type";
 import axios from "axios";
 import ReactPaginate from "react-paginate";
 import "../../styles/pagination.css";
+import { Announcement } from "../../types/type";
 
 const ITEMS_PER_PAGE = 5;
 
@@ -17,17 +17,25 @@ const Notification: React.FC = () => {
   const [notification, setNotification] = React.useState<Announcement[]>([]);
   const [currentPage, setCurrentPage] = React.useState<number>(0);
 
-  const handleExpansion =
-    (panel: number) => (event: React.SyntheticEvent, isExpanded: boolean) => {
-      setExpanded(isExpanded ? panel : false);
-    };
-
   const fetchNotification = async () => {
+    const boardType = "공지사항"
     try {
-      const response = await axios.get<Announcement[]>(
-        "http://localhost:3001/announcement"
-      );
-      setNotification(response.data);
+      const response = await axios.get(
+          `http://localhost:4040/api/v1/boards/type/${boardType}`
+        );
+
+      const notificationResponse: Announcement[] = response.data.data;
+      
+      setNotification(
+        notificationResponse.map((notification: Announcement) => ({
+          id: notification.id,
+          boardType: notification.boardType,
+          boardTitle: notification.boardTitle,
+          boardContent: notification.boardContent,
+          author: notification.author,
+          uploadDate: new Date(notification.uploadDate),
+        }))
+      )
     } catch (error) {
       console.error("Failed to fetch notifications:", error);
     }
@@ -36,10 +44,15 @@ const Notification: React.FC = () => {
   useEffect(() => {
     fetchNotification();
   }, []);
-
+  
   const handlePageChange = (event: { selected: number }) => {
     setCurrentPage(event.selected);
   };
+
+  const handleExpansion =
+    (panel: number) => (event: React.SyntheticEvent, isExpanded: boolean) => {
+      setExpanded(isExpanded ? panel : false);
+    };
 
   const indexOfLastItem = (currentPage + 1) * ITEMS_PER_PAGE;
   const indexOfFirstItem = indexOfLastItem - ITEMS_PER_PAGE;
@@ -62,17 +75,24 @@ const Notification: React.FC = () => {
               aria-controls={`${item.id}-content`}
               id={`${item.id}-header`}
             >
-              <Typography style={{ fontWeight: "bold" }}>{item.title}</Typography>
+              <Typography style={{ fontWeight: "bold" }}>{item.boardTitle}</Typography>
             </AccordionSummary>
             <AccordionDetails
               style={{
                 wordWrap: "break-word",
                 overflowWrap: "break-word",
                 whiteSpace: "pre-wrap",
+                backgroundColor: "#e9e9e9"
               }}
             >
-              <Typography>{item.content}</Typography>
-              <Typography variant="caption">- {item.author}</Typography>
+              <Typography
+                sx={{
+                  borderBottom: "1px solid #cccccc",
+                  padding: "20px"
+                }}
+              >{item.boardContent}
+              </Typography>
+              <Typography variant="caption" sx={{ padding: "10px"}}>- {item.author}</Typography>
             </AccordionDetails>
           </Accordion>
         ))}
