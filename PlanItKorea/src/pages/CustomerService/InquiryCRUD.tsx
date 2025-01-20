@@ -1,7 +1,7 @@
 import React, { ChangeEvent, useEffect, useState } from "react";
 import { ContentDiv } from "./customerSt";
 import { ModalText } from "../Login/SignSt";
-import { Inquiry, InquiryType } from "../../types/type";
+import { InquiryRequest } from "../../types/type";
 import Modal, { ModalButton, Overlay } from "../../component/Modal";
 import { NavLink, useLocation, useParams } from "react-router-dom";
 import {
@@ -25,207 +25,205 @@ import {
   TitleDiv,
 } from "./InquirySt";
 import axios from "axios";
-import useAuthStore from "../../stores/use.auth.store";
 import { Error } from "../MyPage/MyPageSt";
-import useIdStore from "../../stores/use.nexId.store";
+import { useCookies } from "react-cookie";
 
 export default function InquiryCRUD() {
-  const { id } = useParams<{ id: string }>();
   const [previews, setPreviews] = useState<string[]>([]);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-
-  //! 유저 전역상태정보
-  const user = useAuthStore((state) => state.user);
-  const isLoggedin = useAuthStore((state) => state.isLoggedIn);
-
-  // 문의내역 id 전역
-  const { nextId, incrementId } = useIdStore((state) => ({
-    nextId: state.nextId,
-    incrementId: state.incrementId,
-  }));
-
-  // 상태 초기화
-  const [inquiry, setInquiry] = useState<Inquiry>({
-    id: nextId.toString(),
-    userId: user.id,
-    category: "결제",
-    title: "",
-    content: "",
-    image: [],
-  });
-
   const [hasTitleError, setHasTitleError] = useState(false);
   const [hasBodyError, setHasBodyError] = useState(false);
 
-  // 카테고리 변경 핸들러
-  const handleCategory = (e: ChangeEvent<HTMLSelectElement>) => {
-    setInquiry((prevInquiry) => ({
-      ...prevInquiry,
-      category: e.target.value as InquiryType,
-    }));
-  };
+  const [inquiry, setInquiry] = useState<InquiryRequest>({
+    inquiryTitle: "",
+    inquiryCategory: "결제",
+    inquiryContent: "",
+    inquiryImage: null,
+  });
 
-  const handleTitleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const newTitleValue = e.target.value;
-    setInquiry((prevInquiry) => ({
-      ...prevInquiry,
-      title: newTitleValue,
-    }));
+  const [modalMessage, setModalMessage] = useState<string>("");
 
-    setHasTitleError(newTitleValue.trim() === '');
-  };
+  const [cookies] = useCookies();
 
-  // 내용 변경 핸들러
-  const handleBodyChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
-    const newBodyValue = e.target.value
-    setInquiry((prevInquiry) => ({
-      ...prevInquiry,
-      content: newBodyValue,
-    }));
+  const token = cookies.token;
 
-    setHasBodyError(newBodyValue.trim() === '')
-  };
+  const location = useLocation();
+  const { inquiryId } = useParams();
+  const isEditMode = location.pathname.includes("edit");
 
-  // 이미지 변경 핸들러
+  // 문의 내역 수정 시 정보 가져오기
+  useEffect(() => {
+    const inquiryState = location.state?.inquiryId;
+
+    if (inquiryState) {
+      const fetchInquiry = async () => {
+        try {
+          const response = await axios.get(
+            `http://localhost:4040/api/v1/inquiries/get/${inquiryState}`,
+            { headers: { Authorization: `Bearer ${token}` }}
+          );
+          setInquiry(response.data.data);
+        } catch (error) {
+          console.error(error);
+        }
+      };
+      fetchInquiry();
+    }
+  }, [location.state, token]);
+
+  // 카테고리, 제목, 이름 변경 핸들러
+  const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    setInquiry((prev) => ({ ...prev, [name]: value }));
+  }
+
   const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
-    if (files) {
-      const fileArray = Array.from(files);
-
-      const readerPromises = fileArray.map((file) => {
-        return new Promise<string>((resolve, reject) => {
-          const reader = new FileReader();
-          reader.onloadend = () => {
-            resolve(reader.result as string);
-          };
-          reader.onerror = reject;
-          reader.readAsDataURL(file);
-        });
-      });
-
-      Promise.all(readerPromises)
-        .then((base64Strings) => {
-          setPreviews((prevPreviews) => prevPreviews.concat(base64Strings));
-          setInquiry((prevInquiry) => ({
-            ...prevInquiry,
-            image: (prevInquiry.image || []).concat(base64Strings),
-          }));
-        })
-        .catch((error) => {
-          console.error("Error reading files:", error);
-        });
+    if (files && files.length > 0) {
+      const file = files[0];
+      setPreviews((prev) => [...prev, URL.createObjectURL(file)]);
+      setInquiry((prev) => ({ ...prev, inquiryImage: file }));
     }
-  };
+  }
 
   // 이미지 제거 핸들러
   const handleImageRemove = (index: number) => {
     setPreviews((prevPreviews) => prevPreviews.filter((_, i) => i !== index));
+    setInquiry((prev) => ({
+      ...prev,
+      inquiryImage: null,
+    }));
   };
+ // 새로운 문의 저장 핸들러 (생성)
+const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
+  e.preventDefault();
 
-  // 초기화 핸들러
-  const handleReset = () => {
-    setInquiry({
-      id: nextId.toString(),
-      userId: user.id,
-      category: "결제",
-      title: "",
-      content: "",
-      image: [],
-    });
-    setPreviews([]);
-  };
+  let valid = true;
 
+  if (!inquiry.inquiryTitle) {
+    setHasTitleError(true);
+    valid = false;
+  }
+  if (!inquiry.inquiryContent) {
+    setHasBodyError(true);
+    valid = false;
+  }
 
-  // 문의내역 로드
-  useEffect(() => {
-    if (id) {
-      const fetchInquiry = async () => {
-        try {
-          const response = await axios.get(`http://localhost:3001/Inquiries/${id}`);
-          setInquiry(response.data);
-          setPreviews(response.data.image || []);
-        } catch (error) {
-          console.error("Error fetching inquiry:", error);
+  if (valid) {
+    try {
+      const formData = new FormData();
+      formData.append("inquiryTitle", inquiry.inquiryTitle);
+      formData.append("inquiryCategory", inquiry.inquiryCategory);
+      formData.append("inquiryContent", inquiry.inquiryContent);
+      if (inquiry.inquiryImage) {
+        formData.append("inquiryImage", inquiry.inquiryImage);
+      }
+
+      const response = await axios.post(
+        `http://localhost:4040/api/v1/inquiries/create`, 
+        formData, 
+        { 
+          headers: { 
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/form-data",
+          }
         }
-      };
+      );
+      const inquiryResponse = response.data.data;
+      console.log(inquiryResponse);
 
-      fetchInquiry();
+      setInquiry({
+        inquiryTitle: inquiryResponse.inquiryTitle,
+        inquiryCategory: inquiryResponse.inquriyCategory,
+        inquiryContent: inquiryResponse.inquiryContent,
+        inquiryImage: inquiryResponse.inquiryImage,
+      })
+
+      setModalMessage("질문이 등록되었습니다!")
+      setIsModalOpen(true);
+    } catch (error) {
+      console.error(error);
     }
-  }, [id]);
+  } else {
+    console.log("Validation failed", inquiry);
+  }
+}
 
-  // 수정 핸들러
-  const handleUpdate = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
+// 문의 수정 핸들러
+const handleUpdate = async (e: React.MouseEvent<HTMLButtonElement>) => {
+  e.preventDefault();
 
-    let valid = true;
+  let valid = true;
 
-    if (!inquiry.title) {
-      setHasTitleError(true);
-      valid = false;
-    }
-    if (!inquiry.content) {
-      setHasBodyError(true);
-      valid = false;
-    }
-  
-    if (!isLoggedin) {
-      console.error("로그인 상태가 아닙니다.");
-      valid = false;
-    }
+  if (!inquiry.inquiryTitle) {
+    setHasTitleError(true);
+    valid = false;
+  }
 
-    if(valid) {
-      try {
-        await axios.put<Inquiry>(`http://localhost:3001/Inquiries/${id}`, inquiry);
-        setIsModalOpen(true);
-      } catch (error) {
-        console.error("업데이트 도중 에러가 발생했습니다:");
+  if (!inquiry.inquiryContent) {
+    setHasBodyError(true);
+    valid = false;
+  }
+
+  if (!token) {
+    console.error("로그인 상태가 아닙니다.");
+    valid = false;
+  }
+
+  if (valid) {
+    try {
+      const formData = new FormData();
+      formData.append("inquiryTitle", inquiry.inquiryTitle);
+      formData.append("inquiryCategory", inquiry.inquiryCategory);
+      formData.append("inquiryContent", inquiry.inquiryContent);
+      if (inquiry.inquiryImage && inquiry.inquiryImage instanceof File) {
+        formData.append("inquiryImage", inquiry.inquiryImage);
       }
+
+
+      const response = await axios.put(
+        `http://localhost:4040/api/v1/inquiries/update/${inquiryId}`, 
+        formData,
+        {
+          headers: { 
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/form-data",
+          }
+        }
+      );
+      
+      const inquiryResponse = response.data.data;
+      console.log(inquiryResponse);
+
+      setInquiry({
+        inquiryTitle: inquiryResponse.inquiryTitle,
+        inquiryCategory: inquiryResponse.inquriyCategory,
+        inquiryContent: inquiryResponse.inquiryContent,
+        inquiryImage: inquiryResponse.inquiryImage,
+      })
+
+      setModalMessage("수정이 완료되었습니다!")
+      setIsModalOpen(true);
+    } catch(error) {
+      console.error(error);
     }
-  };
+  }
+}
 
-  // 제출 핸들러
-  const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-
-    let valid = true;
-
-    if (!inquiry.title) {
-      setHasTitleError(true);
-      valid = false;
-    }
-    if (!inquiry.content) {
-      setHasBodyError(true);
-      valid = false;
-    }
-
-    if (valid) {
-      try {
-        await axios.post("http://localhost:3001/Inquiries", inquiry);
-        setIsModalOpen(true);
-        incrementId();
-        setInquiry({
-          id: (nextId + 1).toString(),
-          userId: user.id,
-          category: "결제",
-          title: "",
-          content: "",
-          image: [],
-        });
-        setPreviews([]);
-      } catch (error) {
-        console.error("Error submitting inquiry:", error);
-      }
-    } else {
-      console.log("Validation failed", inquiry); 
-    }
-  };
-
-  const location = useLocation();
-  const isEditMode = location.pathname.includes("edit");
+// 초기화 핸들러
+const handleReset = () => {
+  setInquiry({
+    inquiryTitle: "",
+    inquiryCategory: "결제",
+    inquiryContent: "",
+    inquiryImage: null,
+  });
+  setPreviews([]);
+}
 
   return (
     <>
-      {isLoggedin ? (
+      {token ? (
         <ContentDiv>
           <BtnCategory>
             <NavLink to={"/inquiryCRUD"}>
@@ -242,7 +240,7 @@ export default function InquiryCRUD() {
                   <InquiryTitleName>문의 유형</InquiryTitleName>
                 </InquiryTitle>
                 <InputBox>
-                  <Select name="Category" value={inquiry.category} onChange={handleCategory}>
+                  <Select name="inquiryCategory" value={inquiry.inquiryCategory} onChange={handleChange}>
                     <option value="결제">결제</option>
                     <option value="취소">취소</option>
                     <option value="환불">환불</option>
@@ -255,10 +253,11 @@ export default function InquiryCRUD() {
                 </InquiryTitle>
                 <InputBox>
                   <InputTitle
+                    name="inquiryTitle"
                     placeholder="제목"
-                    value={inquiry.title}
+                    value={inquiry.inquiryTitle}
                     required
-                    onChange={handleTitleChange}
+                    onChange={handleChange}
                     hasError={hasTitleError}
                   />
                 </InputBox>
@@ -269,9 +268,10 @@ export default function InquiryCRUD() {
                 </InquiryTitle>
                 <InputBox>
                   <InputBody
+                    name="inquiryContent"
                     placeholder="내용"
-                    value={inquiry.content}
-                    onChange={handleBodyChange}
+                    value={inquiry.inquiryContent}
+                    onChange={handleChange}
                     hasError={hasBodyError}
                     required
                   />
@@ -331,7 +331,7 @@ export default function InquiryCRUD() {
         <>
           <Overlay />
           <Modal isOpen={isModalOpen}>
-            <ModalText>질문이 등록되었습니다!</ModalText>
+            <ModalText>{modalMessage}</ModalText>
             <NavLink to="/inquiryHistory">
               <ModalButton onClick={() => setIsModalOpen(false)}>확인</ModalButton>
             </NavLink>

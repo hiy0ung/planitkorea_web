@@ -104,14 +104,32 @@ export type Announcement = {
 export type BoardType = "공지사항" | "자주묻는질문";
 
 //! 문의 사항
-export type Inquiry = {
-  id: string;
-  userId: string;
-  category: InquiryType;
-  title: string;
-  content: string;
-  image: string[] | undefined;
+export type InquiryAllResponse = {
+  inquiryId: number;
+  inquiryTitle: string;
+  inquiryCategory: InquiryType;
 };
+
+export type InquiryList = {
+  inquiryId: number;
+  inquiryTitle: string;
+  inquiryCategory: InquiryType;
+};
+
+export type InquiryDetail = {
+  inquiryId: number;
+  inquiryTitle: string;
+  inquiryCategory: InquiryType;
+  inquiryContent: string;
+  inquiryImage: any;
+};
+
+export type InquiryRequest = {
+  inquiryTitle: string,
+  inquiryCategory: InquiryType,
+  inquiryContent: string,
+  inquiryImage: any,
+}
 
 //! 문의사항 유형 선택
 export type InquiryType = "결제" | "취소" | "환불";
