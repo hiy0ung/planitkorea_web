@@ -9,11 +9,11 @@ import {
   Img,
   ImgDiv,
   InquiryBtn,
+  InquiryTitle,
   UDButton,
   UserIdDiv,
 } from "./InquirySt";
 import { NavLink } from "react-router-dom";
-import { Inquiry } from "../../types/type";
 import {
   Accordion,
   AccordionDetails,
@@ -22,53 +22,109 @@ import {
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import axios from "axios";
-import useAuthStore from "../../stores/use.auth.store";
+import { useCookies } from "react-cookie";
+import {
+  InquiryAllResponse,
+  InquiryDetail,
+  InquiryList,
+} from "../../types/type";
 
 export default function InquiryHistory() {
-  const user = useAuthStore((state) => state.user);
+  const [expanded, setExpanded] = useState<number | false>(false);
+  const [inquiryList, setInquiryList] = useState<InquiryList[]>([]);
+  const [inquiryDetail, setInquiryDetail] = useState<InquiryDetail>({
+    inquiryId: 0,
+    inquiryTitle: "",
+    inquiryCategory: "결제",
+    inquiryContent: "",
+    inquiryImage: null,
+  });
 
-  const [expanded, setExpanded] = useState<string | false>(false);
-
-  
+  const [cookies] = useCookies(["token"]);
+  const token = cookies.token;
 
   const handleExpansion =
-    (panel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
+    (panel: number) =>
+    async (event: React.SyntheticEvent, isExpanded: boolean) => {
       setExpanded(isExpanded ? panel : false);
-    };
-  const [inquiries, setInquiries] = useState<Inquiry[]>([]);
-
-  const fetchInquiry = async () => {
-    if (user.id) {
-      try {
-        const response = await axios.get(`http://localhost:3001/Inquiries`, {
-          params: { userId: user.id },
-        });
-        setInquiries(response.data);
-      } catch (error) {
-        console.error("Error fetching inquiries:", error);
+      if (isExpanded) {
+        await fetchInquiryDetail(panel);
       }
-    } else {
-      console.error("User ID is not defined");
+    };
+
+  const fetchInquiryList = async () => {
+    try {
+      const response = await axios.get(
+        `http://localhost:4040/api/v1/inquiries/get`,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      console.log(response.data.data);
+      const inquiryList: InquiryAllResponse[] = response.data.data;
+      setInquiryList(
+        inquiryList.map((inquiry) => ({
+          inquiryId: inquiry.inquiryId,
+          inquiryTitle: inquiry.inquiryTitle,
+          inquiryCategory: inquiry.inquiryCategory,
+        }))
+      );
+    } catch (error) {
+      console.error("Error fetching inquiries:", error);
     }
   };
 
-  const deleteInquiry = async (inquiryId: string) => {
+  const fetchInquiryDetail = async (inquiryId: number) => {
+    try {
+      const response = await axios.get(
+        `http://localhost:4040/api/v1/inquiries/get/${inquiryId}`,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+
+      console.log(response.data.data);
+
+      const inquiryDetail: InquiryDetail = response.data.data;
+
+      setInquiryDetail({
+        inquiryId: inquiryDetail.inquiryId,
+        inquiryTitle: inquiryDetail.inquiryTitle,
+        inquiryCategory: inquiryDetail.inquiryCategory,
+        inquiryContent: inquiryDetail.inquiryContent,
+        inquiryImage: inquiryDetail.inquiryImage,
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const deleteInquiry = async (inquiryId: number) => {
     console.log(inquiryId);
     try {
-      const id: string = String(inquiryId);
-      await axios.delete(`http://localhost:3001/Inquiries/${id}`);
-      await fetchInquiry();
+      const response = await axios.delete(
+        `http://localhost:4040/api/v1/inquiries/delete/${inquiryId}`,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
 
+      setInquiryList((prev) =>
+        prev.filter((item) => item.inquiryId !== inquiryId)
+      );
+
+      if (expanded === inquiryId) {
+        setExpanded(false);
+        setInquiryDetail({
+          inquiryId: 0,
+          inquiryTitle: "",
+          inquiryCategory: "결제",
+          inquiryContent: "",
+          inquiryImage: null,
+        });
+      }
     } catch (error) {
       console.error("사용자 정보 호출 실패", (error as Error).message);
     }
   };
 
   useEffect(() => {
-    fetchInquiry();
-  }, [user.id]);
-
-  
+    fetchInquiryList();
+  }, []);
 
   return (
     <>
@@ -83,29 +139,29 @@ export default function InquiryHistory() {
             </InquiryBtn>
           </NavLink>
         </BtnCategory>
-        {inquiries.map((item) => (
+        {inquiryList.map((item) => (
           <Accordion
-            key={item.id}
-            expanded={expanded === item.id}
-            onChange={handleExpansion(item.id)}
+            key={item.inquiryId}
+            expanded={expanded === item.inquiryId}
+            onChange={handleExpansion(item.inquiryId)}
             sx={{
               margin: 1,
               "& .MuiAccordion-region": {
-                height: expanded === item.id ? "auto" : 0,
+                height: expanded === item.inquiryId ? "auto" : 0,
               },
               "& .MuiAccordionDetails-root": {
-                display: expanded === item.id ? "block" : "none",
+                display: expanded === item.inquiryId ? "block" : "none",
               },
               overflow: "auto",
             }}
           >
             <AccordionSummary
               expandIcon={<ExpandMoreIcon />}
-              aria-controls={`${item.id}-content`}
-              id={`${item.id}-header`}
+              aria-controls={`${item.inquiryId}-content`}
+              id={`${item.inquiryId}-header`}
             >
               <Typography sx={{ fontWeight: "bold", fontSize: "20px" }}>
-                {item.category} - {item.title}
+                {item.inquiryCategory} - {item.inquiryTitle}
               </Typography>
             </AccordionSummary>
             <AccordionDetails
@@ -115,28 +171,40 @@ export default function InquiryHistory() {
                 whiteSpace: "pre-wrap",
               }}
             >
-              <AccordionDiv>
-                <ImgDiv>
-                  {item.image &&
-                    item.image.map((imgSrc, index) => (
-                      <Img
-                        key={index}
-                        src={imgSrc}
-                        alt={`inquiry-${item.id}-${index}`}
-                      />
-                    ))}
-                </ImgDiv>
-                <AcContentDiv>{item.content}</AcContentDiv>
-              </AccordionDiv>
-              <FooterDiv>
-              <UserIdDiv>작성자 - {item.userId}</UserIdDiv>
-              <ButtonsDiv>
-              <NavLink to={`/inquiryCRUD/edit/${item.id}`}>
-                    <UDButton>수정</UDButton>
-                  </NavLink>
-                <UDButton onClick={() => deleteInquiry((item.id))}>삭제</UDButton>
-              </ButtonsDiv>
-              </FooterDiv>
+              {expanded === item.inquiryId && (
+                <>
+                  {!inquiryDetail ? (
+                    <Typography>Loading...</Typography>
+                  ) : (
+                    <AccordionDiv>
+                      <AcContentDiv>
+                        <ImgDiv>
+                          {inquiryDetail.inquiryImage && (
+                            <Img
+                              src={`http://localhost:4040/image/${inquiryDetail.inquiryImage}`}
+                              alt="Inquiry Image"
+                            />
+                          )}
+                        </ImgDiv>
+                        {inquiryDetail.inquiryContent}
+                      </AcContentDiv>
+                    </AccordionDiv>
+                  )}
+                  <FooterDiv>
+                    <ButtonsDiv>
+                      <NavLink
+                        to={`/inquiryCRUD/edit/${item.inquiryId}`}
+                        state={{ inquiryId: item.inquiryId }}
+                      >
+                        <UDButton>수정</UDButton>
+                      </NavLink>
+                      <UDButton onClick={() => deleteInquiry(item.inquiryId)}>
+                        삭제
+                      </UDButton>
+                    </ButtonsDiv>
+                  </FooterDiv>
+                </>
+              )}
             </AccordionDetails>
           </Accordion>
         ))}

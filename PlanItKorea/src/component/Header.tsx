@@ -21,11 +21,12 @@ import {
 } from "./HeaderSt";
 import useAuthStore from "../stores/use.auth.store";
 import useSelectStore from "../stores/use.select.store";
+import { useCookies } from "react-cookie";
 
 export default function Header() {
   const [showMenuModal, setShowMenuModal] = useState<boolean>(false);
+  const [cookies, setCookies] = useCookies(["token"]);
   const navigate = useNavigate();
-  const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
   const logout = useAuthStore((state) => state.logout);
   const setCityDropdownOpen = useSelectStore(
     (state) => state.setCityDropdownOpen
@@ -57,6 +58,7 @@ export default function Header() {
   }, []);
 
   const handleLogOut = () => {
+    setCookies("token", "", { path: "/", expires: new Date(0) });
     logout();
     navigate("/");
   };
@@ -81,7 +83,7 @@ export default function Header() {
           <CustomerServiceButton onClick={() => navigate("/notification")}>
             <span> 고객센터 </span>
           </CustomerServiceButton>
-          {!isLoggedIn ? (
+          {!cookies.token ? (
             <SingInButton onClick={() => navigate("/signIn")}>
               <span>로그인 & 회원가입</span>
             </SingInButton>
@@ -97,7 +99,7 @@ export default function Header() {
             </MenuButton>
             {showMenuModal && (
               <MenuBar ref={modalRef}>
-                {!isLoggedIn && (
+                {!cookies.token && (
                   <MenuSingInButton onClick={() => navigate("/signIn")}>
                     <span>로그인 & 회원가입</span>
                   </MenuSingInButton>
@@ -106,7 +108,7 @@ export default function Header() {
                 <GroupLine />
                 <MenuGroup onClick={handleFocus}>국내 숙소</MenuGroup>
                 <GroupLine />
-                {isLoggedIn && (
+                {cookies.token && (
                   <>
                     <MenuList onClick={() => navigate("/myPageMain")}>
                       <span> 마이페이지 </span>
@@ -120,7 +122,7 @@ export default function Header() {
                   <span> 고객센터 </span>
                 </MenuList>
                 <GroupLine />
-                {isLoggedIn && (
+                {cookies.token && (
                   <MenuSingInButton
                     onClick={logout}
                     style={{ minWidth: "164px" }}

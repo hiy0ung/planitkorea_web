@@ -80,7 +80,7 @@ function App() {
               path="/frequentlyQuestion"
               element={<FrequentlyQuestion />}
             />
-            <Route path="/inquiryCRUD/edit/:id" element={<InquiryCRUD />} />
+            <Route path="/inquiryCRUD/edit/:inquiryId" element={<InquiryCRUD />} />
             <Route path="/inquiryCRUD" element={<InquiryCRUD />} />
             <Route path="/inquiryHistory" element={<InquiryHistory />} />
             <Route path="/notification" element={<Notification />} />
