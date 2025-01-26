@@ -1,9 +1,9 @@
 import React, { ChangeEvent, useState } from "react";
 import styled from "styled-components";
-import { Logo, LogoDIv, LogoName } from "../../styles/logo";
-import theme from "../../styles/theme";
+import { Logo, LogoDIv, LogoName } from "../../../styles/logo";
+import theme from "../../../styles/theme";
 import { NavLink, useNavigate } from "react-router-dom";
-import useAuthStore from "../../stores/use.auth.store";
+import useAuthStore from "../../../stores/use.auth.store";
 import {
   AllDiv,
   LoginDiv,
@@ -12,15 +12,24 @@ import {
   ErrorMessage,
   Button,
   GroupLine,
-  InputIdField,
   InputPasswordField,
   Form,
   InputIdField2,
-} from "./SignSt";
+  SnsLogoNaver,
+  SnsLogoKakao,
+  SnsNaverTextBox,
+  SnsKakaoTextBox,
+  SnsNaverBtn,
+  SnsKakaoBtn,
+  SnsNaverLogoBox,
+  SnsKakaoLogoBox,
+} from "../SignSt";
 import axios from "axios";
 import { useCookies } from "react-cookie";
-import { error } from "console";
-import { ErorrMsg, LoginInfo, LoginSuccessResponse } from "../../types/type";
+import { ErorrMsg, LoginInfo, LoginSuccessResponse } from "../../../types/type";
+import kakaoLogo from '../../../assets/images/kakaoLogo.png';
+import naverLogo from '../../../assets/images/naverLogo.png';
+import { SIGN_IN_SNS_API } from "../../../apis";
 
 const OptionDiv = styled.div`
   display: flex;
@@ -120,6 +129,10 @@ export default function Login() {
     }
   }
 
+  const onSnsButtonClickHandler = (sns: "kakao" | "naver") => {
+    window.location.href = `${SIGN_IN_SNS_API}${sns}`;
+  }
+
   return (
     <>
       <GroupLine />
@@ -176,6 +189,28 @@ export default function Login() {
               </NavLink>
             </OptionDiv>
           </InputContainer>
+            <InputContainer>
+          <SnsNaverBtn
+            onClick={() => onSnsButtonClickHandler("naver")}
+          >
+            <SnsNaverLogoBox>
+              <SnsLogoNaver src={naverLogo} alt="네이버로고" />
+            </SnsNaverLogoBox>
+            <SnsNaverTextBox>
+              Naver 계정으로 로그인
+            </SnsNaverTextBox>
+          </SnsNaverBtn>
+          <SnsKakaoBtn
+            onClick={() => onSnsButtonClickHandler("kakao")}
+          >
+            <SnsKakaoLogoBox>
+              <SnsLogoKakao src={kakaoLogo} alt="카카오로고" />
+            </SnsKakaoLogoBox>
+            <SnsKakaoTextBox>
+              Kakao 계정으로 로그인
+            </SnsKakaoTextBox>
+          </SnsKakaoBtn>
+        </InputContainer>
         </LoginDiv>
       </AllDiv>
     </>

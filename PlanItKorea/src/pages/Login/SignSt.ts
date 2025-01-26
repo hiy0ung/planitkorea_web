@@ -296,3 +296,175 @@ export const Form = styled.form`
   align-items: center;
 `;
 
+export const SnsNaverBtn = styled.div`
+  width: 100%;
+  height: 60px;
+  display: flex;
+  flex-direction: row;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  margin-top: 20px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #01C73C;
+    border: 1px solid #01C73C;
+  }
+`;
+
+export const SnsKakaoBtn = styled.div`
+  width: 100%;
+  height: 60px;
+  display: flex;
+  flex-direction: row;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  margin-top: 20px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #FEE500;
+    border: 1px solid #FEE500;
+  }
+`;
+
+export const SnsNaverLogoBox = styled.div`
+  width: 20%;
+  border-right: 1px solid #ccc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  &:hover {
+    border-right: 1px solid #01C73C;
+  }
+`;
+export const SnsKakaoLogoBox = styled.div`
+  width: 20%;
+  border-right: 1px solid #ccc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  &:hover {
+    border-right: 1px solid #FEE500;
+  }
+`;
+
+export const SnsLogoKakao = styled.img`
+  width: 50px;
+  height: 50px;
+`;
+
+export const SnsLogoNaver = styled.img`
+  width: 60px;
+  height: 50px;
+`;
+
+export const SnsKakaoTextBox = styled.div`
+  width: 80%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+  color: ${theme.palette.text.secondary};
+  &:hover {
+    color: #000;
+  }
+`;
+
+export const SnsNaverTextBox = styled.div`
+  width: 80%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+  color: ${theme.palette.text.secondary};
+
+  &:hover {
+    color: #fff;
+  }
+`;
+
+
+export const SignupNaverBtn = styled.div`
+  width: 50%;
+  height: 60px;
+  display: flex;
+  flex-direction: row;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #01C73C;
+    border: 1px solid #01C73C;
+  }
+`;
+
+export const SignupKakaoBtn = styled.div`
+  width: 50%;
+  height: 60px;
+  display: flex;
+  flex-direction: row;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #FEE500;
+    border: 1px solid #FEE500;
+  }
+`;
+
+export const SignupPlkBtn = styled.div`
+  width: 50%;
+  height: 60px;
+  display: flex;
+  flex-direction: row;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: ${theme.palette.primary.main};
+    border: 1px solid ${theme.palette.primary.main};
+  }
+`;
+
+export const SnsPlkLogoBox = styled.div`
+  width: 20%;
+  border-right: 1px solid #ccc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  &:hover {
+    border-right: 1px solid ${theme.palette.primary.main};
+  }
+`;
+
+export const SnsLogoPlk = styled.img`
+  width: 55px;
+  height: 55px;
+`;
+
+export const SnsPlkTextBox = styled.div`
+  width: 80%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+  color: ${theme.palette.text.secondary};
+
+  &:hover {
+    color: #fff;
+  }
+`;
+
+export const SnsBtnBox = styled.div`
+  margin-top: 50px;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+`;
