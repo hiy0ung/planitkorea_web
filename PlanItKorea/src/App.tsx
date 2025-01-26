@@ -7,8 +7,8 @@ import Footer from "./component/Footer";
 import CustomerBar from "./component/CustomerBar";
 
 import IndexHome from "./pages/home/Home";
-import Login from "./pages/Login/Login";
-import SignUp from "./pages/Login/SignUp";
+import Login from "./pages/Login/login/Login";
+import SignUp from "./pages/Login/signup/SignUp";
 import IdSearch from "./pages/Login/IdSearch";
 import PasswordSearch from "./pages/Login/PasswordSearch";
 import MyPageMain from "./pages/MyPage/MyPageMain";
