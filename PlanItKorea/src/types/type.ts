@@ -19,6 +19,8 @@ export type NewUser = {
   userBirthDate: string;
   userPhone: string;
   userEmail: string;
+  snsId: string | null;
+  joinPath: string;
 }
 
 // 중복확인 에러 메세지 타입

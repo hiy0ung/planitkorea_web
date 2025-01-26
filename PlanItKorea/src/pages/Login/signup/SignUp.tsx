@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import {
   AllDiv,
   LoginDiv as SignUpDiv,
@@ -16,14 +16,29 @@ import {
   InputEmailField,
   InputContainer2,
   SuccessMessage,
-} from "./SignSt";
-import { Logo, LogoDIv, LogoName } from "../../styles/logo";
-import styled from "styled-components";
-import theme from "../../styles/theme";
-import { NavLink, useNavigate } from "react-router-dom";
-import Modal, { ModalButton, Overlay } from "../../component/Modal";
+  SnsNaverLogoBox,
+  SnsLogoNaver,
+  SnsNaverTextBox,
+  SnsKakaoLogoBox,
+  SnsLogoKakao,
+  SnsKakaoTextBox,
+  SignupNaverBtn,
+  SignupKakaoBtn,
+  SignupPlkBtn,
+  SnsPlkLogoBox,
+  SnsLogoPlk,
+  SnsPlkTextBox,
+  SnsBtnBox,
+} from "../SignSt";
+import { Logo, LogoDIv, LogoName } from "../../../styles/logo";
+import kakaoLogo from '../../../assets/images/kakaoLogo.png';
+import naverLogo from '../../../assets/images/naverLogo.png';
+import theme from "../../../styles/theme";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
+import Modal, { ModalButton, Overlay } from "../../../component/Modal";
 import axios from "axios";
-import { DuplicationError, DuplicationSuccess, NewUser, User } from "../../types/type";
+import { DuplicationError, DuplicationSuccess, NewUser, User } from "../../../types/type";
+import { SIGN_IN_SNS_API } from "../../../apis";
 
 // 회원가입 정규식
 // 아이디 8~14자의 영문, 숫자 포함 입력
@@ -35,6 +50,14 @@ const phoneNumberRegex = /^\d{9,11}$/;
 const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
 export default function SignUp() {
+
+  const navigate = useNavigate();
+  const location = useLocation();
+  const params = new URLSearchParams(location.search);
+  const snsId = params.get("snsId");
+  const joinPath = params.get("joinPath");
+  const path = params.get("path");
+
   const [signUpData, setSignUpData] = useState<NewUser>({
     userId: "",
     userPassword: "",
@@ -43,6 +66,8 @@ export default function SignUp() {
     userBirthDate: "",
     userPhone: "",
     userEmail: "",
+    snsId: snsId,
+    joinPath: joinPath ? joinPath : "Home"
   });
 
   const [idError, setIdError] = useState<string>("");
@@ -53,6 +78,17 @@ export default function SignUp() {
   const [phoneNumberError, setPhoneNumberError] = useState<string>("");
   const [emailError, setEmailError] = useState<string>("");
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [page, setPage] = useState<number>(0);
+
+  useEffect(() => {
+    if(path === "1") {
+      setPage(1);
+    }
+  },[path])
+
+  const onSnsButtonClickHandler = (sns: "kakao" | "naver") => {
+    window.location.href = `${SIGN_IN_SNS_API}${sns}`;
+  };
 
   //! 중복확인 성공, 실패 메세지 상태관리
   const [duplicationError, setDuplicationError] = useState<DuplicationError>({
@@ -316,6 +352,43 @@ export default function SignUp() {
           <Logo src={"/images/logo.png"} alt="logo" />
           <LogoName>Plan It Korea</LogoName>
         </LogoDIv>
+
+        {page === 0 && (
+          <SignUpDiv>
+            <SnsBtnBox>
+            <SignupPlkBtn onClick={() => setPage(1)}>
+              <SnsPlkLogoBox>
+                <SnsLogoPlk src="/images/logo.png"/>
+              </SnsPlkLogoBox>
+              <SnsPlkTextBox>
+                PLK 회원가입
+              </SnsPlkTextBox>
+            </SignupPlkBtn>
+            <SignupNaverBtn
+            onClick={() => onSnsButtonClickHandler("naver")}
+          >
+            <SnsNaverLogoBox>
+              <SnsLogoNaver src={naverLogo} alt="네이버로고" />
+            </SnsNaverLogoBox>
+            <SnsNaverTextBox>
+              Naver 회원가입
+            </SnsNaverTextBox>
+          </SignupNaverBtn>
+          <SignupKakaoBtn
+            onClick={() => onSnsButtonClickHandler("kakao")}
+          >
+            <SnsKakaoLogoBox>
+              <SnsLogoKakao src={kakaoLogo} alt="카카오로고" />
+            </SnsKakaoLogoBox>
+            <SnsKakaoTextBox>
+              Kakao 회원가입
+            </SnsKakaoTextBox>
+          </SignupKakaoBtn>
+            </SnsBtnBox>
+          </SignUpDiv>
+        )}
+
+        {page === 1 && (
         <SignUpDiv>
           <DuplicationContainer>
             <InputContainer2>
@@ -451,6 +524,7 @@ export default function SignUp() {
             <Button onClick={handleSubmit}>회원가입 완료</Button>
           </InputContainer>
         </SignUpDiv>
+        )}
       </AllDiv>
 
       {isModalOpen && (
