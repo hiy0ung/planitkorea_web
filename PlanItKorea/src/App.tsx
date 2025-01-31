@@ -10,7 +10,7 @@ import IndexHome from "./pages/home/Home";
 import Login from "./pages/Login/login/Login";
 import SignUp from "./pages/Login/signup/SignUp";
 import IdSearch from "./pages/Login/IdSearch";
-import PasswordSearch from "./pages/Login/PasswordSearch";
+import PasswordSearch from "./pages/Login/findPassword/PasswordSearch";
 import MyPageMain from "./pages/MyPage/MyPageMain";
 import FrequentlyQuestion from "./pages/CustomerService/FrequentlyQuestion";
 import InquiryCRUD from "./pages/CustomerService/InquiryCRUD";
@@ -25,6 +25,7 @@ import AppContainer from "./layouts/AppContainer";
 import MainContainer from "./layouts/MainContainer";
 import { useCookies } from "react-cookie";
 import useAuthStore from "./stores/use.auth.store";
+import ResetPasswordPage from "./pages/Login/findPassword/ResetPasswordPage";
 
 
 
@@ -75,6 +76,8 @@ function App() {
             <Route path="/signUp" element={<SignUp />} />
             <Route path="/idSearch" element={<IdSearch />} />
             <Route path="/passwordSearch" element={<PasswordSearch />} />
+            <Route path="/findPassword/verify" element={<ResetPasswordPage />} />
+
 
             <Route
               path="/frequentlyQuestion"
