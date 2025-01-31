@@ -67,7 +67,7 @@ export const InputIdField = styled.input<{ hasIdError: boolean }>`
     props.hasIdError ? `2px solid ${theme.palette.secondary.main}` : "none"};
   height: 47px;
   max-width: 1500px;
-  width: 95%;
+  width: 100%;
   padding-left: 6%;
   margin-bottom: 15px;
   &:hover {
