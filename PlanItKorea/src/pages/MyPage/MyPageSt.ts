@@ -456,14 +456,14 @@ export const CancelBtn = styled.div`
   }
 `;
 
-export const MapUl = styled.ul`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center; 
-  width: 100%;
+// export const MapUl = styled.ul`
+//   display: flex;
+//   flex-direction: column;
+//   justify-content: center;
+//   align-items: center; 
+//   width: 100%;
   
-`;
+// `;
 
 export const MainLi = styled.li`
   display: flex;
