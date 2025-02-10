@@ -9,7 +9,6 @@ import {
   NavInnerBox,
   NavInnerDiv,
   NavTitle,
-  WishInner,
 } from "./MyPageSt";
 import { NavLink, useNavigate } from "react-router-dom";
 import {
@@ -136,7 +135,7 @@ export default function WishList() {
 
             <Card>
               <Error>찜 상품이 없습니다.</Error>
-          </Card>
+            </Card>
           ): (
 
             <AllProductDiv>

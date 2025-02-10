@@ -61,7 +61,7 @@ export default function PasswordSearch() {
     if (valid && !isButtonDisabled) {
       try {
         setIsButtonDisabled(true);
-        const response = await axios.post(`http://localhost:4040/api/v1/auth/users/mails/find-pw`, mailData)
+        const response = await axios.post(`http://localhost:4040/api/v1/auth/users/mails/password`, mailData)
         if(!!response.data.result) {
           setHasSendMail(true);
           setIsModalOpen(true);
