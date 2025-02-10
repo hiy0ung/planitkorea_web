@@ -20,7 +20,7 @@ export const HomeBox = styled.div`
 
 export const PopularCityBox = styled.div`
   border: none;
-  padding: 1% 8%;
+  padding: 20px 100px;
   display: flex;
   flex-wrap: wrap;
   justify-content: space-around;
@@ -43,12 +43,12 @@ export const City = styled.div`
 
 export const MostUsedBox = styled.div`
   border: none;
-  padding: 1% 10%;
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  grid-gap: 20px;
-  justify-content: center;
+  padding: 20px 100px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
   align-items: flex-start;
+  column-gap: 40px;
   width: 100%;
 `;
 
@@ -57,6 +57,7 @@ export const MostUsed = styled.a`
   height: 280px;
   display: flex;
   flex-direction: column;
+  justify-content: center;
   align-items: center;
   min-width: 180px;
   box-sizing: border-box;
@@ -64,27 +65,6 @@ export const MostUsed = styled.a`
   cursor: pointer;
 `;
 
-export const MostTicketBox = styled.div`
-  border: none;
-  padding: 1% 10%;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-around;
-  align-items: flex-start;
-  width: 100%;
-`;
-
-export const MostTicket = styled.a`
-  width: 200px;
-  height: 280px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  min-width: 180px;
-  box-sizing: border-box;
-  margin: 5px 5px;
-  cursor: pointer;
-`;
 
 export const CityImg = styled.img`
   width: 100%;
