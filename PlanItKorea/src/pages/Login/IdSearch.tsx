@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useState } from "react";
+import React, { useState } from "react";
 import {
   AllDiv,
   InputContainer,
@@ -16,7 +16,6 @@ import { Logo, LogoDIv, LogoName } from "../../styles/logo";
 import Modal from "../../component/Modal";
 import { NavLink } from "react-router-dom";
 import axios from "axios";
-import { User } from "../../types/type";
 
 type FindUserId = {
   userName: string;
@@ -171,7 +170,7 @@ export default function IdSearch() {
           <Overlay />
           <Modal isOpen={isModalOpen}>
             <ModalText>아이디 확인: {userId}</ModalText>
-            <NavLink to="/signIn">
+            <NavLink to="/signin">
               <ModalButton onClick={() => setIsModalOpen(false)}>
                 확인
               </ModalButton>
