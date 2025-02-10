@@ -181,21 +181,14 @@ export interface Review {
   date: string;
 }
 
-//! 숙소 상품 타입
-export interface BerthProduct {
+export type Top5Product = {
   id: number;
-  img: string[];
-  name: string;
-  price: string;
-  address: string;
-  point: Point;
-  //? 지역 카테고리
-  city: Location;
-  //? 숙소 카테고리
-  accommodationCategory: Accommodation[];
-  //? 편의시설 카테고리
-  facility: Facilities[];
-  description: string;
+  productName: string;
+  productCategory: string;
+  productRegion: string;
+  productAddress: string;
+  productPrice: string;
+  productImage: string;
 }
 
 export interface Point {

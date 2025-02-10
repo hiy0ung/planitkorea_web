@@ -58,6 +58,14 @@ export default function SignUp() {
   const joinPath = params.get("joinPath");
   const path = params.get("path");
 
+  useEffect(() => {
+    setSignUpData((prev) => ({
+      ...prev,
+      snsId: snsId || prev.snsId,
+      joinPath: joinPath || prev.joinPath
+    }));
+  }, [snsId, joinPath]); 
+
   const [signUpData, setSignUpData] = useState<NewUser>({
     userId: "",
     userPassword: "",

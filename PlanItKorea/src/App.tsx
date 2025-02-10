@@ -26,6 +26,8 @@ import MainContainer from "./layouts/MainContainer";
 import { useCookies } from "react-cookie";
 import useAuthStore from "./stores/use.auth.store";
 import ResetPasswordPage from "./pages/Login/findPassword/ResetPasswordPage";
+import SnsSuccess from "./pages/Login/login/SnsSuccess";
+import AuthRedirectHandler from "./pages/Login/signup/AuthRedirectHandler";
 
 
 
@@ -72,10 +74,12 @@ function App() {
         <MainContainer>
           <Routes>
             <Route path="/" element={<IndexHome />} />
-            <Route path="/signIn" element={<Login />} />
+            <Route path="/signin" element={<Login />} />
             <Route path="/signUp" element={<SignUp />} />
+            <Route path="/sns-success" element={<SnsSuccess />} />
             <Route path="/idSearch" element={<IdSearch />} />
             <Route path="/passwordSearch" element={<PasswordSearch />} />
+            <Route path="/auth" element={<AuthRedirectHandler />} />
             <Route path="/findPassword/verify" element={<ResetPasswordPage />} />
 
 

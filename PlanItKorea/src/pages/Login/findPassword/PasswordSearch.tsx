@@ -1,5 +1,4 @@
 import React, { ChangeEvent, useState } from "react";
-import logo from "../../assets/images/logo.png";
 import {
   AllDiv,
   InputContainer,
@@ -126,7 +125,7 @@ export default function PasswordSearch() {
           <Overlay />
           <Modal isOpen={isModalOpen}>
             <ModalText> 이메일 전송이 완료되었습니다. </ModalText>
-            <NavLink to="/signIn">
+            <NavLink to="/signin">
               <ModalButton onClick={() => setIsModalOpen(false)}>
                 확인
               </ModalButton>
