@@ -22,7 +22,6 @@ import {
   PriceBack,
   CancelBtn,
   DetailLabelRe,
-  MapUl,
   MainLi,
   Card,
   Error,
@@ -88,83 +87,82 @@ export default function ReservationCheck() {
           </NavInnerBox>
         </NaviBox>
 
-        <MapUl>
-          {reservation.length === 0 && (
+          {!reservation || reservation.length === 0 ? (
             <Card>
               <Error>예약 목록이 없습니다.</Error>
             </Card>
+          ) : (
+            <>
+              {reservation.map((item) => (
+                <MainLi key={item.id}>
+                  <ReservationMainInner>
+                    <ReserVationProductDiv
+                      onClick={() => reservationClick(item.productId)}
+                    >
+                      <ReserVationProductImgDiv>
+                        <ProductImage
+                          src={
+                            item.productImg
+                              ? `http://localhost:4040/image/${item.productImg}`
+                              : "/images/logo.png"
+                          }
+                        />
+                      </ReserVationProductImgDiv>
+                    </ReserVationProductDiv>
+
+                    <ReserVationDetail>
+                      <ReservationNumber>NO: {item.id}</ReservationNumber>
+                      <ProductName>{item.productName}</ProductName>
+                      <DateDivWrap>
+                        <DateColumn>
+                          <DetailLabel>체크인</DetailLabel>
+                          <DateDiv>
+                            {format(new Date(item.startDate), "yyyy-MM-dd")}
+                          </DateDiv>
+                        </DateColumn>
+                        <DateColumn>
+                          <DetailLabel>체크아웃</DetailLabel>
+                          <DateDiv>
+                            {format(new Date(item.endDate), "yyyy-MM-dd")}
+                          </DateDiv>
+                        </DateColumn>
+                      </DateDivWrap>
+                      <PersonDiv>
+                        <DetailLabel>인원수</DetailLabel>
+                        <Person>{item.person}</Person>
+                      </PersonDiv>
+                      <PersonDiv>
+                        <DetailLabel>예약 상태</DetailLabel>
+                        <Person>
+                          {item.reservationStatus === 0 ? (
+                            <p>결제 취소</p>
+                          ) : item.reservationStatus === 1 ? (
+                            <p>결제 완료</p>
+                          ) : (
+                            <p>이용 완료</p>
+                          )}
+                        </Person>
+                      </PersonDiv>
+                    </ReserVationDetail>
+
+                    <PriceDiv>
+                      <CancelBtn>예약 취소</CancelBtn>
+                      <PriceBox>
+                        <DetailLabelRe>가격</DetailLabelRe>
+                        <PriceBack>
+                          {item.totalPrice}{" "}
+                          <FontAwesomeIcon
+                            style={{ marginLeft: "5px" }}
+                            icon={faWonSign}
+                          />
+                        </PriceBack>
+                      </PriceBox>
+                    </PriceDiv>
+                  </ReservationMainInner>
+                </MainLi>
+              ))}
+            </>
           )}
-          {reservation.map((item) => (
-            <MainLi key={item.id}>
-              <ReservationMainInner>
-
-                <ReserVationProductDiv
-                  onClick={() => reservationClick(item.productId)}
-                >
-                  <ReserVationProductImgDiv>
-                    <ProductImage
-                      src={
-                        item.productImg
-                          ? `http://localhost:4040/image/${item.productImg}`
-                          : "/images/logo.png"
-                      }
-                    />
-                  </ReserVationProductImgDiv>
-                </ReserVationProductDiv>
-
-                <ReserVationDetail>
-                  <ReservationNumber>NO: {item.id}</ReservationNumber>
-                  <ProductName>{item.productName}</ProductName>
-                  <DateDivWrap>
-                    <DateColumn>
-                      <DetailLabel>체크인</DetailLabel>
-                      <DateDiv>
-                        {format(new Date(item.startDate), "yyyy-MM-dd")}
-                      </DateDiv>
-                    </DateColumn>
-                    <DateColumn>
-                      <DetailLabel>체크아웃</DetailLabel>
-                      <DateDiv>
-                        {format(new Date(item.endDate), "yyyy-MM-dd")}
-                      </DateDiv>
-                    </DateColumn>
-                  </DateDivWrap>
-                  <PersonDiv>
-                    <DetailLabel>인원수</DetailLabel>
-                    <Person>{item.person}</Person>
-                  </PersonDiv>
-                  <PersonDiv>
-                    <DetailLabel>예약 상태</DetailLabel>
-                    <Person>
-                      {item.reservationStatus === 0 ? (
-                        <p>결제 취소</p>
-                      ) : item.reservationStatus === 1 ? (
-                        <p>결제 완료</p>
-                      ) : (
-                        <p>이용 완료</p>
-                      )}
-                    </Person>
-                  </PersonDiv>
-                </ReserVationDetail>
-
-                <PriceDiv>
-                  <CancelBtn>예약 취소</CancelBtn>
-                  <PriceBox>
-                    <DetailLabelRe>가격</DetailLabelRe>
-                    <PriceBack>
-                      {item.totalPrice}{" "}
-                      <FontAwesomeIcon
-                        style={{ marginLeft: "5px" }}
-                        icon={faWonSign}
-                      />
-                    </PriceBack>
-                  </PriceBox>
-                </PriceDiv>
-                
-              </ReservationMainInner>
-            </MainLi>
-          ))}
-        </MapUl>
       </AllDiv>
     </>
   );
