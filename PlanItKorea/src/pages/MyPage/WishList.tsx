@@ -12,7 +12,6 @@ import {
 } from "./MyPageSt";
 import { NavLink, useNavigate } from "react-router-dom";
 import {
-  Category,
   PageDiv,
   PriceDiv,
   ProductDetail,
@@ -23,21 +22,24 @@ import {
 import { Checkbox } from "@mui/material";
 import { Favorite, FavoriteBorder } from "@mui/icons-material";
 import ReactPaginate from "react-paginate";
-import { BerthProduct, User } from "../../types/type";
-import useAuthStore from "../../stores/use.auth.store";
+import { Wishlist } from "../../types/type";
 import axios from "axios";
+import { useCookies } from "react-cookie";
 
 const ITEMS_PER_PAGE = 9;
 
 export default function WishList() {
   const navigate = useNavigate();
-  const { user, isLoggedIn } = useAuthStore();
-
-  const [wishList, setWishList] = useState<BerthProduct[]>([]);
-  const [wishNumber, setWishNumber] = useState<number[]>([]);
-  const [userWishList, setUserWishList] = useState<number[]>([]);
-
+  const [cookies] = useCookies(["token"]);
+  const token = cookies.token;
+  const [wishList, setWishList] = useState<Wishlist[]>([]);
   const [currentPage, setCurrentPage] = useState<number>(0);
+
+  
+  useEffect(() => {
+    fetchWishlist();
+  }, [token]);
+
   // 페이지
   const handlePageChange = (event: { selected: number }) => {
     setCurrentPage(event.selected);
@@ -47,151 +49,129 @@ export default function WishList() {
   const indexOfFirstItem = indexOfLastItem - ITEMS_PER_PAGE;
   const currentItems = wishList.slice(indexOfFirstItem, indexOfLastItem);
 
-  const handleProductClick = (id: number) => {
-    navigate(`/detailProduct/${id}`);
+  const handleProductClick = (productId: number) => {
+    navigate(`/detailProduct/${productId}`);
   };
 
-  // const toggleWishlist = async (id: number) => {
-  //   if (!isLoggedIn) {
-  //     alert("로그인이 필요한 시스템입니다.");
-  //     return;
-  //   }
-  //   try {
-  //     const response = await axios.get<User>(
-  //       `http://localhost:3001/users/${user.id}`
-  //     );
-  //     const userWishData = response.data;
-  //     const updatedWishList = userWishData.wishList.includes(id)
-  //       ? userWishData.wishList.filter((item) => item !== id)
-  //       : [...userWishData.wishList, id];
-  //     setUserWishList(updatedWishList);
-  //     await axios.put(`http://localhost:3001/users/${user.id}`, {
-  //       ...userWishData,
-  //       wishList: updatedWishList,
-  //     });
-  //     setWishNumber(updatedWishList);
+  const fetchWishlist = async () => {
+    if (!token) {
+      alert("로그인이 필요한 시스템입니다.");
+      return;
+    }
+    try {
+      const response = await axios.get(
+        `http://localhost:4040/api/v1/wishlist`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      const userWishList = response.data.data;
+      setWishList(userWishList);
+    } catch (error) {
+      console.error("위시리스트 업데이트 중 오류 발생:", error);
+    }
+  };
 
-  //     console.log("위시리스트가 성공적으로 업데이트되었습니다.");
-  //   } catch (error) {
-  //     console.error("위시리스트 업데이트 중 오류 발생:", error);
-  //   }
-  // };
 
-  // const fetchUserWishList = async () => {
-  //   try {
-  //     const response = await axios.get<User>(
-  //       `http://localhost:3001/users/${user.id}`
-  //     );
-  //     const userWishData = response.data.wishList;
-  //     setWishNumber(userWishData);
-  //     setUserWishList(userWishData);
+  const deleteWishList = async (wishListId: number) => {
+    try {
+      await axios.delete(
+        `http://localhost:4040/api/v1/wishlist/${wishListId}`,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      setWishList((prev) =>
+        prev.filter((item) => item.wishListId !== wishListId)
+      );
+    } catch (error) {
+      console.error("위시리스트 삭제 오류", error);
+    }
+  };
 
-  //     const products = await Promise.all(
-  //       userWishData.map((id) =>
-  //         axios.get<BerthProduct>(`http://localhost:3001/BerthProduct/${id}`)
-  //       )
-  //     );
-
-  //     setWishList(products.map((res) => res.data));
-  //   } catch (error) {
-  //     console.error("위시리스트 로드 중 오류 발생:", error);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   fetchUserWishList();
-  // }, [isLoggedIn, userWishList]);
-
-  console.log(wishNumber);
-  const label = { inputProps: { "aria-label": "Checkbox demo" } };
-
-  //! 배열을 돌려서 상품 데이터 추출
+  const toggleWishlist = (productId: number) => {
+    const existingItem = wishList.find((item) => item.productId === productId);
+    if (existingItem) {
+      deleteWishList(existingItem.wishListId);
+    }
+  };
 
   return (
     <>
       <GroupLine />
       <AllDiv>
         <NaviBox>
-                  <NavInnerBox>
-                    <NavLink to="/myPageMain">
-                      <NavInnerDiv>
-                        <NavTitle>계정 관리</NavTitle>
-                      </NavInnerDiv>
-                    </NavLink>
-                    <NavLink to="/reservationCheck">
-                      <NavInnerDiv>
-                        <NavTitle>예약 확인</NavTitle>
-                      </NavInnerDiv>
-                    </NavLink>
-                    <NavLink to="/wishList">
-                      <NavInnerDiv style={{ backgroundColor: "#D8E8F9" }}>
-                        <NavTitle>찜 목록</NavTitle>
-                      </NavInnerDiv>
-                    </NavLink>
-                  </NavInnerBox>
-                </NaviBox>
+          <NavInnerBox>
+            <NavLink to="/myPageMain">
+              <NavInnerDiv>
+                <NavTitle>계정 관리</NavTitle>
+              </NavInnerDiv>
+            </NavLink>
+            <NavLink to="/reservationCheck">
+              <NavInnerDiv>
+                <NavTitle>예약 확인</NavTitle>
+              </NavInnerDiv>
+            </NavLink>
+            <NavLink to="/wishList">
+              <NavInnerDiv style={{ backgroundColor: "#D8E8F9" }}>
+                <NavTitle>찜 목록</NavTitle>
+              </NavInnerDiv>
+            </NavLink>
+          </NavInnerBox>
+        </NaviBox>
 
-          {currentItems.length === 0 ? (
-
-            <Card>
-              <Error>찜 상품이 없습니다.</Error>
-            </Card>
-          ): (
-
-            <AllProductDiv>
-          {currentItems.map((product) => (
-            <ProductDiv
-              key={product.id}
-              onClick={() => handleProductClick(product.id)}
-            >
-              <ProductImg src={product.img[0]} />
-              <ProductDetail>
-                <Category>
-                  {product.city} - {product.accommodationCategory}
+        {currentItems.length === 0 ? (
+          <Card>
+            <Error>찜 상품이 없습니다.</Error>
+          </Card>
+        ) : (
+          <AllProductDiv>
+            {currentItems.map((product) => (
+              <ProductDiv
+                key={product.productId}
+                
+              >
+                <ProductImg src={product.productImage} onClick={() => handleProductClick(product.productId)} />
+                <ProductDetail>
                   <Checkbox
-                    {...label}
+                    // {...label}
                     icon={<FavoriteBorder sx={{ color: "#DD1162" }} />}
                     checkedIcon={<Favorite sx={{ color: "#DD1162" }} />}
-                    checked={userWishList.includes(product.id)}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      // toggleWishlist(product.id);
-                    }}
+                    checked={wishList.some((item) => item.productId === product.productId)} 
+                    onChange={(e) => {e.stopPropagation(); toggleWishlist(product.productId);}}
                     sx={{ position: "relative" }}
                   />
-                </Category>
-                <ProductName>{product.name}</ProductName>
-                <PriceDiv>₩ {product.price.toLocaleString()}</PriceDiv>
-              </ProductDetail>
-            </ProductDiv>
-          ))}
-          
-          {userWishList.length > 0 && (
+                  <ProductName>{product.productName}</ProductName>
+                  <PriceDiv>₩ {product.productPrice.toLocaleString()}</PriceDiv>
+                </ProductDetail>
+              </ProductDiv>
+            ))}
 
-            <PageDiv>
-            <ReactPaginate
-              previousLabel={"<"}
-              nextLabel={">"}
-              breakLabel={"..."}
-              pageCount={Math.ceil(wishList.length / ITEMS_PER_PAGE)}
-              marginPagesDisplayed={2}
-              pageRangeDisplayed={5}
-              onPageChange={handlePageChange}
-              containerClassName={"pagination"}
-              pageClassName={"page-item"}
-              pageLinkClassName={"page-link"}
-              previousClassName={"page-item"}
-              previousLinkClassName={"page-link"}
-              nextClassName={"page-item"}
-              nextLinkClassName={"page-link"}
-              breakClassName={"page-item"}
-              breakLinkClassName={"page-link"}
-              activeClassName={"active"}
-              />
-          </PageDiv>
+            {wishList.length > 0 && (
+              <PageDiv>
+                <ReactPaginate
+                  previousLabel={"<"}
+                  nextLabel={">"}
+                  breakLabel={"..."}
+                  pageCount={Math.ceil(wishList.length / ITEMS_PER_PAGE)}
+                  marginPagesDisplayed={2}
+                  pageRangeDisplayed={5}
+                  onPageChange={handlePageChange}
+                  containerClassName={"pagination"}
+                  pageClassName={"page-item"}
+                  pageLinkClassName={"page-link"}
+                  previousClassName={"page-item"}
+                  previousLinkClassName={"page-link"}
+                  nextClassName={"page-item"}
+                  nextLinkClassName={"page-link"}
+                  breakClassName={"page-item"}
+                  breakLinkClassName={"page-link"}
+                  activeClassName={"active"}
+                />
+              </PageDiv>
             )}
-        </AllProductDiv>
-    )}
+          </AllProductDiv>
+        )}
       </AllDiv>
     </>
   );

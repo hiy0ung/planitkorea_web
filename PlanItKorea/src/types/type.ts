@@ -181,6 +181,28 @@ export interface Review {
   date: string;
 }
 
+export type Product = {
+  productId: number;
+  productCategory: string;
+  productName: string;
+  productPrice: string;
+  productDescription: string;
+  productAddress: string;
+  productImage: string;
+  facilityIds: number[];
+};
+
+export type Wishlist = {
+  wishListId: number;
+  userId: number;
+  productId: number;
+  productName: string;
+  productAddress: string;
+  productPrice: string;
+  productImage: string;
+}
+
+
 export type Top5Product = {
   id: number;
   productName: string;
