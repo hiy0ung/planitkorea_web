@@ -124,7 +124,7 @@ export default function Header() {
                 <GroupLine />
                 {cookies.token && (
                   <MenuSingInButton
-                    onClick={logout}
+                    onClick={handleLogOut}
                     style={{ minWidth: "164px" }}
                   >
                     <span>로그아웃</span>
