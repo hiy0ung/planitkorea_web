@@ -28,7 +28,7 @@ import {
   NavInnerBox,
   NaviBox,
   MapUl,
-} from "./MyPageSt";
+} from "../mypage/MyPageSt";
 import { NavLink, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faWonSign } from "@fortawesome/free-solid-svg-icons";

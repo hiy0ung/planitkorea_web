@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { NewUser, User } from "../../types/type";
 import { set } from "date-fns";
 import axios from "axios";
-import { Button } from "../CustomerService/InquirySt";
+import { Button } from "../customerService/InquirySt";
 import {
   AllDiv,
   Box,
@@ -24,7 +24,7 @@ import {
   WithDrawalButton,
   WithdrawalDiv,
   WithdrawalInput,
-} from "./MyPageSt";
+} from "../mypage/MyPageSt";
 import { NavLink, useNavigate } from "react-router-dom";
 import useAuthStore from "../../stores/use.auth.store";
 import { useCookies } from "react-cookie";

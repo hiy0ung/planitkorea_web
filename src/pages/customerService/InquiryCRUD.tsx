@@ -1,6 +1,6 @@
 import React, { ChangeEvent, useEffect, useState } from "react";
 import { ContentDiv } from "./customerSt";
-import { ModalText } from "../Login/SignSt";
+import { ModalText } from "../user/SignSt";
 import { InquiryRequest } from "../../types/type";
 import Modal, { ModalButton, Overlay } from "../../component/Modal";
 import { NavLink, useLocation, useParams } from "react-router-dom";
@@ -23,9 +23,9 @@ import {
   Select,
   SelectCategoryDiv,
   TitleDiv,
-} from "./InquirySt";
+} from "../customerService/InquirySt";
 import axios from "axios";
-import { Error } from "../MyPage/MyPageSt";
+import { Error } from "../mypage/MyPageSt";
 import { useCookies } from "react-cookie";
 
 export default function InquiryCRUD() {
@@ -43,7 +43,7 @@ export default function InquiryCRUD() {
 
   const [modalMessage, setModalMessage] = useState<string>("");
 
-  const [cookies] = useCookies();
+  const [cookies] = useCookies(['token']);
 
   const token = cookies.token;
 
@@ -59,7 +59,7 @@ export default function InquiryCRUD() {
       const fetchInquiry = async () => {
         try {
           const response = await axios.get(
-            `http://localhost:4040/api/v1/inquiries/get/${inquiryState}`,
+            `http://localhost:4040/api/v1/inquiries/${inquiryState}`,
             { headers: { Authorization: `Bearer ${token}` }}
           );
           setInquiry(response.data.data);
@@ -120,7 +120,7 @@ const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
       }
 
       const response = await axios.post(
-        `http://localhost:4040/api/v1/inquiries/create`, 
+        `http://localhost:4040/api/v1/inquiries`, 
         formData, 
         { 
           headers: { 
@@ -182,7 +182,7 @@ const handleUpdate = async (e: React.MouseEvent<HTMLButtonElement>) => {
 
 
       const response = await axios.put(
-        `http://localhost:4040/api/v1/inquiries/update/${inquiryId}`, 
+        `http://localhost:4040/api/v1/inquiries/${inquiryId}`, 
         formData,
         {
           headers: { 

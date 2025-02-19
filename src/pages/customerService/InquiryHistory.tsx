@@ -12,7 +12,7 @@ import {
   InquiryTitle,
   UDButton,
   UserIdDiv,
-} from "./InquirySt";
+} from "../customerService/InquirySt";
 import { NavLink } from "react-router-dom";
 import {
   Accordion,
@@ -55,7 +55,7 @@ export default function InquiryHistory() {
   const fetchInquiryList = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:4040/api/v1/inquiries/get`,
+        `http://localhost:4040/api/v1/inquiries`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
       console.log(response.data.data);
@@ -75,7 +75,7 @@ export default function InquiryHistory() {
   const fetchInquiryDetail = async (inquiryId: number) => {
     try {
       const response = await axios.get(
-        `http://localhost:4040/api/v1/inquiries/get/${inquiryId}`,
+        `http://localhost:4040/api/v1/inquiries/${inquiryId}`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
@@ -99,7 +99,7 @@ export default function InquiryHistory() {
     console.log(inquiryId);
     try {
       const response = await axios.delete(
-        `http://localhost:4040/api/v1/inquiries/delete/${inquiryId}`,
+        `http://localhost:4040/api/v1/inquiries/${inquiryId}`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
