@@ -202,6 +202,16 @@ export type Wishlist = {
   productImage: string;
 }
 
+export type WishListResponseDto = {
+  wishListId: number;
+  userId: number;
+  productId: number;
+  productName: string;
+  productAddress: string;
+  productPrice: string;
+  productImage: string;
+}
+
 
 export type Top5Product = {
   id: number;

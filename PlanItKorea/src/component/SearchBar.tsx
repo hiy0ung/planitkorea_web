@@ -21,176 +21,82 @@ import "react-datepicker/dist/react-datepicker.css";
 import "../styles/date.css";
 import { format } from "date-fns";
 import SearchIcon from "@mui/icons-material/Search";
-import useSearchStore, { SearchData } from "../stores/use.search.store";
-import { Location } from "../types/type";
-import { useNavigate } from "react-router-dom";
-import useSelectStore from "../stores/use.select.store";
+import { useLocation, useNavigate } from "react-router-dom";
+import { BootstrapInput, HiddenBox, HiddenForm, PersonModal, SearchBarDiv, SearchCity, SearchDay, SearchPerson, SubmitButton, SubmitDiv, SubmitHiddenButton } from "./SearchBarSt";
 
-const SearchBarDiv = styled("div")(({ theme }) => ({
-  display: "flex",
-  gap: "16px",
-  flexWrap: "nowrap",
-  overflow: "none",
-  alignItems: "center",
-  padding: "10px 70px",
-  margin: 0,
-  [theme.breakpoints.down("md")]: {
-    display: "none",
-  },
-}));
 
-const SearchCity = styled("div")(({ theme }) => ({
-  flex: "1 1 20%",
-  minWidth: "150px",
-  position: "relative",
-}));
-
-const SearchDay = styled("div")(({ theme }) => ({
-  flex: "1 1 40%",
-  minWidth: "350px",
-  position: "relative",
-}));
-
-export const SearchPerson = styled("div")(({ theme }) => ({
-  flex: "1 1 20%",
-  minWidth: "150px",
-  position: "relative",
-}));
-
-const SubmitDiv = styled("div")(({ theme }) => ({
-  minWidth: "70",
-  padding: "24px 0 0 10px",
-}));
-
-export const PersonModal = styled("div")(({ theme }) => ({
-  position: "absolute",
-  top: "100%",
-  left: 0,
-  width: "90%",
-  maxHeight: "330px",
-  padding: "12px 24px",
-  border: "0.4px solid #ced4da",
-  boxShadow: "0 2px 4px 0 rgba(0,0,0,.1)",
-  display: "flex",
-  justifyContent: "space-between",
-  alignItems: "center",
-  zIndex: 10,
-  flexWrap: "wrap",
-  backgroundColor: "white",
-}));
-
-const SubmitButton = styled("button")(({ theme }) => ({
-  padding: " 5px 10px",
-  border: "none",
-  borderRadius: "7px",
-  backgroundColor: "#82AEF5",
-  cursor: "pointer",
-  transition: "backgroundColor 0.1s ease",
-  minWidth: "42px",
-  "&:hover": {
-    backgroundColor: "#5F7DFF",
-  },
-}));
-
-const SubmitHiddenButton = styled("button")(({ theme }) => ({
-  padding: " 5px 50px",
-  border: "none",
-  borderRadius: "7px",
-  backgroundColor: "#82AEF5",
-  margin: "10px 50px",
-  cursor: "pointer",
-  transition: "backgroundColor 0.1s ease",
-  minWidth: "42px",
-  "&:hover": {
-    backgroundColor: "#5F7DFF",
-  },
-}));
-
-const HiddenBox = styled("form")(({ theme }) => ({
-  display: "flex",
-  justifyContent: "center",
-  alignItems: "center",
-  height: "100px",
-  boxSizing: "border-box",
-}));
-
-const HiddenForm = styled("form")(({ theme }) => ({}));
-
-export default function Search() {
-  const BootstrapInput = styled(InputBase)(({ theme }) => ({
-    "label + &": {
-      marginTop: theme.spacing(3),
-    },
-    "& .MuiInputBase-input": {
-      borderRadius: 15,
-      position: "relative",
-      backgroundColor: theme.palette.background.paper,
-      border: "1px solid #ced4da",
-      fontSize: 16,
-      padding: "5px 26px 5px 12px",
-      transition: theme.transitions.create(["border-color", "box-shadow"]),
-      fontFamily: [
-        "-apple-system",
-        "BlinkMacSystemFont",
-        '"Segoe UI"',
-        "Roboto",
-        '"Helvetica Neue"',
-        "Arial",
-        "sans-serif",
-        '"Apple Color Emoji"',
-        '"Segoe UI Emoji"',
-        '"Segoe UI Symbol"',
-      ].join(","),
-      "&:focus": {
-        borderRadius: 15,
-        borderColor: "#80bdff",
-        boxShadow: "0 0 0 0.2rem rgba(0,123,255,.25)",
-      },
-    },
-  }));
+export default function Search() {  
+  const [cityName, setCityName] = useState<string>("");
+  const [startDate, setStartDate] = useState<Date | undefined>();
+  const [endDate, setEndDate] = useState<Date | undefined>();
+  const [person, setPerson] = useState<number>(0);
+  const [showCalendar, setShowCalendar] = useState<boolean>(false);
+  const [showPerson, setShowPerson] = useState<boolean>(false);
+  const [isCityDropdownOpen, setIsCitiDropdownOpen] = useState<boolean>(false);
+  const [isOpen, setIsOpen] = useState<boolean>(false);
 
   const navigate = useNavigate();
-
-  //! 전역상태관리
-  const pushData = useSearchStore((state) => state.pushData);
   
-  const isCityDropdownOpen = useSelectStore((state) => state.isCityDropdownOpen);
-  const setCityDropdownOpen = useSelectStore((state) => state.setCityDropdownOpen);
-  const toggleCityDropdown = useSelectStore((state) => state.toggleCityDropdown);
+  const searchParams = new URLSearchParams(useLocation().search);
+  const theme = useTheme();
+  const isLgDown = useMediaQuery(theme.breakpoints.down("md"));
 
 
-  //! 지역
-  const [city, setCity] = useState<Location | null>(null);
-  //! 날짜
-  const [startDate, setStartDate] = useState<Date | undefined>(undefined);
-  const [endDate, setEndDate] = useState<Date | undefined>(undefined);
-  
-
-  const today = new Date();
+  const handleChangeCity = (e: SelectChangeEvent<string>) => {
+    setCityName(e.target.value);
+  };
 
   const handleClearDates = () => {
     setStartDate(undefined);
     setEndDate(undefined);
   };
 
-  const [showCalendar, setShowCalendar] = useState<boolean>(false);
 
-  const [personCount, setPersonCount] = useState<number>(2);
+  const formatDate = (date: Date) => {
+    const offset = date.getTimezoneOffset() * 60000;
+    return new Date(date.getTime() - offset).toISOString().split("T")[0];;
+  };
 
-  const [showPerson, setShowPerson] = useState<boolean>(false);
+  const parseDate = (dateString: string | null) => {
+    if (!dateString) return undefined;
+    const [year, month, day] = dateString.split("-").map(Number);
+    return new Date(year, month -1, day);
+  }
 
-  const handleChangeCity = (e: SelectChangeEvent<Location>) => {
-    setCity(e.target.value as Location);
-    // setCityDropdownOpen(false);
+  useEffect(() => {
+    const city = searchParams.get("cityName") || "";
+    const start = parseDate(searchParams.get("startDate"));
+    const end = parseDate(searchParams.get("endDate"));
+    const people = searchParams.get("person") ? parseInt(searchParams.get("person")!) : 0;
+
+    setCityName(city);
+    setStartDate(start);
+    setEndDate(end);
+    setPerson(people);
+  }, [searchParams.toString()]);
+
+  const handleSearchSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    if (cityName && startDate && endDate && person > 0) {
+      const queryParams = new URLSearchParams();
+      queryParams.append("cityName", cityName);
+      queryParams.append("startDate", formatDate(startDate));
+      queryParams.append("endDate", formatDate(endDate));
+      queryParams.append("person", person.toString());
+
+      navigate(`/allProductPage?${queryParams.toString()}`, { replace: true });
+    } else {
+      alert("모두 선택해주세요!");
+    }
   };
 
   const personCountUp = () => {
-    setPersonCount((prevCount) => prevCount + 1);
+    setPerson((prev) => prev + 1);
   };
 
   const personCountDown = () => {
-    if (personCount > 1) {
-      setPersonCount((prevCount) => prevCount - 1);
+    if (person > 1) {
+      setPerson((prev) => prev - 1);
     }
   };
 
@@ -213,80 +119,35 @@ export default function Search() {
   };
 
   useEffect(() => {
-    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
 
-  const theme = useTheme();
-  const isLgDown = useMediaQuery(theme.breakpoints.down("md"));
+  const toggleDrawer =
+    (open: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
+      if (
+        event &&
+        event.type === "keydown" &&
+        ((event as React.KeyboardEvent).key === "Tab" ||
+          (event as React.KeyboardEvent).key === "Shift")
+      ) {
+        return;
+      }
 
-  const [isOpen, setIsOpen] = React.useState(false);
-
-  // const toggleDrawer =
-  //   (open: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
-  //     if (
-  //       event &&
-  //       event.type === "keydown" &&
-  //       ((event as React.KeyboardEvent).key === "Tab" ||
-  //         (event as React.KeyboardEvent).key === "Shift")
-  //     ) {
-  //       return;
-  //     }
-
-  //     setIsOpen(open);
-  //   };
+      setIsOpen(open);
+    };
 
   const handleSelectClick = () => {
     toggleCityDropdown();
   };
 
-    useEffect(() => {
+  const toggleCityDropdown = () => {
+    setIsCitiDropdownOpen((prev) => !prev);
+  }
 
-    },[city])
-
-
-
-    const handleSubmit = (event: React.MouseEvent<HTMLButtonElement>) => {
-      event.preventDefault();
-
-      let valid = true;
-      if(!city) {
-        valid = false;
-      }
-      if(!startDate && !endDate) {
-        valid = false;
-        alert('여행 날짜를 입력해주세요')
-      }
-      if(!personCount) {
-        valid = false;
-      }
-
-      if(valid) {
-
-        if (startDate && endDate) {
-          const startDay = startDate;
-          const endDay = endDate;
-          
-          if (city !== null) {
-            const searchData: SearchData = {
-              city,
-              startDay,
-              endDay,
-              personCount,
-            };
-            pushData(searchData);
-            console.log(searchData);
-            navigate("./allProductPage")
-          } else {
-            console.error('도시 값이 설정되지 않았습니다.');
-          }
-        }
-
-      }
-    }
-
+  useEffect(() => {}, [cityName]);
 
 
   const list = () => (
@@ -300,7 +161,7 @@ export default function Search() {
             alignItems: "center",
           }}
         >
-          <SearchCity sx={{ width: "80%" }}>
+          <SearchCity style={{ width: "80%" }}>
             <FormControl sx={{ m: 1, width: "100%" }} variant="standard">
               <InputLabel id="demo-customized-select-label" sx={{ m: 1 }}>
                 여행 지역
@@ -308,9 +169,8 @@ export default function Search() {
               <Select
                 labelId="demo-customized-select-label"
                 id="demo-customized-select"
-                value={city}
+                value={cityName}
                 onChange={handleChangeCity}
-                
                 input={
                   <BootstrapInput
                     id="demo-customized-textbox"
@@ -318,7 +178,7 @@ export default function Search() {
                   />
                 }
               >
-                <MenuItem value=''>
+                <MenuItem value="">
                   <em>여행지를 선택해주세요</em>
                 </MenuItem>
                 <MenuItem value={"서울"} sx={{ fontWeight: "bold" }}>
@@ -355,7 +215,7 @@ export default function Search() {
             </FormControl>
           </SearchCity>
           <Divider />
-          <SearchDay sx={{ width: "80%" }}>
+          <SearchDay style={{ width: "80%" }}>
             <FormControl sx={{ m: 1, width: "100%" }} variant="standard">
               <InputLabel htmlFor="demo-customized-textbox" sx={{ m: 1 }}>
                 여행 날짜
@@ -384,17 +244,14 @@ export default function Search() {
                   <div className="relative flex-1">
                     <DatePicker
                       selected={startDate}
-                      onChange={(date: Date | null) =>
-                        setStartDate(date ?? undefined)
-                      }
+                      onChange={(date: Date | null) => setStartDate(date ?? undefined)}
                       selectsStart
                       startDate={startDate}
                       endDate={endDate}
                       className="w-full p-2 border border-cyan-400 rounded-l-lg"
                       placeholderText="Start Date"
                       isClearable={false}
-                      minDate={today}
-                      
+                      minDate={new Date()}
                     />
                   </div>
                   <div className="relative flex-1">
@@ -406,7 +263,7 @@ export default function Search() {
                       selectsEnd
                       startDate={startDate}
                       endDate={endDate}
-                      minDate={startDate || today}
+                      minDate={startDate || new Date()}
                       className="w-full p-2 border border-cyan-400 rounded-r-lg"
                       placeholderText="End Date"
                       isClearable={false}
@@ -424,7 +281,7 @@ export default function Search() {
             )}
           </SearchDay>
           <Divider />
-          <SearchPerson sx={{ width: "80%" }}>
+          <SearchPerson style={{ width: "80%" }}>
             <FormControl sx={{ m: 1, width: "100%" }} variant="standard">
               <InputLabel htmlFor="demo-customized-textbox" sx={{ m: 1 }}>
                 인원 수
@@ -432,13 +289,13 @@ export default function Search() {
               <BootstrapInput
                 id="demo-customized-textbox"
                 sx={{ fontWeight: "bold" }}
-                value={personCount}
+                value={person}
                 onClick={() => setShowPerson(!showPerson)}
               />
             </FormControl>
 
             {showPerson && (
-              <PersonModal ref={personModalRef} sx={{ width: "90%" }}>
+              <PersonModal ref={personModalRef} style={{ width: "90%" }}>
                 <div style={{ margin: "0" }}>
                   <p style={{ fontSize: "14px", fontWeight: "bold" }}>
                     인원 수
@@ -464,7 +321,7 @@ export default function Search() {
                       fontWeight: "bold",
                     }}
                   >
-                    {personCount}
+                    {person}
                   </p>
                   <AddCircleOutlineIcon
                     fontSize="large"
@@ -476,9 +333,8 @@ export default function Search() {
             )}
           </SearchPerson>
           <Divider />
-          <SubmitHiddenButton onClick={handleSubmit}>
-            <p style={{ margin: 0, color: "#fff" }}
-            >검색</p>
+          <SubmitHiddenButton onClick={handleSearchSubmit}>
+            <p style={{ margin: 0, color: "#fff" }}>검색</p>
           </SubmitHiddenButton>
         </List>
       </HiddenForm>
@@ -500,7 +356,7 @@ export default function Search() {
                 <Select
                   labelId="demo-customized-select-label"
                   id="demo-customized-select"
-                  value={city}
+                  value={cityName || ""}
                   onChange={handleChangeCity}
                   open={isCityDropdownOpen}
                   onClick={handleSelectClick}
@@ -587,7 +443,7 @@ export default function Search() {
                         className="w-full p-2 border border-cyan-400 rounded-l-lg"
                         placeholderText="Start Date"
                         isClearable={false}
-                        minDate={today}
+                        minDate={new Date()}
                       />
                     </div>
                     <div className="relative flex-1 w-full">
@@ -599,7 +455,7 @@ export default function Search() {
                         selectsEnd
                         startDate={startDate}
                         endDate={endDate}
-                        minDate={startDate || today}
+                        minDate={startDate || new Date()}
                         className="w-full p-2 border border-cyan-400 rounded-r-lg"
                         placeholderText="End Date"
                         isClearable={false}
@@ -626,7 +482,7 @@ export default function Search() {
                 <BootstrapInput
                   id="demo-customized-textbox"
                   sx={{ fontWeight: "bold" }}
-                  value={personCount}
+                  value={person}
                   onClick={() => setShowPerson(!showPerson)}
                 />
               </FormControl>
@@ -658,7 +514,7 @@ export default function Search() {
                         fontWeight: "bold",
                       }}
                     >
-                      {personCount}
+                      {person}
                     </p>
                     <AddCircleOutlineIcon
                       fontSize="large"
@@ -671,7 +527,7 @@ export default function Search() {
             </SearchPerson>
 
             <SubmitDiv>
-              <SubmitButton onClick={handleSubmit}>
+              <SubmitButton onClick={handleSearchSubmit}>
                 <p style={{ margin: 0, color: "#fff" }}>검색</p>
               </SubmitButton>
             </SubmitDiv>

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { FormEvent, useEffect, useState } from "react";
 // import HomeImg from "./HomeImg";
 // import jeju from "../../assets/images/1/jeju.jpg";
 // import gapyeng from "../../assets/images/1/gapyeong.jpg";
@@ -6,7 +6,7 @@ import React, { useEffect, useState } from "react";
 // import gyengju from "../../assets/images/1/gyengju.jpg";
 // import seoul from "../../assets/images/1/seoul.jpg";
 import { City, CityImg, CityName, CityWarp, GroupLabel, GroupLine, HomeBox, MostUsed, MostUsedBox, PopularCityBox, PriceDiv, ProductCity, ProductDetail, ProductImg, ProductName } from "./HomeSt";
-import { Top5Product } from "../../types/type";
+import { Product, Top5Product } from "../../types/type";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import useSearchStore, { SearchData } from "../../stores/use.search.store";
