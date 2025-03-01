@@ -32,6 +32,7 @@ export default function AllProductPage() {
 
   const location = useLocation();
   const navigate = useNavigate();
+  const searchParams = new URLSearchParams(location.search);
 
   const [cookies] = useCookies(["token"]);
   const token = cookies.token;
@@ -162,8 +163,14 @@ export default function AllProductPage() {
   const indexOfFirstItem = indexOfLastItem - ITEMS_PER_PAGE;
   const currentItems = products.slice(indexOfFirstItem, indexOfLastItem);
 
-  const handleProductClick = (id: number) => {
-    navigate(`/detailProduct/${id}`);
+  const handleProductClick = (productId: number) => {
+    const queryParams = new URLSearchParams({
+      startDate: searchParams.get("startDate") || "",
+      endDate: searchParams.get("endDate") || "",
+      person: searchParams.get("person") || "1",
+    }).toString();
+  
+    navigate(`/detailProduct/${productId}?${queryParams}`);
   };
 
   return (

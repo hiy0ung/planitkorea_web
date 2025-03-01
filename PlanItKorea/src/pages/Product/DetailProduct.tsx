@@ -1,7 +1,7 @@
-import React, { ChangeEvent, useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useLocation, useParams } from "react-router-dom";
 import axios from "axios";
-import { BerthProduct, Reservation, Review } from "../../types/type";
+import { Point, ProductDetail, Review, SubProduct } from "../../types/type";
 import {
   Address,
   AllDiv,
@@ -18,435 +18,221 @@ import {
   LeftImgDiv,
   MainDiv,
   MapDiv,
-  MapReviewDiv,
-  MapReviewInnerDiv,
   ModalDiv,
   ModalHeader,
   ModalOverlay,
-  PageDiv,
-  PersonBar,
-  PersonDiv,
-  PersonInput,
-  PriceBar,
   ProductImgDiv,
   ProductName,
   ProductNameDiv,
-  ReservationBar,
-  ReservationBarDiv,
-  ReviewButton,
-  ReviewContent,
-  ReviewContentDiv,
-  ReviewContentInput,
-  ReviewDate,
-  ReviewDiv,
-  ReviewInfo,
   RightImgDiv,
   RightInnerImgDiv,
-  UserIdInfo,
+  SubProductContainer,
+  SubProductDetail,
+  SubProductImage,
+  SubProductInfo,
+  SubProductName,
 } from "./DetailSt";
 import MapIcon from "@mui/icons-material/Map";
-import DatePicker from "react-datepicker";
-
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCalendar, faWonSign } from "@fortawesome/free-solid-svg-icons";
-import { GroupLine } from "../CustomerService/customerSt";
-import { Button } from "../Login/SignSt";
 import ImageSlider from "./sliderImg/ImageSlider";
 import NaverMap from "../../component/NaverMap";
-import useSearchStore from "../../stores/use.search.store";
-
-import ReactPaginate from "react-paginate";
-import useAuthStore from "../../stores/use.auth.store";
-import { format } from "date-fns";
-import useIdStore from "../../stores/use.nexId.store";
+import Reservation from "./Reservation";
+import ReviewSection from "./ReviewSection";
 
 export default function DetailProduct() {
-  //! 전역 상태 받아오기
-  const { searchData } = useSearchStore((state) => ({
-    searchData: state.searchData,
-  }));
-  const user = useAuthStore((state) => state.user);
-  const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
-
-  const { nextId, incrementId } = useIdStore((state) => ({
-    nextId: state.nextId,
-    incrementId: state.incrementId,
-  }));
-
-  const navigate = useNavigate();
-
-  const { productId } = useParams<string>();
-  const [product, setProduct] = useState<BerthProduct | null>(null);
-  const [renderReview, setRenderReview] = useState<Review[]>([]);
-
-  const [startDate, setStartDate] = useState<Date | undefined>(
-    searchData.startDay
+  const { productId } = useParams();
+  const [product, setProduct] = useState<ProductDetail | null>(null);
+  const [selectSubProduct, setSelectSubProduct] = useState<SubProduct | null>(
+    null
   );
-  const [endDate, setEndDate] = useState<Date | undefined>(searchData.endDay);
-
-  const [person, setPerson] = useState<number | undefined>(
-    searchData.personCount
+  const [error, setError] = useState<string | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [reviews, setReviews] = useState<Review[]>([]);
+  // const [mapPoint, setMapPoint] = useState<Point | null>(null);
+  const [filteredSubProducts, setFilteredSubProducts] = useState<SubProduct[]>(
+    []
   );
 
-  const [comment, setComment] = useState<string>("");
-  const [reviewDate, setReviewDate] = useState("");
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+
+  const startDate = searchParams.get("startDate")
+    ? new Date(searchParams.get("startDate")!)
+    : undefined;
+  const endDate = searchParams.get("endDate")
+    ? new Date(searchParams.get("endDate")!)
+    : undefined;
+
+  const [person, setPerson] = useState<number>(0);
 
   useEffect(() => {
-    const reviewDay = new Date();
-    const formattedDate = format(reviewDay, "yyyy-MM-dd");
-    setReviewDate(formattedDate);
-  }, []);
-
-  const handleCommentChange = (
-    event: React.ChangeEvent<HTMLTextAreaElement>
-  ) => {
-    setComment(event.target.value);
-  };
-
-  const fetchReviews = async () => {
-    try {
-      const reviewResponse = await axios.get("http://localhost:3001/reviews", {
-        params: { productId },
-      });
-
-      const sortedReviews = reviewResponse.data.sort((a: Review, b: Review) => {
-        return new Date(b.date).getTime() - new Date(a.date).getTime();
-      });
-      console.log("Sorted Reviews:", sortedReviews);
-      setRenderReview(sortedReviews);
-    } catch (error) {
-      console.error("리뷰 호출 에러", error);
-    }
-  };
-
-  const handleReviewSave = async () => {
-    let valid = true;
-
-    if (!comment) {
-      alert("내용을 입력해주세요");
-      valid = false;
-    }
-    
-
-    if (valid) {
-      const updatedReview = {
-        id: nextId.toString(),
-        productId: product?.id ? product.id.toString() : "",
-        userId: user.id,
-        comment: comment,
-        date: reviewDate,
-      };
-
+    const fetchProductDetail = async () => {
       try {
-        await axios.post(`http://localhost:3001/reviews`, updatedReview);
-        incrementId();
-        setComment("");
-
-        fetchReviews();
-      } catch (error) {
-        console.error("데이터 저장 실패", error);
-        alert("리뷰 저장 도중 오류발생.");
-      }
-    }
-  };
-
-  const personValue = (e: ChangeEvent<HTMLInputElement>) => {
-    const value = parseInt(e.target.value, 10);
-    setPerson(value);
-  };
-  const today = new Date();
-
-  const calculateDays = (start: Date | undefined, end: Date | undefined) => {
-    if (!start || !end) return 0;
-    const diffTime = Math.abs(end.getTime() - start.getTime());
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-    return diffDays;
-  };
-
-  const days = calculateDays(startDate, endDate);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        
-        const productResponse = await axios.get(
-          `http://localhost:3001/BerthProduct/${productId}`
+        const response = await axios.get(
+          `http://localhost:4040/api/v1/products/${productId}`
         );
-        setProduct(productResponse.data);
+        setProduct(response.data.data);
+
+        filterSubProducts(response.data.data.subProducts, person);
+
+        // if (response.data.data.productAddress) {
+        //   const point = await convertAddressToPoint(response.data.data.productAddress);
+        //   setMapPoint(point);
+        // }
       } catch (error) {
-        console.error("상품 호출에러");
+        setError("서버 오류가 발생했습니다.");
       }
     };
-    fetchData();
-    fetchReviews();
-  }, [productId]);
 
-  function strToNum(str: string | undefined): number {
-    if (!str) return 0;
+    if (productId) {
+      fetchProductDetail();
+    }
+  }, [productId, person]);
 
-    const numPrice = parseInt(str.replace(/[^0-9]/g, ""), 10);
-    return numPrice;
-  }
-  const numberPrice = strToNum(product?.price);
-  const totalPrice = numberPrice * days;
+  const filterSubProducts = (
+    subProducts: SubProduct[],
+    personCount: number
+  ) => {
+    const availableSubProducts = subProducts.filter(
+      (subProduct) => subProduct.subPerson >= personCount
+    );
+    setFilteredSubProducts(availableSubProducts);
+  };
 
-  function numPriceToStr(num: number): string {
-    return num.toLocaleString("ko-KR");
-  }
+  const handlePersonChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setPerson(Number(e.target.value) || 1);
+  };
 
-  const strPrice = numPriceToStr(totalPrice);
+  const handleSubProductClick = (subProduct: SubProduct) => {
+    setSelectSubProduct(subProduct);
+  };
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const isSelectable = (subProduct: SubProduct) => {
+    return subProduct.subPerson == person;
+  };
+
+  // const convertAddressToPoint = async (address: string): Promise<Point> => {
+  //   const clientId = process.env.REACT_APP_NAVER_CLIENT_ID;
+  //   const clientSecret = process.env.REACT_APP_NAVER_CLIENT_SECRET;
+
+  //   try {
+  //     const response = await axios.get("https://naveropenapi.apigw.ntruss.com/map-geocode/v2/geocode", {
+  //       params: { query: address },
+  //       headers: {
+  //         "X-NCP-APIGW-API-KEY-ID": clientId,
+  //         "X-NCP-APIGW-API-KEY": clientSecret,
+  //       },
+  //     });
+
+  //     if (response.data.addresses.length > 0) {
+  //       return {
+  //         lat: parseFloat(response.data.addresses[0].y),
+  //         lng: parseFloat(response.data.addresses[0].x),
+  //       };
+  //     } else {
+  //       console.warn("주소 변환 실패");
+  //       return { lat: 37.5665, lng: 126.9780 };
+  //     }
+  //   } catch (error) {
+  //     console.error("Geocoding API 오류:", error);
+  //     return { lat: 37.5665, lng: 126.9780 };
+  //   }
+  // };
 
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
-
-  const [currentPage, setCurrentPage] = React.useState<number>(0);
-  const ITEMS_PER_PAGE = 5;
-  const indexOfLastItem = (currentPage + 1) * ITEMS_PER_PAGE;
-  const indexOfFirstItem = indexOfLastItem - ITEMS_PER_PAGE;
-  const currentItems = renderReview.slice(indexOfFirstItem, indexOfLastItem);
-
-  const handlePageChange = (e: { selected: number }) => {
-    setCurrentPage(e.selected);
-  };
-
-  const reservationSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-
-    if (!isLoggedIn) {
-      alert("로그인 후 예약이 가능합니다.");
-      return;
-    }
-
-    const currentId = nextId;
-    incrementId();
-
-    const reservationInfo: Reservation = {
-      id: user.id,
-      productId:
-        typeof product?.id === "number"
-          ? product.id
-          : parseInt(product?.id || "0", 10),
-      productName: product?.name ? product.name : "",
-      img: product
-        ? Array.isArray(product.img)
-          ? product.img
-          : [product.img || ""]
-        : [""],
-      reservationNumber: currentId + 1,
-      startDate: startDate ? startDate.toISOString() : "",
-      endDate: endDate ? endDate.toISOString() : "",
-      person: person ?? 0,
-      price: product?.price ?? ""
-    };
-    navigate('/paymentPage', { state: { reservationInfo } });
-    console.log(reservationInfo);
-  };
 
   return (
     <>
       <AllDiv>
         <HeaderDiv>
           <ProductNameDiv>
-            <ProductName>{product?.name}</ProductName>
+            <ProductName>{product?.productName}</ProductName>
           </ProductNameDiv>
           <ProductImgDiv onClick={openModal}>
             <LeftImgDiv>
-              <Image src={product?.img[0]} />
+              <Image src={product?.productImages[0]} />
             </LeftImgDiv>
             <RightImgDiv>
-              <RightInnerImgDiv>
-                <Image src={product?.img[1]} />
-              </RightInnerImgDiv>
-              <RightInnerImgDiv>
-                <Image src={product?.img[2]} />
-              </RightInnerImgDiv>
-              <RightInnerImgDiv>
-                <Image src={product?.img[3]} />
-              </RightInnerImgDiv>
-              <RightInnerImgDiv>
-                <Image src={product?.img[4]} />
-                <ImgButton onClick={openModal}>사진 모두보기</ImgButton>
-              </RightInnerImgDiv>
+              {product?.productImages?.slice(1, 5).map((img, index) => (
+                <RightInnerImgDiv key={index}>
+                  <Image src={img} />
+                  {index === 3 && (
+                    <ImgButton onClick={openModal}>사진 모두보기</ImgButton>
+                  )}
+                </RightInnerImgDiv>
+              ))}
             </RightImgDiv>
           </ProductImgDiv>
         </HeaderDiv>
         <MainDiv>
           <Detail>
-            <ProductName>
-              <MapIcon sx={{ marginRight: "10px" }} />
-              {product?.city} - {product?.accommodationCategory}
-            </ProductName>
-            <Address>{product?.address}</Address>
-            <MapDiv>
-              {product?.point && <NaverMap point={product?.point}></NaverMap>}
-            </MapDiv>
-            <GroupName>숙소 시설</GroupName>
-            <FacilityDiv>
-              {product?.facility.map((item, index) => (
-                <FacilityItem key={index}>{item}</FacilityItem>
-              ))}
-            </FacilityDiv>
             <DescriptionDiv>
               <GroupName>숙소 이용 정보</GroupName>
-              <DescriptionItem>{product?.description}</DescriptionItem>
+              <DescriptionItem>{product?.productDescription}</DescriptionItem>
             </DescriptionDiv>
+            <ProductName>
+              <MapIcon sx={{ marginRight: "10px" }} />
+            </ProductName>
+            <Address>{product?.productAddress}</Address>
+            <MapDiv>
+              {/* <NaverMap point={mapPoint ?? { lat: 37.5665, lng: 126.9780 }} /> */}
+            </MapDiv>
+            <div>
+              <SubProductName>객실</SubProductName>
+              {product?.subProducts.map((subProduct, index) => (
+                <SubProductContainer
+                  key={index}
+                  isSelectable={isSelectable(subProduct)}
+                  onClick={() =>
+                    isSelectable(subProduct) &&
+                    handleSubProductClick(subProduct)
+                  }
+                >
+                  <SubProductImage
+                    src={subProduct.subProductImages[0]}
+                    alt={subProduct.subName}
+                  />
+                  <SubProductInfo>
+                    <SubProductName>{subProduct.subName}</SubProductName>
+                    <SubProductDetail>
+                      수용 인원: {subProduct.subPerson}명
+                    </SubProductDetail>
+                    <SubProductDetail>
+                      가격: {subProduct.subPrice.toLocaleString()}원
+                    </SubProductDetail>
+                  </SubProductInfo>
+                </SubProductContainer>
+              ))}
+            </div>
+            <GroupName>숙소 시설</GroupName>
+            <FacilityDiv>
+              {product?.facilities.map((facility) => (
+                <FacilityItem key={facility.facilityId}>
+                  {facility.facilityName}
+                </FacilityItem>
+              ))}
+            </FacilityDiv>
           </Detail>
 
-          <ReservationBarDiv>
-            <ReservationBar>
-              <ProductName>{product?.name}</ProductName>
-              <div
-                style={{
-                  zIndex: 10,
-                  width: "100%",
-                }}
-              >
-                <div
-                  className="box-border p-4 border border-cyan-200 rounded-lg flex items-center space-x-2"
-                  style={{ border: "none" }}
-                >
-                  <div className="relative flex-1">
-                    <DatePicker
-                      selected={startDate}
-                      onChange={(date: Date | null) =>
-                        setStartDate(date ?? undefined)
-                      }
-                      selectsStart
-                      startDate={startDate}
-                      endDate={endDate}
-                      className="w-full p-2 border border-cyan-400 rounded-l-lg"
-                      placeholderText="Start Date"
-                      isClearable={false}
-                      minDate={today}
-                    />
-                  </div>
-                  <div className="relative flex-1">
-                    <DatePicker
-                      selected={endDate}
-                      onChange={(date: Date | null) =>
-                        setEndDate(date ?? undefined)
-                      }
-                      selectsEnd
-                      startDate={startDate}
-                      endDate={endDate}
-                      minDate={startDate || today}
-                      className="w-full p-2 border border-cyan-400 rounded-r-lg"
-                      placeholderText="End Date"
-                      isClearable={false}
-                    />
-                  </div>
-                </div>
-              </div>
-
-              {/* 인원 수 */}
-              <PersonDiv>
-                <PersonInput
-                  type="number"
-                  value={person}
-                  placeholder="인원 수"
-                  onChange={personValue}
-                  min={1}
-                ></PersonInput>
-              </PersonDiv>
-              <PriceBar>
-                <FontAwesomeIcon style={{ margin: "0 5px" }} icon={faWonSign} />
-                {product?.price}
-              </PriceBar>
-              <PersonBar>
-                <FontAwesomeIcon
-                  icon={faCalendar}
-                  style={{ margin: "0 7px 0 6px" }}
-                />
-                {days} 박
-              </PersonBar>
-              <GroupLine style={{ marginBottom: "5px" }} />
-              <PriceBar>
-                <div>총 합계</div>
-                <div>
-                  <FontAwesomeIcon
-                    style={{ margin: "0 5px" }}
-                    icon={faWonSign}
-                  />
-                  {strPrice}
-                </div>
-              </PriceBar>
-              <Button style={{ width: "90%" }} onClick={reservationSubmit}>
-                예약 하기
-              </Button>
-            </ReservationBar>
-          </ReservationBarDiv>
+          {/* 예약 */}
+          {product && (
+            <Reservation
+              product={product}
+              selectSubProduct={selectSubProduct ?? undefined}
+              startDateProp={startDate}
+              endDateProp={endDate}
+              personProp={person}
+              handlePersonChange={handlePersonChange}
+            />
+          )}
         </MainDiv>
 
-        <ReviewDiv>
-          <GroupName style={{ margin: "0" }}>리뷰</GroupName>
-
-          <MapReviewDiv>
-            {currentItems && currentItems.length > 0 ? (
-              currentItems.map((item) => (
-                <MapReviewInnerDiv key={item.id}>
-                  <ReviewInfo>
-                    <UserIdInfo>{item.userId}</UserIdInfo>
-                    <ReviewDate>작성일 - {item.date}</ReviewDate>
-                  </ReviewInfo>
-                  <ReviewContentDiv>
-                    <ReviewContent>{item.comment}</ReviewContent>
-                  </ReviewContentDiv>
-                </MapReviewInnerDiv>
-              ))
-            ) : (
-              <MapReviewInnerDiv>작성된 리뷰가 없습니다.</MapReviewInnerDiv>
-            )}
-
-            <PageDiv>
-              <ReactPaginate
-                previousLabel={"<"}
-                nextLabel={">"}
-                breakLabel={"..."}
-                pageCount={Math.ceil(
-                  (renderReview.length || 0) / ITEMS_PER_PAGE
-                )}
-                marginPagesDisplayed={2}
-                pageRangeDisplayed={5}
-                onPageChange={handlePageChange}
-                containerClassName={"pagination"}
-                pageClassName={"page-item"}
-                pageLinkClassName={"page-link"}
-                previousClassName={"page-item"}
-                previousLinkClassName={"page-link"}
-                nextClassName={"page-item"}
-                nextLinkClassName={"page-link"}
-                breakClassName={"page-item"}
-                breakLinkClassName={"page-link"}
-                activeClassName={"active"}
-              />
-            </PageDiv>
-          </MapReviewDiv>
-        </ReviewDiv>
-        <GroupName style={{ margin: "0" }}>리뷰 작성</GroupName>
-        <MapReviewDiv>
-          <MapReviewInnerDiv>
-            <ReviewInfo>
-              <UserIdInfo>{user.id}</UserIdInfo>
-              <ReviewDate>작성일 - {reviewDate}</ReviewDate>
-            </ReviewInfo>
-            <ReviewContentDiv>
-              <ReviewContentInput
-                value={comment}
-                readOnly={!isLoggedIn}
-                isReadonly={!isLoggedIn}
-                onChange={handleCommentChange}
-                placeholder={
-                  isLoggedIn ? "내용을 입력해주세요." : "로그인이 필요합니다."
-                }
-              ></ReviewContentInput>
-              {isLoggedIn &&
-              <ReviewButton onClick={handleReviewSave}>전송</ReviewButton>
-              }
-            </ReviewContentDiv>
-          </MapReviewInnerDiv>
-        </MapReviewDiv>
+        {/* 리뷰 */}
+        <ReviewSection
+          productId={productId!}
+          reviews={reviews}
+          setReviews={setReviews}
+        />
       </AllDiv>
 
       {isModalOpen && (
@@ -457,7 +243,7 @@ export default function DetailProduct() {
                 <CloseBtn onClick={closeModal}>X</CloseBtn>
               </ModalHeader>
 
-              <ImageSlider images={product?.img}></ImageSlider>
+              <ImageSlider images={product?.productImages}></ImageSlider>
             </ModalDiv>
           </ModalOverlay>
         </>
