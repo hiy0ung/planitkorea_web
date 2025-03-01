@@ -192,6 +192,31 @@ export type Product = {
   facilityIds: number[];
 };
 
+export type ProductDetail = {
+  productId: number;
+  productCategory: string;
+  productName: string;
+  productPrice: string;
+  productAddress: string;
+  productDescription: string;
+  productImages: string[];
+  subProducts: SubProduct[];
+  facilities: Facility[];
+}
+
+export type SubProduct = {
+  subProductId: number;
+  subName: string;
+  subPrice: string;
+  subPerson: number;
+  subProductImages: string[];
+}
+
+export type Facility = {
+  facilityId: number;
+  facilityName: string;
+}
+
 export type Wishlist = {
   wishListId: number;
   userId: number;

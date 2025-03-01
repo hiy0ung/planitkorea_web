@@ -22,10 +22,42 @@ import "../styles/date.css";
 import { format } from "date-fns";
 import SearchIcon from "@mui/icons-material/Search";
 import { useLocation, useNavigate } from "react-router-dom";
-import { BootstrapInput, HiddenBox, HiddenForm, PersonModal, SearchBarDiv, SearchCity, SearchDay, SearchPerson, SubmitButton, SubmitDiv, SubmitHiddenButton } from "./SearchBarSt";
+import { HiddenBox, HiddenForm, PersonModal, SearchBarDiv, SearchCity, SearchDay, SearchPerson, SubmitButton, SubmitDiv, SubmitHiddenButton } from "./SearchBarSt";
 
 
 export default function Search() {  
+  const BootstrapInput = styled(InputBase)(({ theme }) => ({
+    "label + &": {
+      marginTop: theme.spacing(3),
+    },
+    "& .MuiInputBase-input": {
+      borderRadius: 15,
+      position: "relative",
+      backgroundColor: theme.palette.background.paper,
+      border: "1px solid #ced4da",
+      fontSize: 16,
+      padding: "5px 26px 5px 12px",
+      transition: theme.transitions.create(["border-color", "box-shadow"]),
+      fontFamily: [
+        "-apple-system",
+        "BlinkMacSystemFont",
+        '"Segoe UI"',
+        "Roboto",
+        '"Helvetica Neue"',
+        "Arial",
+        "sans-serif",
+        '"Apple Color Emoji"',
+        '"Segoe UI Emoji"',
+        '"Segoe UI Symbol"',
+      ].join(","),
+      "&:focus": {
+        borderRadius: 15,
+        borderColor: "#80bdff",
+        boxShadow: "0 0 0 0.2rem rgba(0,123,255,.25)",
+      },
+    },
+  }));
+
   const [cityName, setCityName] = useState<string>("");
   const [startDate, setStartDate] = useState<Date | undefined>();
   const [endDate, setEndDate] = useState<Date | undefined>();
