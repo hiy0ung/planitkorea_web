@@ -78,7 +78,7 @@ export type NewReservation = {
   startDate: Date;
   endDate: Date;
   reservationStatus: number;
-  productImg: string;
+  productImage: string;
   productName: string;
 }
 

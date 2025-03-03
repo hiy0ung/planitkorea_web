@@ -11,6 +11,12 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import useSearchStore, { SearchData } from "../../stores/use.search.store";
 import HomeImg from "./HomeImg";
+import busan from "../../assets/images/region/busan.jpg";
+import gapyeong from "../../assets/images/region/gapyeong.jpg";
+import gyengju from "../../assets/images/region/gyengju.jpg";
+import jeju from "../../assets/images/region/jeju.jpg";
+import seoul from "../../assets/images/region/seoul.jpg";
+
 
 
 
@@ -54,23 +60,23 @@ export default function Home() {
         </GroupLine>
         <PopularCityBox>
           <City onClick={() => handleCityClick("제주도") }>
-            <CityImg src={"/images/logo.png"} />
+            <CityImg src={jeju} />
             <CityName>제주도</CityName>
           </City>
           <City onClick={() => handleCityClick('서울') }>
-            <CityImg src={"/images/logo.png"} />
+            <CityImg src={seoul} />
             <CityName>서울</CityName>
           </City>
           <City onClick={() => handleCityClick('부산') }>
-            <CityImg src={"/images/logo.png"} />
+            <CityImg src={busan} />
             <CityName>부산</CityName>
           </City>
           <City onClick={() => handleCityClick('가평') }>
-            <CityImg src={"/images/logo.png"} />
+            <CityImg src={gapyeong} />
             <CityName>가평</CityName>
           </City>
           <City onClick={() => handleCityClick('경주') }>
-            <CityImg src={"/images/logo.png"} />
+            <CityImg src={gyengju} />
             <CityName>경주</CityName>
           </City>
         </PopularCityBox>
