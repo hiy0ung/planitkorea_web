@@ -17,9 +17,9 @@ import InquiryCRUD from "./pages/CustomerService/InquiryCRUD";
 import Notification from "./pages/CustomerService/Notification";
 import InquiryHistory from "./pages/CustomerService/InquiryHistory";
 import ReservationCheck from "./pages/MyPage/ReservationCheck";
-import WishList from "./pages/MyPage/WishList";
-import AllProductPage from "./pages/Product/AllProductPage";
-import DetailProduct from "./pages/Product/DetailProduct"
+// import WishList from "./pages/MyPage/WishList";
+// import AllProductPage from "./pages/Product/AllProductPage";
+// import DetailProduct from "./pages/Product/DetailProduct"
 import PaymentPage from "./pages/Product/PaymentPage";
 import AppContainer from "./layouts/AppContainer";
 import MainContainer from "./layouts/MainContainer";
@@ -94,12 +94,12 @@ function App() {
 
             <Route path="/myPageMain" element={<MyPageMain />} />
             <Route path="/reservationCheck" element={<ReservationCheck />} />
-            <Route path="/wishList" element={<WishList />} />
+            {/* <Route path="/wishList" element={<WishList />} /> */}
 
-            <Route path="/allProductPage" element={<AllProductPage />} />
+            {/* <Route path="/allProductPage" element={<AllProductPage />} />
             <Route path="/paymentPage" element={<PaymentPage />} />
             <Route path="/detailProduct/:productId" element={<DetailProduct />} />
-            <Route path="/allProductPage/:category?" element={<AllProductPage />} />
+            <Route path="/allProductPage/:category?" element={<AllProductPage />} /> */}
           </Routes>
         </MainContainer>
 
