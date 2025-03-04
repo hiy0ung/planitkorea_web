@@ -40,9 +40,8 @@ export default function Reservation({
   const [startDate, setStartDate] = useState<Date | undefined>(startDateProp);
   const [endDate, setEndDate] = useState<Date | undefined>(endDateProp);
   const [person, setPerson] = useState<number>(personProp || 1);
-  const [availableSubProducts, setAvailableSubProducts] = useState<
-    SubProduct[]
-  >([]);
+  const [availableSubProducts, setAvailableSubProducts] = useState<SubProduct[]>([]);
+  const [totalPrice, setTotalPrice] = useState<string>("0");
 
   const [cookies] = useCookies(["token"]);
   const token = cookies.token;
@@ -50,17 +49,24 @@ export default function Reservation({
 
   const today = new Date();
 
-  const calculateDays = () => {
-    if (!startDate || !endDate) return { nights: 0, days: 0 };
-    const totalDays =
-      Math.ceil(
-        (endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24)
-      ) + 1;
-    const nights = totalDays - 1;
-    return { nights, days: totalDays };
-  };
+  useEffect(() => {
+    if (!selectSubProduct || !selectSubProduct.subPrice) {
+      setTotalPrice("0");
+      return;
+    }
 
-  const { nights, days } = calculateDays();
+    const days  = calculateDays();
+    const subProductPrice = strToNum(selectSubProduct?.subPrice);
+    setTotalPrice(numPriceToStr(subProductPrice * days));
+  }, [startDate, endDate, selectSubProduct]);
+
+  const calculateDays = () => {
+    if (!startDate || !endDate) return 0;
+    return Math.max(
+      Math.ceil((endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24)),
+      1
+    );
+  };
 
   function strToNum(str: string): number {
     return parseInt(str.replace(/[^0-9]/g, ""), 10);
@@ -69,7 +75,6 @@ export default function Reservation({
   function numPriceToStr(num: number): string {
     return num.toLocaleString("ko-KR");
   }
-  const totalPrice = strToNum(product.productPrice) * days;
 
   const reservationSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -88,7 +93,7 @@ export default function Reservation({
       startDate: startDate ? startDate.toISOString() : "",
       endDate: endDate ? endDate.toISOString() : "",
       person,
-      price: totalPrice,
+      price: strToNum(totalPrice),
     };
     navigate("/paymentPage", { state: { reservationInfo } });
   };
@@ -163,7 +168,7 @@ export default function Reservation({
             icon={faCalendar}
             style={{ margin: "0 7px 0 6px" }}
           />
-          {nights} 박 {days} 일
+          {calculateDays()} 박 {calculateDays() + 1} 일
         </SelectInfo>
         <SelectInfo>
           <span>객실</span> {selectSubProduct?.subName}
@@ -173,7 +178,7 @@ export default function Reservation({
           <div>총 합계</div>
           <div>
             <FontAwesomeIcon style={{ margin: "0 5px" }} icon={faWonSign} />
-            {selectSubProduct?.subPrice}
+            {strToNum(totalPrice)}
           </div>
         </PriceBar>
         <Button style={{ width: "90%" }} onClick={reservationSubmit}>
