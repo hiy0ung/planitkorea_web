@@ -90,6 +90,48 @@ export const Detail = styled.div`
   min-width: 700px;
 `;
 
+export const SubProductContainer = styled.div<{ isSelectable: boolean }>`
+  display: flex;
+  width: 100%;
+  gap: 20px;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  background-color: ${({ isSelectable }) => (isSelectable ? "#fff" : "#f0f0f0")};
+  cursor: ${({ isSelectable }) => (isSelectable ? "pointer" : "not-allowed")};
+  opacity: ${({ isSelectable }) => (isSelectable ? 1 : 0.5)};
+  pointer-events: ${({ isSelectable }) => (isSelectable ? "auto" : "none")};
+`;
+
+export const SubProductImage = styled.img`
+  width: 40%;
+  height: auto;
+  border-radius: 10px;
+  object-fit: cover;
+`;
+
+export const SubProductInfo = styled.div`
+  width: 60%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 10px;
+`;
+
+export const SubProductName = styled.h2`
+  font-weight: bold;
+  font-size: 24px;
+  display: flex;
+  align-items: center;
+`;
+
+
+export const SubProductDetail = styled.p`
+  font-size: 18px;
+  color: #666;
+`;
+
+
 export const FacilityDiv = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
@@ -118,6 +160,7 @@ export const FacilityItem = styled.div`
 export const DescriptionDiv = styled.div`
   display: flex;
   flex-direction: column;
+  margin-bottom: 30px;
 `;
 
 export const DescriptionItem = styled.div``;
@@ -125,7 +168,13 @@ export const DescriptionItem = styled.div``;
 export const GroupName = styled.h3`
   font-weight: bold;
   font-size: 18px;
-  margin: 50px 0;
+  margin: 30px 0;
+`;
+
+export const ReviewGroupName = styled.h3`
+  font-weight: bold;
+  font-size: 18px;
+  margin-top: 30px;
 `;
 
 export const ReservationBarDiv = styled.div`
@@ -187,6 +236,7 @@ export const PriceBar = styled.div`
   align-items: center;
   margin-bottom: 5px;
 `;
+
 export const PersonBar = styled.div`
   width: 100%;
   padding: 0 16px;
@@ -195,6 +245,17 @@ export const PersonBar = styled.div`
   justify-content: space-between;
   align-items: center;
   margin-bottom: 5px;
+`;
+
+export const SelectInfo = styled.div`
+  width: 100%;
+  padding: 16px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 5px;
+  font-weight: bold;
 `;
 
 export const ImgButton = styled.button`

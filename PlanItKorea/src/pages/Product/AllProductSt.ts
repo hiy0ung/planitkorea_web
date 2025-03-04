@@ -79,9 +79,10 @@ export const PageDiv = styled.div`
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  position: absolute; 
-  bottom: 20px;
+  position: relative;
+  bottom: 0px;
   width: 100%;
+  margin-top: auto; 
 `;
 
 export const FilterHeader = styled.div`

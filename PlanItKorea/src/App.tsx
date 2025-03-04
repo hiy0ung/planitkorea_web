@@ -28,17 +28,28 @@ import useAuthStore from "./stores/use.auth.store";
 import ResetPasswordPage from "./pages/Login/findPassword/ResetPasswordPage";
 import SnsSuccess from "./pages/Login/login/SnsSuccess";
 import AuthRedirectHandler from "./pages/Login/signup/AuthRedirectHandler";
+import WishList from "./pages/MyPage/WishList";
+import AllProductPage from "./pages/Product/AllProductPage";
+import DetailProduct from "./pages/Product/DetailProduct";
+import axios from "axios";
 
 
 
 function App() {
   const location = useLocation();
   const [cookies] = useCookies(["token"]);
-  const { login, logout } = useAuthStore();
+  const { setUserId, login, logout } = useAuthStore();
 
   useEffect(() => {
     if (cookies.token) {
       login(cookies.token);
+      axios.get('http://localhost:4040/api/v1/users', {
+        headers: {
+          Authorization: `Bearer ${cookies.token}`
+        }
+      }).then((response) => {
+        setUserId(response.data.data.userId);
+      })
     } else {
       logout();
     }
@@ -94,12 +105,12 @@ function App() {
 
             <Route path="/myPageMain" element={<MyPageMain />} />
             <Route path="/reservationCheck" element={<ReservationCheck />} />
-            {/* <Route path="/wishList" element={<WishList />} /> */}
+            <Route path="/wishList" element={<WishList />} />
 
-            {/* <Route path="/allProductPage" element={<AllProductPage />} />
+            <Route path="/allProductPage" element={<AllProductPage />} />
             <Route path="/paymentPage" element={<PaymentPage />} />
             <Route path="/detailProduct/:productId" element={<DetailProduct />} />
-            <Route path="/allProductPage/:category?" element={<AllProductPage />} /> */}
+            <Route path="/allProductPage/:category?" element={<AllProductPage />} />
           </Routes>
         </MainContainer>
 

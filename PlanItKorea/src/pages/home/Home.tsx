@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { FormEvent, useEffect, useState } from "react";
 // import HomeImg from "./HomeImg";
 // import jeju from "../../assets/images/1/jeju.jpg";
 // import gapyeng from "../../assets/images/1/gapyeong.jpg";
@@ -6,7 +6,7 @@ import React, { useEffect, useState } from "react";
 // import gyengju from "../../assets/images/1/gyengju.jpg";
 // import seoul from "../../assets/images/1/seoul.jpg";
 import { City, CityImg, CityName, CityWarp, GroupLabel, GroupLine, HomeBox, MostUsed, MostUsedBox, PopularCityBox, PriceDiv, ProductCity, ProductDetail, ProductImg, ProductName } from "./HomeSt";
-import { Top5Product } from "../../types/type";
+import { Product, Top5Product } from "../../types/type";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import useSearchStore, { SearchData } from "../../stores/use.search.store";
@@ -30,6 +30,7 @@ export default function Home() {
       axios.get(`http://localhost:4040/api/v1/products/top5`)
       .then((response) => {
         setProducts(response.data.data);
+        console.log(response.data.data);
       })
     } catch(error) {
       console.error(error);
@@ -37,10 +38,11 @@ export default function Home() {
   }, [])
 
   const handleProductClick = (id: number) => {
+    console.log(id);
     navigate(`/detailProduct/${id}`);
     window.scrollTo(0, 0);
   };
-
+  
   const handleCityClick = (cityName: string) => {
     pushData({
       ...searchData,
@@ -86,7 +88,7 @@ export default function Home() {
         </GroupLine>
         <MostUsedBox>
         {products.map(product => (
-          <MostUsed key={product.id} onClick={() => handleProductClick(product.id)}>
+          <MostUsed key={product.productId} onClick={() => handleProductClick(product.productId)}>
             <ProductImg src={`http://localhost:4040/image/${product.productImage}`} alt="숙소 이미지"/>
             <ProductDetail>
               <CityWarp>

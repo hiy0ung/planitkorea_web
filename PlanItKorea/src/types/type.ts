@@ -181,8 +181,75 @@ export interface Review {
   date: string;
 }
 
-export type Top5Product = {
+export type ResponseReviewDto = {
   id: number;
+  productId: number;
+  userId: number;
+  reviewCommend: string;
+  reviewDate: Date;
+  userStringId: string;
+}
+
+
+export type Product = {
+  productId: number;
+  productCategory: string;
+  productName: string;
+  productPrice: string;
+  productDescription: string;
+  productAddress: string;
+  productImage: string;
+  facilityIds: number[];
+};
+
+export type ProductDetail = {
+  productId: number;
+  productCategory: string;
+  productName: string;
+  productPrice: string;
+  productAddress: string;
+  productDescription: string;
+  productImages: string[];
+  subProducts: SubProduct[];
+  facilities: Facility[];
+}
+
+export type SubProduct = {
+  subProductId: number;
+  subName: string;
+  subPrice: string;
+  subPerson: number;
+  subProductImages: string[];
+}
+
+export type Facility = {
+  facilityId: number;
+  facilityName: string;
+}
+
+export type Wishlist = {
+  wishListId: number;
+  userId: number;
+  productId: number;
+  productName: string;
+  productAddress: string;
+  productPrice: string;
+  productImage: string;
+}
+
+export type WishListResponseDto = {
+  wishListId: number;
+  userId: number;
+  productId: number;
+  productName: string;
+  productAddress: string;
+  productPrice: string;
+  productImage: string;
+}
+
+
+export type Top5Product = {
+  productId: number;
   productName: string;
   productCategory: string;
   productRegion: string;

@@ -1,356 +1,230 @@
-// import React, { useEffect, useState } from "react";
-// import { GroupLine } from "../Login/SignSt";
-// import {
-//   AllDiv,
-//   AllProductDiv,
-//   Category,
-//   FilterDiv,
-//   FilterHeader,
-//   GroupTitle,
-//   PriceDiv,
-//   ProductDetail,
-//   ProductDiv,
-//   ProductImg,
-//   ProductName,
-//   ResetButton,
-//   PageDiv
-// } from "../Product/AllProductSt";
-// import ReactPaginate from "react-paginate";
-// import {
-//   Checkbox,
-//   FormControl,
-//   FormControlLabel,
-//   FormGroup,
-//   FormLabel,
-//   Radio,
-//   RadioGroup,
-// } from "@mui/material";
-// import { Accommodation,  Facilities, User } from "../../types/type";
-// import { Favorite, FavoriteBorder } from "@mui/icons-material";
-// import { useLocation, useNavigate, useParams } from "react-router-dom";
-// import useSearchStore from "../../stores/use.search.store";
-// import axios from "axios";
-// import useAuthStore from "../../stores/use.auth.store"
+import React, { FormEvent, useEffect, useState } from "react";
+import { GroupLine } from "../Login/SignSt";
+import {
+  AllDiv,
+  AllProductDiv,
+  PriceDiv,
+  ProductDetail,
+  ProductDiv,
+  ProductImg,
+  ProductName,
+  PageDiv,
+} from "../Product/AllProductSt";
+import ReactPaginate from "react-paginate";
+import { Checkbox } from "@mui/material";
+import { Product, WishListResponseDto } from "../../types/type";
+import {
+  Favorite,
+  FavoriteBorder
+} from "@mui/icons-material";
+import { useLocation, useNavigate } from "react-router-dom";
+import axios from "axios";
+import { useCookies } from "react-cookie";
+import ProductFilter from "./ProductFilter";
 
-
-// const ITEMS_PER_PAGE = 9;
-
-// export default function AllProductPage() {
-//   const { category } = useParams<{ category: string }>();
-//   const location = useLocation();
-//   const queryParams = new URLSearchParams(location.search);
-//   const cityFilter = queryParams.get('city');
-  
-//   // URL 디코딩
-//   const decodedCityFilter = cityFilter ? decodeURIComponent(cityFilter) : '';
-
-//   const [currentPage, setCurrentPage] = useState<number>(0);
-//   const [accommodationType, setAccommodationType] = useState<Accommodation | null>(null);
-//   const [facilities, setFacilities] = useState<Facilities[]>([]);
-//   const [userWishList, setUserWishList] = useState<number[]>([]);
-//   const [products, setProducts] = useState<BerthProduct[]>([]);
-
-//   const navigate = useNavigate();
-
-//   const { searchData } = useSearchStore();
-//   const { user, isLoggedIn } = useAuthStore();
-
-//   useEffect(() => {
-//     const fetchWish = async () => {
-//       if (user?.id && isLoggedIn) {
-//         try {
-//           const response = await axios.get<User>(`http://localhost:3001/users/${user.id}`);
-//           setUserWishList(response.data.wishList);
-//           console.log(userWishList);
-//         } catch (error) {
-//           console.error('위시리스트 호출 실패:', error);
-//         }
-//       }
-//     };
-
-//     fetchWish();
-//   }, [user?.id, isLoggedIn]); 
-
-
-  
-//   //! 찜
-//   const toggleWishlist = async(id: number) => {
-//     if(!isLoggedIn) {
-//       alert('로그인이 필요한 시스템입니다.')
-//       return
-//     }
-//     try {
-//       const response = await axios.get<User>(`http://localhost:3001/users/${user.id}`);
-//       const userWishData = response.data;
-
-//       const updatedWishList = userWishData.wishList.includes(id)
-//         ? userWishData.wishList.filter(item => item !== id) 
-//         : [...userWishData.wishList, id]; 
-
-//         setUserWishList(updatedWishList)
-//       await axios.put(`http://localhost:3001/users/${user.id}`, {
-//         ...userWishData,
-//         wishList: updatedWishList,
-//       });
-
-//       console.log('위시리스트가 성공적으로 업데이트되었습니다.');
-//     } catch (error) {
-//       console.error('위시리스트 업데이트 중 오류 발생:', error);
-//     }
-
-//   };
-
-//   const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
-
-//   //! 카테고리 리셋
-//   const handleReset = () => {
-//     setAccommodationType(null); 
-//     setFacilities([]);
-//   };
-
-//   //! 숙소타입 핸들러
-//   const handleChangeAccommodation = (e: React.ChangeEvent<HTMLInputElement>) => {
-//     setAccommodationType(e.target.value as Accommodation);
-//   };
-
-//   useEffect(() => {
-//     const fetchProducts = async () => {
-//       try {
-//         const response = await axios.get('http://localhost:3001/BerthProduct');
-//         setProducts(response.data);
-//       } catch (error) {
-//         console.error("Error fetching products:", error);
-//       }
-//     };
-//     fetchProducts();
-//   }, []);
-
-//   //! 편의시설 핸들러
-//   const handleChangeFacilities = (event: React.ChangeEvent<HTMLInputElement>) => {
-//     const { value, checked } = event.target;
-//     setFacilities((prevFacilities) => {
-//       if (checked) {
-//         return [...prevFacilities, value as Facilities];
-//       } else {
-//         return prevFacilities.filter((facility) => facility !== value);
-//       }
-//     });
-//   };
-
-//    //! 카테고리 필터링
-//   const filterProducts = products.filter((product) => {
-//     const matchSearchCity = !searchData.city || product.city === searchData.city;
-  
-//     const matchQueryCity = !decodedCityFilter || product.city === decodedCityFilter;
-  
-//     const matchCity = matchSearchCity && matchQueryCity;
-  
-//     const matchAccommodationType =
-//       !accommodationType || product.accommodationCategory.includes(accommodationType as Accommodation);
-  
-//     const matchFacilities =
-//       facilities.length === 0 || facilities.every((facility) =>
-//         product.facility.includes(facility)
-//       );
-  
-//     const matchCategory = !category || product.accommodationCategory.some((cat) => cat === category);
-  
-//     return matchAccommodationType && matchFacilities && matchCategory && matchCity ;
-//   });
-//   //! 페이지네이션
-//   const handlePageChange = (event: { selected: number }) => {
-//     setCurrentPage(event.selected);
-//   };
-
-//   const indexOfLastItem = (currentPage + 1) * ITEMS_PER_PAGE;
-//   const indexOfFirstItem = indexOfLastItem - ITEMS_PER_PAGE;
-//   const currentItems = filterProducts.slice(indexOfFirstItem, indexOfLastItem);
-
-//   const handleProductClick = (id: number) => {
-//     navigate(`/detailProduct/${id}`);
-//   };
-
-
-//   return (
-//     <>
-//       <GroupLine />
-
-//       <AllDiv>
-//         <FilterDiv>
-//           <FilterHeader>
-//             <GroupTitle>숙소 필터</GroupTitle>
-//             <ResetButton onClick={handleReset}>초기화</ResetButton>
-//           </FilterHeader>
-//           <FormControl>
-//             <FormLabel
-//               id="demo-radio-buttons-group-label"
-//               sx={{ fontWeight: "bold", fontSize: "18px", color: "#000" }}
-//             >
-//               숙소별
-//             </FormLabel>
-//             <RadioGroup
-//               sx={{ paddingBottom: "40px", borderBottom: "1px solid #D9D9D9" }}
-//               value={accommodationType || ''}
-//               name="radio-buttons-group"
-//               onChange={handleChangeAccommodation}
-//             >
-//               <FormControlLabel
-//                 value=""
-//                 control={<Radio />}
-//                 label="전체"
-//               />
-//               <FormControlLabel
-//                 value="호텔&리조트"
-//                 control={<Radio />}
-//                 label="호텔 & 리조트"
-//               />
-//               <FormControlLabel
-//                 value="펜션&풀빌라"
-//                 control={<Radio />}
-//                 label="펜션 & 풀빌라"
-//               />
-//               <FormControlLabel
-//                 value="캠핑&글램핑"
-//                 control={<Radio />}
-//                 label="캠핑 & 글램핑"
-//               />
-//             </RadioGroup>
-//             <FormLabel
-//               id="facilities-filter"
-//               sx={{ fontWeight: "bold", fontSize: "18px", color: "#000", paddingTop: "40px" }}
-//             >
-//               편의 시설
-//             </FormLabel>
-//             <FormGroup sx={{zIndex:10}}>
-//               <FormControlLabel
-//                 value="사우나"
-//                 control={<Checkbox onChange={handleChangeFacilities} checked={facilities.includes('사우나')} />}
-//                 label="사우나"
-//               />
-//               <FormControlLabel
-//                 value="수영장"
-//                 control={<Checkbox onChange={handleChangeFacilities} checked={facilities.includes('수영장')} />}
-//                 label="수영장"
-//               />
-//               <FormControlLabel
-//                 value="바베큐"
-//                 control={<Checkbox onChange={handleChangeFacilities} checked={facilities.includes('바베큐')} />}
-//                 label="바베큐"
-//               />
-//               <FormControlLabel
-//                 value="세탁 가능"
-//                 control={<Checkbox onChange={handleChangeFacilities} checked={facilities.includes('세탁 가능')} />}
-//                 label="세탁 가능"
-//               />
-//               <FormControlLabel
-//                 value="스파/월풀"
-//                 control={<Checkbox onChange={handleChangeFacilities} checked={facilities.includes('스파/월풀')} />}
-//                 label="스파/월풀"
-//               />
-//               <FormControlLabel
-//                 value="와이파이"
-//                 control={<Checkbox onChange={handleChangeFacilities} checked={facilities.includes('와이파이')} />}
-//                 label="와이파이"
-//               />
-//               <FormControlLabel
-//                 value="에어컨"
-//                 control={<Checkbox onChange={handleChangeFacilities} checked={facilities.includes('에어컨')} />}
-//                 label="에어컨"
-//               />
-//               <FormControlLabel
-//                 value="욕실용품"
-//                 control={<Checkbox onChange={handleChangeFacilities} checked={facilities.includes('욕실용품')} />}
-//                 label="욕실용품"
-//               />
-//               <FormControlLabel
-//                 value="샤워실"
-//                 control={<Checkbox onChange={handleChangeFacilities} checked={facilities.includes('샤워실')} />}
-//                 label="샤워실"
-//               />
-//               <FormControlLabel
-//                 value="조식포함"
-//                 control={<Checkbox onChange={handleChangeFacilities} checked={facilities.includes('조식포함')} />}
-//                 label="조식포함"
-//               />
-//               <FormControlLabel
-//                 value="무료주차"
-//                 control={<Checkbox onChange={handleChangeFacilities} checked={facilities.includes('무료주차')} />}
-//                 label="무료주차"
-//               />
-//               <FormControlLabel
-//                 value="반려견 동반"
-//                 control={<Checkbox onChange={handleChangeFacilities} checked={facilities.includes('반려견 동반')} />}
-//                 label="반려견 동반"
-//               />
-//               <FormControlLabel
-//                 value="객실 내 취사"
-//                 control={<Checkbox onChange={handleChangeFacilities} checked={facilities.includes('객실 내 취사')} />}
-//                 label="객실 내 취사"
-//               />
-//               <FormControlLabel
-//                 value="OTT"
-//                 control={<Checkbox onChange={handleChangeFacilities} checked={facilities.includes('OTT')} />}
-//                 label="OTT"
-//               />
-//             </FormGroup>
-//           </FormControl>
-//         </FilterDiv>
-
-//         <AllProductDiv>
-//           {currentItems.map((product) => (
-//             <ProductDiv key={product.id} onClick={() => handleProductClick(product.id)}>
-//                 <ProductImg src={product.img[0]} />
-//               <ProductDetail>
-//                 <Category>
-//                   {product.city} - {product.accommodationCategory}
-//                   <Checkbox
-//                     {...label}
-//                     icon={<FavoriteBorder sx={{ color: '#DD1162',  }} />}
-//                     checkedIcon={<Favorite sx={{ color: '#DD1162' , }} />}
-//                     checked={userWishList.includes(product.id)}
-//                     onClick={(e) => {
-//                       e.stopPropagation()
-//                       toggleWishlist(product.id);
-//                     }}
-//                     sx={{ position: 'relative'}}
-//                   />
-//                 </Category>
-//                 <ProductName>{product.name}</ProductName>
-//                 <PriceDiv>₩ {product.price.toLocaleString()}</PriceDiv>
-//               </ProductDetail>
-//             </ProductDiv>
-//           ))}
-//         <PageDiv>
-//           <ReactPaginate
-//             previousLabel={"<"}
-//             nextLabel={">"}
-//             breakLabel={"..."}
-//             pageCount={Math.ceil(filterProducts.length / ITEMS_PER_PAGE)}
-//             marginPagesDisplayed={2}
-//             pageRangeDisplayed={5}
-//             onPageChange={handlePageChange}
-//             containerClassName={"pagination"}
-//             pageClassName={"page-item"}
-//             pageLinkClassName={"page-link"}
-//             previousClassName={"page-item"}
-//             previousLinkClassName={"page-link"}
-//             nextClassName={"page-item"}
-//             nextLinkClassName={"page-link"}
-//             breakClassName={"page-item"}
-//             breakLinkClassName={"page-link"}
-//             activeClassName={"active"}
-//           />
-//         </PageDiv>
-//         </AllProductDiv>
-
-//       </AllDiv>
-//     </>
-//   );
-// }
-import React from 'react'
+const ITEMS_PER_PAGE = 9;
 
 export default function AllProductPage() {
+  const [wishList, setWishList] = useState<WishListResponseDto[]>([]);
+  const [userWishList, setUserWishList] = useState<number[]>([]);
+  const [products, setProducts] = useState<Product[]>([]);
+  const [currentPage, setCurrentPage] = useState<number>(0);
+
+  const location = useLocation();
+  const navigate = useNavigate();
+  const searchParams = new URLSearchParams(location.search);
+
+  const [cookies] = useCookies(["token"]);
+  const token = cookies.token;
+
+  useEffect(() => {
+    fetchProducts();
+    if (token) {
+      fetchWishList();
+    }
+  }, [location]);
+
+  const formatDate = (date: Date | null) => {
+    if (!date) return "";
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, "0");
+    const day = date.getDate().toString().padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  }
+
+  const getQueryParams = () => {
+    const queryParams = new URLSearchParams(location.search);
+    const cityName = queryParams.get("cityName") || "";
+    const startDateParam = queryParams.get("startDate") || null;
+    const endDateParam = queryParams.get("endDate") || null;
+    const person = queryParams.get("person") ? parseInt(queryParams.get("person")!) : 0;
+
+    const startDate = startDateParam ? new Date(startDateParam) : null;
+    const endDate = endDateParam ? new Date(endDateParam) : null;
+  
+    return { cityName, startDate, endDate, person };
+  };
+
+  const fetchProducts = async () => {
+    const { cityName, startDate, endDate, person } = getQueryParams();
+
+    try {
+      const response = await axios.get(
+        `http://localhost:4040/api/v1/products/search`,
+        {
+          params: {
+            cityName,
+            startDate: startDate ? formatDate(startDate) : "",
+            endDate: endDate ? formatDate(endDate) : "",
+            person
+          },
+        });
+        setProducts(response.data.data);
+    } catch (error) {
+      console.error("숙소 검색 중 오류 발생", error);
+    }
+  };
+
+  
+  const fetchWishList = async () => {
+    try {
+      const response = await axios.get(
+        `http://localhost:4040/api/v1/wishlist`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
+        const wishListData: WishListResponseDto[] = response.data.data;
+
+        setWishList(wishListData);
+        setUserWishList(wishListData.map((item) => item.productId));
+
+    } catch (error) {
+      console.error("위시리스트 가져오기 중 오류 발생", error);
+    }
+  }
+
+  //! 찜
+  const toggleWishlist = async(productId: number) => {
+    if(!token) {
+      alert('로그인이 필요한 시스템입니다.')
+      return;
+    }
+    try {
+      const isWished = userWishList.includes(productId);
+      if (isWished) {
+        const wishListItem = wishList.find((item) => item.productId === productId);
+
+        console.log("삭제 대상", wishListItem);
+        if (!wishListItem) {
+          console.error("삭제할 위시리스트 아이템을 찾을 수 없습니다.");
+          return;
+        }
+        if (!wishListItem) return;
+
+        await axios.delete(`http://localhost:4040/api/v1/wishlist/${wishListItem.wishListId}`, { headers: { Authorization: `Bearer ${token}` }});
+
+        setWishList((prev) => prev.filter((item) => item.productId !== productId));
+        setUserWishList((prev) => prev.filter((id) => id !== productId));
+      } else {
+        const response = await axios.post(`http://localhost:4040/api/v1/wishlist?productId=${productId}`, 
+        {},
+        { headers: { Authorization: `Bearer ${token}` }}
+        );
+
+        if (response.data.result) {
+          const newWishItem: WishListResponseDto = {
+            wishListId: response.data.data.wishListId,
+            userId: response.data.data.userId,
+            productId: productId,
+            productName: response.data.data.productName,
+            productAddress: response.data.data.productAddress,
+            productPrice: response.data.data.productPrice,
+            productImage: response.data.data.productImage,
+          }
+
+          setWishList((prev) => [...prev, newWishItem]);
+          setUserWishList((prev) => [...prev, productId]);
+        }
+      }
+      console.log('위시리스트가 성공적으로 업데이트되었습니다.');
+    } catch (error) {
+      console.error('위시리스트 업데이트 중 오류 발생:', error);
+    }
+  };
+
+  const label = { inputProps: { "aria-label": "Checkbox demo" } };
+
+  //! 페이지네이션
+  const handlePageChange = (event: { selected: number }) => {
+    setCurrentPage(event.selected);
+  };
+
+  const indexOfLastItem = (currentPage + 1) * ITEMS_PER_PAGE;
+  const indexOfFirstItem = indexOfLastItem - ITEMS_PER_PAGE;
+  const currentItems = products.slice(indexOfFirstItem, indexOfLastItem);
+
+  const handleProductClick = (productId: number) => {
+    const queryParams = new URLSearchParams({
+      startDate: searchParams.get("startDate") || "",
+      endDate: searchParams.get("endDate") || "",
+      person: searchParams.get("person") || "1",
+    }).toString();
+  
+    navigate(`/detailProduct/${productId}?${queryParams}`);
+  };
+
   return (
-    <div>AllProductPage</div>
-  )
+    <>
+      <GroupLine />
+      <AllDiv>
+        <ProductFilter />
+        <AllProductDiv>
+          {currentItems.map((product) => (
+            <ProductDiv
+              key={product.productId}
+              onClick={() => handleProductClick(product.productId)}
+            >
+              <ProductImg src={product.productImage} />
+              <ProductDetail>
+                  <Checkbox
+                    {...label}
+                    icon={<FavoriteBorder sx={{ color: '#DD1162',  }} />}
+                    checkedIcon={<Favorite sx={{ color: '#DD1162' , }} />}
+                    checked={userWishList.includes(product.productId)}
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      toggleWishlist(product.productId);
+                    }}
+                    sx={{ position: 'relative'}}
+                  />
+                <ProductName>{product.productName}</ProductName>
+                <PriceDiv>₩ {product.productPrice.toLocaleString()}</PriceDiv>
+              </ProductDetail>
+            </ProductDiv>
+          ))}
+          <PageDiv>
+            <ReactPaginate
+              previousLabel={"<"}
+              nextLabel={">"}
+              breakLabel={"..."}
+              pageCount={Math.ceil(products.length / ITEMS_PER_PAGE)}
+              marginPagesDisplayed={2}
+              pageRangeDisplayed={5}
+              onPageChange={handlePageChange}
+              containerClassName={"pagination"}
+              pageClassName={"page-item"}
+              pageLinkClassName={"page-link"}
+              previousClassName={"page-item"}
+              previousLinkClassName={"page-link"}
+              nextClassName={"page-item"}
+              nextLinkClassName={"page-link"}
+              breakClassName={"page-item"}
+              breakLinkClassName={"page-link"}
+              activeClassName={"active"}
+            />
+          </PageDiv>
+        </AllProductDiv>
+      </AllDiv>
+    </>
+  );
 }
