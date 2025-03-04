@@ -1,158 +1,143 @@
 import React, { useEffect, useState } from "react";
 import { format } from "date-fns";
 import { useCookies } from "react-cookie";
-import { GroupName, MapReviewDiv, MapReviewInnerDiv, ReviewButton, ReviewContent, ReviewContentDiv, ReviewContentInput, ReviewDate, ReviewDiv, ReviewInfo, UserIdInfo } from "./DetailSt";
+import { GroupName, MapReviewDiv, MapReviewInnerDiv, ReviewButton, ReviewContent, ReviewContentDiv, ReviewContentInput, ReviewDate, ReviewDiv, ReviewGroupName, ReviewInfo, UserIdInfo } from "./DetailSt";
 import { PageDiv } from "./AllProductSt";
 import ReactPaginate from "react-paginate";
-import { Review } from "../../types/type";
+import { ResponseReviewDto, Review } from "../../types/type";
+import useAuthStore from "../../stores/use.auth.store";
+import axios from "axios";
 
 interface ReviewProps {
   productId: string;
-  reviews: Review[];
-  setReviews: React.Dispatch<React.SetStateAction<Review[]>>;
 }
 
-export default function ReviewSection({ productId, reviews, setReviews }: ReviewProps) {
-// const [renderReview, setRenderReview] = useState<Review[]>([]);
-//   const [comment, setComment] = useState<string>("");
-//   const [currentPage, setCurrentPage] = React.useState<number>(0);
-//   const ITEMS_PER_PAGE = 5;
+export default function ReviewSection({ productId }: ReviewProps) {
+  const [renderReview, setRenderReview] = useState<ResponseReviewDto[]>([]);
+  const [comment, setComment] = useState<string>("");
+  const [currentPage, setCurrentPage] = React.useState<number>(0);
+  const { userId } = useAuthStore();
+  const ITEMS_PER_PAGE = 5;
 
-//   const [cookies] = useCookies(["token"]);
-//   const token = cookies.token;
+  const today = format(new Date(), "yyyy-MM-dd");
 
-//   useEffect(() => {
-//     const reviewDay = new Date();
-//     const formattedDate = format(reviewDay, "yyyy-MM-dd");
-//     setReviewDate(formattedDate);
-//   }, []);
+  const [cookies] = useCookies(["token"]);
+  const token = cookies.token;
 
-//   const fetchReviews = async () => {
-//     try {
-//       const reviewResponse = await axios.get("http://localhost:3001/reviews", {
-//         params: { productId },
-//       });
+  useEffect(() => {
+    axios.get(`http://localhost:4040/api/v1/reviews/auth/${productId}`)
+      .then((response) => {
+        setRenderReview(response.data?.data || []); 
+      })
+      .catch((error) => {
+        console.error("리뷰 데이터를 불러오는데 실패했습니다.", error);
+        setRenderReview([]); 
+      });
+  }, [productId]);
+  
 
-//       const sortedReviews = reviewResponse.data.sort((a: Review, b: Review) => {
-//         return new Date(b.date).getTime() - new Date(a.date).getTime();
-//       });
-//       console.log("Sorted Reviews:", sortedReviews);
-//       setRenderReview(sortedReviews);
-//     } catch (error) {
-//       console.error("리뷰 호출 에러", error);
-//     }
-//   };
+  const handleReviewPost = async() => {
+    try {
+      await axios.post(`http://localhost:4040/api/v1/reviews`, {
+        productId: productId,
+        reviewCommend: comment
+      }, {
+        headers: {
+          Authorization: `Bearer ${cookies.token}`
+        }
+      }).then((response) => {
+        if(response.data.result) {
+          setComment("")
+        }
+      })
+    } catch(error) {
+      console.error(error);
+    }
+  }
 
-//   const handleReviewSave = async () => {
-//     let valid = true;
+  const handleCommentChange = (
+    event: React.ChangeEvent<HTMLTextAreaElement>
+  ) => {
+    setComment(event.target.value);
+  };
 
-//     if (!comment) {
-//       alert("내용을 입력해주세요");
-//       valid = false;
-//     }
+  const indexOfLastItem = (currentPage + 1) * ITEMS_PER_PAGE;
+  const indexOfFirstItem = indexOfLastItem - ITEMS_PER_PAGE;
+  const currentItems = renderReview.slice(indexOfFirstItem, indexOfLastItem);
 
-//     if (valid) {
-//       const updatedReview = {
-//         id: nextId.toString(),
-//         productId: product?.id ? product.id.toString() : "",
-//         userId: user.id,
-//         comment: comment,
-//         date: reviewDate,
-//       };
-
-//       try {
-//         await axios.post(`http://localhost:3001/reviews`, updatedReview);
-//         incrementId();
-//         setComment("");
-
-//         fetchReviews();
-//       } catch (error) {
-//         console.error("데이터 저장 실패", error);
-//         alert("리뷰 저장 도중 오류발생.");
-//       }
-//     }
-//   };
-
-//   const handleCommentChange = (
-//     event: React.ChangeEvent<HTMLTextAreaElement>
-//   ) => {
-//     setComment(event.target.value);
-//   };
-
-//   const indexOfLastItem = (currentPage + 1) * ITEMS_PER_PAGE;
-//   const indexOfFirstItem = indexOfLastItem - ITEMS_PER_PAGE;
-//   const currentItems = renderReview.slice(indexOfFirstItem, indexOfLastItem);
-
-//   const handlePageChange = (e: { selected: number }) => {
-//     setCurrentPage(e.selected);
-//   };
+  const handlePageChange = (e: { selected: number }) => {
+    setCurrentPage(e.selected);
+  };
 
   return (
-  //   <>
-  //   <ReviewDiv>
-  //     <GroupName style={{ margin: "0" }}>리뷰</GroupName>
+    <>
+    <ReviewDiv>
 
-  //     <MapReviewDiv>
-  //       {currentItems && currentItems.length > 0 ? (
-  //         currentItems.map((item) => (
-  //           <MapReviewInnerDiv key={item.id}>
-  //             <ReviewInfo>
-  //               <UserIdInfo>{item.userId}</UserIdInfo>
-  //               <ReviewDate>작성일 - {item.date}</ReviewDate>
-  //             </ReviewInfo>
-  //             <ReviewContentDiv>
-  //               <ReviewContent>{item.comment}</ReviewContent>
-  //             </ReviewContentDiv>
-  //           </MapReviewInnerDiv>
-  //         ))
-  //       ) : (
-  //         <MapReviewInnerDiv>작성된 리뷰가 없습니다.</MapReviewInnerDiv>
-  //       )}
+    <ReviewGroupName>리뷰 작성</ReviewGroupName>
+    <MapReviewDiv>
+      <MapReviewInnerDiv>
+        <ReviewInfo>
+          <UserIdInfo>{userId}</UserIdInfo>
+          <ReviewDate>작성일 - {today}</ReviewDate>
+        </ReviewInfo>
+        <ReviewContentDiv>
+          <ReviewContentInput
+            value={comment}
+            readOnly={!token}
+            isReadonly={!token}
+            onChange={handleCommentChange}
+            placeholder={token ? "내용을 입력해주세요." : "로그인이 필요합니다."}
+          />
+          {token && <ReviewButton onClick={handleReviewPost}>전송</ReviewButton>}
+        </ReviewContentDiv>
+      </MapReviewInnerDiv>
+    </MapReviewDiv>
 
-  //       <PageDiv>
-  //         <ReactPaginate
-  //           previousLabel={"<"}
-  //           nextLabel={">"}
-  //           breakLabel={"..."}
-  //           pageCount={Math.ceil((renderReview.length || 0) / ITEMS_PER_PAGE)}
-  //           marginPagesDisplayed={2}
-  //           pageRangeDisplayed={5}
-  //           onPageChange={handlePageChange}
-  //           containerClassName={"pagination"}
-  //           pageClassName={"page-item"}
-  //           pageLinkClassName={"page-link"}
-  //           previousClassName={"page-item"}
-  //           previousLinkClassName={"page-link"}
-  //           nextClassName={"page-item"}
-  //           nextLinkClassName={"page-link"}
-  //           breakClassName={"page-item"}
-  //           breakLinkClassName={"page-link"}
-  //           activeClassName={"active"}
-  //         />
-  //       </PageDiv>
-  //     </MapReviewDiv>
-  //   </ReviewDiv>
 
-  //   <GroupName style={{ margin: "0" }}>리뷰 작성</GroupName>
-  //   <MapReviewDiv>
-  //     <MapReviewInnerDiv>
-  //       <ReviewInfo>
-  //         <UserIdInfo>{user.id}</UserIdInfo>
-  //         <ReviewDate>작성일 - {reviewDate}</ReviewDate>
-  //       </ReviewInfo>
-  //       <ReviewContentDiv>
-  //         <ReviewContentInput
-  //           value={comment}
-  //           readOnly={!isLoggedIn}
-  //           isReadonly={!isLoggedIn}
-  //           onChange={handleCommentChange}
-  //           placeholder={isLoggedIn ? "내용을 입력해주세요." : "로그인이 필요합니다."}
-  //         />
-  //         {isLoggedIn && <ReviewButton onClick={handleReviewSave}>전송</ReviewButton>}
-  //       </ReviewContentDiv>
-  //     </MapReviewInnerDiv>
-  //   </MapReviewDiv>
-  // </>
-  <div>리뷰ㅠㅠㅠ</div>
+      <ReviewGroupName>리뷰</ReviewGroupName>
+
+      <MapReviewDiv>
+        {currentItems && currentItems.length > 0 ? (
+          currentItems.map((item) => (
+            <MapReviewInnerDiv key={item.id}>
+              <ReviewInfo>
+                <UserIdInfo>{item.userStringId}</UserIdInfo>
+                <ReviewDate>작성일 - {item.reviewDate ? format(new Date(item.reviewDate), "yyyy-MM-dd") : "날짜 없음"} </ReviewDate>
+              </ReviewInfo>
+              <ReviewContentDiv>
+                <ReviewContent>{item.reviewCommend}</ReviewContent>
+              </ReviewContentDiv>
+            </MapReviewInnerDiv>
+          ))
+        ) : (
+          <MapReviewInnerDiv>작성된 리뷰가 없습니다.</MapReviewInnerDiv>
+        )}
+
+        <PageDiv>
+          <ReactPaginate
+            previousLabel={"<"}
+            nextLabel={">"}
+            breakLabel={"..."}
+            pageCount={Math.ceil((renderReview.length || 0) / ITEMS_PER_PAGE)}
+            marginPagesDisplayed={2}
+            pageRangeDisplayed={5}
+            onPageChange={handlePageChange}
+            containerClassName={"pagination"}
+            pageClassName={"page-item"}
+            pageLinkClassName={"page-link"}
+            previousClassName={"page-item"}
+            previousLinkClassName={"page-link"}
+            nextClassName={"page-item"}
+            nextLinkClassName={"page-link"}
+            breakClassName={"page-item"}
+            breakLinkClassName={"page-link"}
+            activeClassName={"active"}
+          />
+        </PageDiv>
+      </MapReviewDiv>
+    </ReviewDiv>
+
+    
+  </>
   );
 }

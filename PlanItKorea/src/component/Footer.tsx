@@ -34,7 +34,7 @@ export default function Footer() {
           </LogoBox>
           
           <GitHubBox>
-            <LogoLink href="https://github.com/youngjun9909" target="_blank">
+            <LogoLink href="https://github.com/PlanItKorea" target="_blank">
             <GitHubLogo src={GitHubImg}/>
             </LogoLink>
           </GitHubBox>

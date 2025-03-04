@@ -17,9 +17,9 @@ import InquiryCRUD from "./pages/CustomerService/InquiryCRUD";
 import Notification from "./pages/CustomerService/Notification";
 import InquiryHistory from "./pages/CustomerService/InquiryHistory";
 import ReservationCheck from "./pages/MyPage/ReservationCheck";
-import WishList from "./pages/MyPage/WishList";
-import AllProductPage from "./pages/Product/AllProductPage";
-import DetailProduct from "./pages/Product/DetailProduct"
+// import WishList from "./pages/MyPage/WishList";
+// import AllProductPage from "./pages/Product/AllProductPage";
+// import DetailProduct from "./pages/Product/DetailProduct"
 import PaymentPage from "./pages/Product/PaymentPage";
 import AppContainer from "./layouts/AppContainer";
 import MainContainer from "./layouts/MainContainer";
@@ -28,17 +28,28 @@ import useAuthStore from "./stores/use.auth.store";
 import ResetPasswordPage from "./pages/Login/findPassword/ResetPasswordPage";
 import SnsSuccess from "./pages/Login/login/SnsSuccess";
 import AuthRedirectHandler from "./pages/Login/signup/AuthRedirectHandler";
+import WishList from "./pages/MyPage/WishList";
+import AllProductPage from "./pages/Product/AllProductPage";
+import DetailProduct from "./pages/Product/DetailProduct";
+import axios from "axios";
 
 
 
 function App() {
   const location = useLocation();
   const [cookies] = useCookies(["token"]);
-  const { login, logout } = useAuthStore();
+  const { setUserId, login, logout } = useAuthStore();
 
   useEffect(() => {
     if (cookies.token) {
       login(cookies.token);
+      axios.get('http://localhost:4040/api/v1/users', {
+        headers: {
+          Authorization: `Bearer ${cookies.token}`
+        }
+      }).then((response) => {
+        setUserId(response.data.data.userId);
+      })
     } else {
       logout();
     }

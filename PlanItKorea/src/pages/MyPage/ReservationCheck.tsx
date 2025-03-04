@@ -27,6 +27,7 @@ import {
   Error,
   NavInnerBox,
   NaviBox,
+  MapUl,
 } from "./MyPageSt";
 import { NavLink, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -58,6 +59,10 @@ export default function ReservationCheck() {
     }
     console.log(reservation);
   }, []);
+
+useEffect(() => {
+  console.log(reservation);
+}, [reservation])
 
   const reservationClick = (id: number) => {
     navigate(`/detailProduct/${id}`);
@@ -93,6 +98,7 @@ export default function ReservationCheck() {
             </Card>
           ) : (
             <>
+                <MapUl>
               {reservation.map((item) => (
                 <MainLi key={item.id}>
                   <ReservationMainInner>
@@ -100,13 +106,12 @@ export default function ReservationCheck() {
                       onClick={() => reservationClick(item.productId)}
                     >
                       <ReserVationProductImgDiv>
-                        <ProductImage
-                          src={
-                            item.productImg
-                              ? `http://localhost:4040/image/${item.productImg}`
-                              : "/images/logo.png"
-                          }
-                        />
+                        {item.productImage ? (
+                          <ProductImage src={`http://localhost:4040/image/${item.productImage}`}/>
+                        ): (
+                          <ProductImage src={"/images/logo.png"}/>
+                        )}
+                        
                       </ReserVationProductImgDiv>
                     </ReserVationProductDiv>
 
@@ -161,6 +166,7 @@ export default function ReservationCheck() {
                   </ReservationMainInner>
                 </MainLi>
               ))}
+              </MapUl>
             </>
           )}
       </AllDiv>

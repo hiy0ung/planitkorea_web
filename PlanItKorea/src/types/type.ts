@@ -78,7 +78,7 @@ export type NewReservation = {
   startDate: Date;
   endDate: Date;
   reservationStatus: number;
-  productImg: string;
+  productImage: string;
   productName: string;
 }
 
@@ -181,6 +181,16 @@ export interface Review {
   date: string;
 }
 
+export type ResponseReviewDto = {
+  id: number;
+  productId: number;
+  userId: number;
+  reviewCommend: string;
+  reviewDate: Date;
+  userStringId: string;
+}
+
+
 export type Product = {
   productId: number;
   productCategory: string;
@@ -239,7 +249,7 @@ export type WishListResponseDto = {
 
 
 export type Top5Product = {
-  id: number;
+  productId: number;
   productName: string;
   productCategory: string;
   productRegion: string;
