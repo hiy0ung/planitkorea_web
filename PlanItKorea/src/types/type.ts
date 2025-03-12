@@ -150,9 +150,6 @@ export type Location =
   | "대구"
   | null;
 
-//! 숙소 타입
-export type Accommodation = "호텔&리조트" | "펜션&풀빌라" | "캠핑&글램핑";
-
 export type Facilities =
   | "사우나"
   | "수영장"

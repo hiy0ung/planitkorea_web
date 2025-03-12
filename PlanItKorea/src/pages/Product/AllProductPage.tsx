@@ -29,6 +29,8 @@ export default function AllProductPage() {
   const [userWishList, setUserWishList] = useState<number[]>([]);
   const [products, setProducts] = useState<Product[]>([]);
   const [currentPage, setCurrentPage] = useState<number>(0);
+  const [accommodationType, setAccommodationType] = useState<string | null>(null);
+
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -76,7 +78,7 @@ export default function AllProductPage() {
             cityName,
             startDate: startDate ? formatDate(startDate) : "",
             endDate: endDate ? formatDate(endDate) : "",
-            person
+            person,
           },
         });
         setProducts(response.data.data);
@@ -84,6 +86,8 @@ export default function AllProductPage() {
       console.error("숙소 검색 중 오류 발생", error);
     }
   };
+
+  const filteredProducts = accommodationType ? products.filter(product => product.productCategory === accommodationType) : products;
 
   
   const fetchWishList = async () => {
@@ -161,7 +165,7 @@ export default function AllProductPage() {
 
   const indexOfLastItem = (currentPage + 1) * ITEMS_PER_PAGE;
   const indexOfFirstItem = indexOfLastItem - ITEMS_PER_PAGE;
-  const currentItems = products.slice(indexOfFirstItem, indexOfLastItem);
+  const currentItems = filteredProducts.slice(indexOfFirstItem, indexOfLastItem);
 
   const handleProductClick = (productId: number) => {
     const queryParams = new URLSearchParams({
@@ -177,7 +181,10 @@ export default function AllProductPage() {
     <>
       <GroupLine />
       <AllDiv>
-        <ProductFilter />
+        <ProductFilter
+          accommodationType={accommodationType}
+          setAccommodationType={setAccommodationType}
+        />
         <AllProductDiv>
           {currentItems.map((product) => (
             <ProductDiv
@@ -207,7 +214,7 @@ export default function AllProductPage() {
               previousLabel={"<"}
               nextLabel={">"}
               breakLabel={"..."}
-              pageCount={Math.ceil(products.length / ITEMS_PER_PAGE)}
+              pageCount={Math.ceil(filteredProducts.length / ITEMS_PER_PAGE)}
               marginPagesDisplayed={2}
               pageRangeDisplayed={5}
               onPageChange={handlePageChange}
