@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   FilterDiv,
   FilterHeader,
@@ -14,22 +14,32 @@ import {
   Radio,
   RadioGroup,
 } from "@mui/material";
-import { Accommodation, Facilities } from "../../types/type";
+import { Facilities } from "../../types/type";
+import axios from "axios";
 
-export default function ProductFilter() {
-    // const [accommodationType, setAccommodationType] = useState<Accommodation | null>(null);
-    // const [facilities, setFacilities] = useState<Facilities[]>([]);
+interface ProductFilterProps {
+  accommodationType: string | null;
+  setAccommodationType: React.Dispatch<React.SetStateAction<string | null>>;
+}
+
+export default function ProductFilter({
+  accommodationType,
+  setAccommodationType,
+}: ProductFilterProps) {
+  // const [facilities, setFacilities] = useState<Facilities[]>([]);
 
   // //! 카테고리 리셋
-  // const handleReset = () => {
-  //   setAccommodationType(null);
-  //   setFacilities([]);
-  // };
+  const handleReset = () => {
+    setAccommodationType(null);
+    // setFacilities([]);
+  };
 
   // //! 숙소타입 핸들러
-  // const handleChangeAccommodation = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   setAccommodationType(e.target.value as Accommodation);
-  // };
+  const handleChangeAccommodation = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setAccommodationType(e.target.value);
+  };
 
   // useEffect(() => {
   //   const fetchProducts = async () => {
@@ -105,9 +115,7 @@ export default function ProductFilter() {
       <FilterDiv>
         <FilterHeader>
           <GroupTitle>숙소 필터</GroupTitle>
-          <ResetButton 
-            // onClick={handleReset}
-          >초기화</ResetButton>
+          <ResetButton onClick={handleReset}>초기화</ResetButton>
         </FilterHeader>
         <FormControl>
           <FormLabel
@@ -118,9 +126,9 @@ export default function ProductFilter() {
           </FormLabel>
           <RadioGroup
             sx={{ paddingBottom: "40px", borderBottom: "1px solid #D9D9D9" }}
-            // value={accommodationType || ""}
+            value={accommodationType || ""}
             name="radio-buttons-group"
-            // onChange={handleChangeAccommodation}
+            onChange={handleChangeAccommodation}
           >
             <FormControlLabel value="" control={<Radio />} label="전체" />
             <FormControlLabel
@@ -155,8 +163,8 @@ export default function ProductFilter() {
               value="사우나"
               control={
                 <Checkbox
-                  // onChange={handleChangeFacilities}
-                  // checked={facilities.includes("사우나")}
+                // onChange={handleChangeFacilities}
+                // checked={facilities.includes("사우나")}
                 />
               }
               label="사우나"
@@ -165,8 +173,8 @@ export default function ProductFilter() {
               value="수영장"
               control={
                 <Checkbox
-                  // onChange={handleChangeFacilities}
-                  // checked={facilities.includes("수영장")}
+                // onChange={handleChangeFacilities}
+                // checked={facilities.includes("수영장")}
                 />
               }
               label="수영장"
@@ -175,8 +183,8 @@ export default function ProductFilter() {
               value="바베큐"
               control={
                 <Checkbox
-                  // onChange={handleChangeFacilities}
-                  // checked={facilities.includes("바베큐")}
+                // onChange={handleChangeFacilities}
+                // checked={facilities.includes("바베큐")}
                 />
               }
               label="바베큐"
@@ -185,8 +193,8 @@ export default function ProductFilter() {
               value="세탁 가능"
               control={
                 <Checkbox
-                  // onChange={handleChangeFacilities}
-                  // checked={facilities.includes("세탁 가능")}
+                // onChange={handleChangeFacilities}
+                // checked={facilities.includes("세탁 가능")}
                 />
               }
               label="세탁 가능"
@@ -195,8 +203,8 @@ export default function ProductFilter() {
               value="스파/월풀"
               control={
                 <Checkbox
-                  // onChange={handleChangeFacilities}
-                  // checked={facilities.includes("스파/월풀")}
+                // onChange={handleChangeFacilities}
+                // checked={facilities.includes("스파/월풀")}
                 />
               }
               label="스파/월풀"
@@ -205,8 +213,8 @@ export default function ProductFilter() {
               value="와이파이"
               control={
                 <Checkbox
-                  // onChange={handleChangeFacilities}
-                  // checked={facilities.includes("와이파이")}
+                // onChange={handleChangeFacilities}
+                // checked={facilities.includes("와이파이")}
                 />
               }
               label="와이파이"
@@ -215,8 +223,8 @@ export default function ProductFilter() {
               value="에어컨"
               control={
                 <Checkbox
-                  // onChange={handleChangeFacilities}
-                  // checked={facilities.includes("에어컨")}
+                // onChange={handleChangeFacilities}
+                // checked={facilities.includes("에어컨")}
                 />
               }
               label="에어컨"
@@ -225,8 +233,8 @@ export default function ProductFilter() {
               value="욕실용품"
               control={
                 <Checkbox
-                  // onChange={handleChangeFacilities}
-                  // checked={facilities.includes("욕실용품")}
+                // onChange={handleChangeFacilities}
+                // checked={facilities.includes("욕실용품")}
                 />
               }
               label="욕실용품"
@@ -235,8 +243,8 @@ export default function ProductFilter() {
               value="샤워실"
               control={
                 <Checkbox
-                  // onChange={handleChangeFacilities}
-                  // checked={facilities.includes("샤워실")}
+                // onChange={handleChangeFacilities}
+                // checked={facilities.includes("샤워실")}
                 />
               }
               label="샤워실"
@@ -245,8 +253,8 @@ export default function ProductFilter() {
               value="조식포함"
               control={
                 <Checkbox
-                  // onChange={handleChangeFacilities}
-                  // checked={facilities.includes("조식포함")}
+                // onChange={handleChangeFacilities}
+                // checked={facilities.includes("조식포함")}
                 />
               }
               label="조식포함"
@@ -255,8 +263,8 @@ export default function ProductFilter() {
               value="무료주차"
               control={
                 <Checkbox
-                  // onChange={handleChangeFacilities}
-                  // checked={facilities.includes("무료주차")}
+                // onChange={handleChangeFacilities}
+                // checked={facilities.includes("무료주차")}
                 />
               }
               label="무료주차"
@@ -265,8 +273,8 @@ export default function ProductFilter() {
               value="반려견 동반"
               control={
                 <Checkbox
-                  // onChange={handleChangeFacilities}
-                  // checked={facilities.includes("반려견 동반")}
+                // onChange={handleChangeFacilities}
+                // checked={facilities.includes("반려견 동반")}
                 />
               }
               label="반려견 동반"
@@ -275,8 +283,8 @@ export default function ProductFilter() {
               value="객실 내 취사"
               control={
                 <Checkbox
-                  // onChange={handleChangeFacilities}
-                  // checked={facilities.includes("객실 내 취사")}
+                // onChange={handleChangeFacilities}
+                // checked={facilities.includes("객실 내 취사")}
                 />
               }
               label="객실 내 취사"
@@ -285,8 +293,8 @@ export default function ProductFilter() {
               value="OTT"
               control={
                 <Checkbox
-                  // onChange={handleChangeFacilities}
-                  // checked={facilities.includes("OTT")}
+                // onChange={handleChangeFacilities}
+                // checked={facilities.includes("OTT")}
                 />
               }
               label="OTT"
