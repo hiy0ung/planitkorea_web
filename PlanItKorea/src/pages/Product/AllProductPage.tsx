@@ -13,10 +13,7 @@ import {
 import ReactPaginate from "react-paginate";
 import { Checkbox } from "@mui/material";
 import { Product, WishListResponseDto } from "../../types/type";
-import {
-  Favorite,
-  FavoriteBorder
-} from "@mui/icons-material";
+import { Favorite, FavoriteBorder } from "@mui/icons-material";
 import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useCookies } from "react-cookie";
@@ -30,7 +27,7 @@ export default function AllProductPage() {
   const [products, setProducts] = useState<Product[]>([]);
   const [currentPage, setCurrentPage] = useState<number>(0);
   const [accommodationType, setAccommodationType] = useState<string | null>(null);
-
+  const [cityName, setCityName] = useState<string | null>(null);
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -40,7 +37,13 @@ export default function AllProductPage() {
   const token = cookies.token;
 
   useEffect(() => {
-    fetchProducts();
+    const city = searchParams.get("cityName");
+    setCityName(city);
+    if (city) {
+      fetchPopularRegionProducts(city);
+    } else {
+      fetchProducts();
+    }
     if (token) {
       fetchWishList();
     }
@@ -54,12 +57,12 @@ export default function AllProductPage() {
     return `${year}-${month}-${day}`;
   }
 
-  const getQueryParams = () => {
-    const queryParams = new URLSearchParams(location.search);
-    const cityName = queryParams.get("cityName") || "";
-    const startDateParam = queryParams.get("startDate") || null;
-    const endDateParam = queryParams.get("endDate") || null;
-    const person = queryParams.get("person") ? parseInt(queryParams.get("person")!) : 0;
+  const getSearchParams = () => {
+    const searchParams = new URLSearchParams(location.search);
+    const cityName = searchParams.get("cityName") || "";
+    const startDateParam = searchParams.get("startDate") || null;
+    const endDateParam = searchParams.get("endDate") || null;
+    const person = searchParams.get("person") ? parseInt(searchParams.get("person")!) : 0;
 
     const startDate = startDateParam ? new Date(startDateParam) : null;
     const endDate = endDateParam ? new Date(endDateParam) : null;
@@ -68,7 +71,7 @@ export default function AllProductPage() {
   };
 
   const fetchProducts = async () => {
-    const { cityName, startDate, endDate, person } = getQueryParams();
+    const { cityName, startDate, endDate, person } = getSearchParams();
 
     try {
       const response = await axios.get(
@@ -81,11 +84,22 @@ export default function AllProductPage() {
             person,
           },
         });
-        setProducts(response.data.data);
+        setProducts(response.data.data || []);
     } catch (error) {
       console.error("숙소 검색 중 오류 발생", error);
     }
   };
+
+  const fetchPopularRegionProducts = async (city: string) => {
+    try {
+      const response = await axios.get(`http://localhost:4040/api/v1/products`, {
+        params: { popularRegion: city },
+      });
+      setProducts(response.data.data || []);
+    } catch(error) {
+      console.error("인기 숙소 목록 조회 중 오류 발생", error);
+    }
+  }
 
   const filteredProducts = accommodationType ? products.filter(product => product.productCategory === accommodationType) : products;
 

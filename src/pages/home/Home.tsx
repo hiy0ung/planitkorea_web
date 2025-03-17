@@ -8,8 +8,7 @@ import React, { FormEvent, useEffect, useState } from "react";
 import { City, CityImg, CityName, CityWarp, GroupLabel, GroupLine, HomeBox, MostUsed, MostUsedBox, PopularCityBox, PriceDiv, ProductCity, ProductDetail, ProductImg, ProductName } from "./HomeSt";
 import { Product, Top5Product } from "../../types/type";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
-import useSearchStore, { SearchData } from "../../stores/use.search.store";
+import { useLocation, useNavigate } from "react-router-dom";
 import HomeImg from "./HomeImg";
 import busan from "../../assets/images/region/busan.jpg";
 import gapyeong from "../../assets/images/region/gapyeong.jpg";
@@ -22,7 +21,6 @@ import seoul from "../../assets/images/region/seoul.jpg";
 
 export default function Home() {
   const [products, setProducts] = useState<Top5Product[]>([]);
-  const { searchData, pushData } = useSearchStore();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -36,18 +34,19 @@ export default function Home() {
     }
   }, [])
 
+<<<<<<< HEAD:src/pages/home/Home.tsx
   const handleProductClick = (id: number) => {
     navigate(`/detailProduct/${id}`);
+=======
+  const handleProductClick = (productId: number) => {
+    console.log(productId);
+    navigate(`/detailProduct/${productId}`);
+>>>>>>> 4f785e4 (20250317 shy):PlanItKorea/src/pages/home/Home.tsx
     window.scrollTo(0, 0);
   };
 
   const handleCityClick = (cityName: string) => {
-    pushData({
-      ...searchData,
-      city: cityName as SearchData['city']
-    })
-    navigate(`/allProductPage?city=${encodeURIComponent(cityName)}`);
-    window.scrollTo(0, 0);
+    navigate(`/allProductPage?cityName=${encodeURIComponent(cityName)}`);
   };
 
   return (
