@@ -1,4 +1,4 @@
-import React, { FormEvent, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { GroupLine } from "../Login/SignSt";
 import {
   AllDiv,
@@ -12,7 +12,7 @@ import {
 } from "../Product/AllProductSt";
 import ReactPaginate from "react-paginate";
 import { Checkbox } from "@mui/material";
-import { Product, WishListResponseDto } from "../../types/type";
+import { Facilities, Product, WishListResponseDto } from "../../types/type";
 import { Favorite, FavoriteBorder } from "@mui/icons-material";
 import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -25,9 +25,11 @@ export default function AllProductPage() {
   const [wishList, setWishList] = useState<WishListResponseDto[]>([]);
   const [userWishList, setUserWishList] = useState<number[]>([]);
   const [products, setProducts] = useState<Product[]>([]);
+  const [filterProducts, setFilterProducts] = useState<Product[]>([]);
   const [currentPage, setCurrentPage] = useState<number>(0);
   const [accommodationType, setAccommodationType] = useState<string | null>(null);
-  const [cityName, setCityName] = useState<string | null>(null);
+  const [selectedFacilities, setSelectedFacilities] = useState<Facilities[]>([]);
+
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -38,7 +40,6 @@ export default function AllProductPage() {
 
   useEffect(() => {
     const city = searchParams.get("cityName");
-    setCityName(city);
     if (city) {
       fetchPopularRegionProducts(city);
     } else {
@@ -85,6 +86,7 @@ export default function AllProductPage() {
           },
         });
         setProducts(response.data.data || []);
+        setFilterProducts(response.data.data || []);
     } catch (error) {
       console.error("숙소 검색 중 오류 발생", error);
     }
@@ -100,9 +102,6 @@ export default function AllProductPage() {
       console.error("인기 숙소 목록 조회 중 오류 발생", error);
     }
   }
-
-  const filteredProducts = accommodationType ? products.filter(product => product.productCategory === accommodationType) : products;
-
   
   const fetchWishList = async () => {
     try {
@@ -120,6 +119,22 @@ export default function AllProductPage() {
       console.error("위시리스트 가져오기 중 오류 발생", error);
     }
   }
+
+  //! 필터링
+  useEffect(() => {
+    const selectedFacilityIds = selectedFacilities.map(f => f.facilityId);
+    const filtered = products.filter(product => {
+      const matchAccommodationType = accommodationType ? product.productCategory === accommodationType : true;
+      const matchFacilities = selectedFacilityIds.length === 0
+        ? true
+        : selectedFacilityIds.every(id => product.facilityIds.includes(id));
+  
+      return matchAccommodationType && matchFacilities;
+    });
+  
+    setFilterProducts(filtered);
+    setCurrentPage(0);
+  }, [products, accommodationType, selectedFacilities]);
 
   //! 찜
   const toggleWishlist = async(productId: number) => {
@@ -179,10 +194,10 @@ export default function AllProductPage() {
 
   const indexOfLastItem = (currentPage + 1) * ITEMS_PER_PAGE;
   const indexOfFirstItem = indexOfLastItem - ITEMS_PER_PAGE;
-  const currentItems = filteredProducts.slice(indexOfFirstItem, indexOfLastItem);
+  const currentItems = filterProducts.slice(indexOfFirstItem, indexOfLastItem);
 
   const handleProductClick = (productId: number) => {
-    const queryParams = new URLSearchParams({
+    const queryParams = new URLSearchParams({ 
       startDate: searchParams.get("startDate") || "",
       endDate: searchParams.get("endDate") || "",
       person: searchParams.get("person") || "1",
@@ -198,6 +213,8 @@ export default function AllProductPage() {
         <ProductFilter
           accommodationType={accommodationType}
           setAccommodationType={setAccommodationType}
+          selectedFacilities={selectedFacilities}
+          setSelectedFacilities={setSelectedFacilities}
         />
         <AllProductDiv>
           {currentItems.map((product) => (
@@ -228,7 +245,7 @@ export default function AllProductPage() {
               previousLabel={"<"}
               nextLabel={">"}
               breakLabel={"..."}
-              pageCount={Math.ceil(filteredProducts.length / ITEMS_PER_PAGE)}
+              pageCount={Math.ceil(filterProducts.length / ITEMS_PER_PAGE)}
               marginPagesDisplayed={2}
               pageRangeDisplayed={5}
               onPageChange={handlePageChange}

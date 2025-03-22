@@ -150,21 +150,44 @@ export type Location =
   | "대구"
   | null;
 
-export type Facilities =
-  | "사우나"
-  | "수영장"
-  | "바베큐"
-  | "세탁 가능"
-  | "스파/월풀"
-  | "와이파이"
-  | "에어컨"
-  | "욕실용품"
-  | "샤워실"
-  | "조식포함"
-  | "무료주차"
-  | "반려견 동반"
-  | "객실 내 취사"
-  | "OTT";
+// export type Facilities =
+//   | "사우나"
+//   | "수영장"
+//   | "바베큐"
+//   | "세탁 가능"
+//   | "스파/월풀"
+//   | "와이파이"
+//   | "에어컨"
+//   | "욕실용품"
+//   | "샤워실"
+//   | "조식포함"
+//   | "무료주차"
+//   | "반려견 동반"
+//   | "객실 내 취사"
+//   | "OTT";
+
+export type Facilities = {
+  facilityId: number;
+  facilityName: string;
+};
+
+export const facilities: Facilities[] = [
+  { facilityId: 1, facilityName: "사우나" },
+  { facilityId: 2, facilityName: "수영장" },
+  { facilityId: 3, facilityName: "바베큐" },
+  { facilityId: 4, facilityName: "세탁" },
+  { facilityId: 5, facilityName: "스파/월풀" },
+  { facilityId: 6, facilityName: "와이파이" },
+  { facilityId: 7, facilityName: "에어컨" },
+  { facilityId: 8, facilityName: "샤워실" },
+  { facilityId: 9, facilityName: "욕실용품" },
+  { facilityId: 10, facilityName: "조식" },
+  { facilityId: 11, facilityName: "주차" },
+  { facilityId: 12, facilityName: "반려견" },
+  { facilityId: 13, facilityName: "취사" },
+  { facilityId: 14, facilityName: "OTT" },
+];
+
 
 //! 레저 & 티켓 타입
 export type Ticket = "관광" | "테마파크" | "레저스포츠" | "전시&공연";
