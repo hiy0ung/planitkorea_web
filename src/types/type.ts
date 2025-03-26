@@ -23,6 +23,19 @@ export type NewUser = {
   joinPath: string;
 }
 
+export type GetUserDto = {
+  id: number;
+  userId: string;
+  userPassword: string;
+  checkPassword: string;
+  userName: string;
+  userBirthDate: string;
+  userPhone: string;
+  userEmail: string;
+  snsId: string | null;
+  joinPath: string;
+}
+
 // 중복확인 에러 메세지 타입
 export type DuplicationError = {
   userId: string,
@@ -58,6 +71,7 @@ export type ErorrMsg = {
 export interface Reservation {
   id: string;
   productId: number; // 숙소 고유id
+  subProductId:number;
   productName: string; // 숙소 이름
   price: string; // 가격
   reservationNumber: number; // 예약 번호
@@ -77,6 +91,7 @@ export type NewReservation = {
   totalPrice: string;
   startDate: Date;
   endDate: Date;
+  orderId: string;
   reservationStatus: number;
   productImage: string;
   productName: string;

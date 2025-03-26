@@ -11,6 +11,7 @@ export const AllDiv = styled.div`
   align-items: stretch; 
   margin-top: 20px;
   border-top: 1px solid ${theme.palette.primary.main};
+  border: 1px solid black;
   @media (max-width: 768px) {
     flex-direction: column;
   flex-wrap: wrap-reverse;
@@ -106,3 +107,4 @@ export const ProductImg = styled.img`
   height: 200px;
   border-radius: 10px;
 `;
+

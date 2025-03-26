@@ -19,31 +19,38 @@ import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { PersonBar, PriceBar, ProductName, ReservationBar } from "../product/DetailSt";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCalendar, faWonSign } from "@fortawesome/free-solid-svg-icons";
+<<<<<<< HEAD:src/pages/product/PaymentPage.tsx
 import { GroupLine } from "../customerService/customerSt";
 import { Reservation, User } from "../../types/type";
+=======
+import { GroupLine } from "../CustomerService/customerSt";
+import { GetUserDto, NewUser, Reservation, User } from "../../types/type";
+>>>>>>> 10b48d9 (250327):PlanItKorea/src/pages/Product/PaymentPage.tsx
 import axios from "axios";
 import { format } from "date-fns";
+import { useCookies } from "react-cookie";
+import { v4 as uuidv4 } from "uuid";
 
 export default function PaymentPage() {
   const navigate = useNavigate();
-
-  const [user, setUser] = useState<User>();
+  const [cookies] = useCookies(["token"]);
+  const [user, setUser] = useState<GetUserDto>();
   // 예약정보 가져오기
   const location = useLocation();
   const reservationInfo = (location.state as { reservationInfo: Reservation })?.reservationInfo;
 
-  // 유저 정보 가져오기
-  const fetchUser = async() => {
-    try {
-      const response = await axios.get(`http://localhost:3001/users/${reservationInfo.id}`)
-      setUser(response.data)
-    }catch(error) {
-      console.error('사용자 정보 호출 실패',error);
-    }
-  }
-
   useEffect(() => {
-    fetchUser()
+    try {
+      axios.get(`http://localhost:4040/api/v1/users`, {
+        headers: {
+          Authorization: `Bearer ${cookies.token}`
+        }
+      }).then((response) => {
+        setUser(response.data.data)
+      })
+    } catch(error) {
+      console.error(error);
+    }
   },[])
 
 
@@ -60,7 +67,7 @@ export default function PaymentPage() {
   }
 
   const startDate = parseDateString(reservationInfo.startDate);
-const endDate = parseDateString(reservationInfo.endDate);
+  const endDate = parseDateString(reservationInfo.endDate);
 
   const days = calculateDays(startDate, endDate);
 
@@ -68,45 +75,81 @@ const endDate = parseDateString(reservationInfo.endDate);
   const checkOut = format(new Date(endDate), 'yyyy-MM-dd')
 
   // 총가격 계산
-  function strToNum(str: string | undefined): number {
-    if (!str) return 0;
-
-    const numPrice = parseInt(str.replace(/[^0-9]/g, ""), 10);
-    return numPrice;
+  function strToNum(str: string | number | undefined): number {
+    if (str === undefined || str === null) return 0;
+  
+    const stringPrice = typeof str === "number" ? str.toString() : str;
+    const numPrice = parseInt(stringPrice.replace(/[^0-9]/g, ""), 10);
+  
+    return isNaN(numPrice) ? 0 : numPrice;
   }
+  
   const numberPrice = strToNum(reservationInfo.price);
-  const totalPrice = numberPrice * days;
 
   function numPriceToStr(num: number): string {
     return num.toLocaleString("ko-KR");
   }
 
-  const strPrice = numPriceToStr(totalPrice);
+  const strPrice = numPriceToStr(numberPrice);
 
-  const reservationSubmit = async(e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-
-    const newReservation = { 
-      ...reservationInfo,
-      startDate: checkIn,
-      endDate: checkOut,
-      price: strPrice
-    }
-      
-
+  const paymentHandler = async() => {
+    const partnerOrderId = uuidv4(); 
     try {
-      const currentReservations = user?.reservation || [] ;
-      const updatedReservations = [...currentReservations, newReservation];
-      await axios.put<User>(`http://localhost:3001/users/${user?.id}`, {
-        ...user,
-        reservation: updatedReservations
-      });
-    navigate('/reservationCheck')
-    } catch (error) {
-      console.error('예약 정보 저장 실패:', error);
+      await axios.post(`http://localhost:4040/api/v1/kakaoPay/request`, {
+        cid: "TC0ONETIME",
+        partner_order_id: partnerOrderId,
+        partner_user_id: user?.userId,
+        item_name: "Plan It Korea",
+        item_code: reservationInfo.productId.toString(),
+        quantity: 1,
+        total_amount: reservationInfo.price,
+        tax_free_amount: 0,
+        approval_url: "http://localhost:3000/kakaoPay/success",
+        fail_url: "http://localhost:4040/kakaoPay/fail",
+        cancel_url: "http://localhost:4040/kakaoPay/cancel"
+        
+      }, {
+        headers: {
+          Authorization: `Bearer ${cookies.token}`
+        }
+      }).then((response) => {
+        const tid = response.data.data.tid;
+        console.log(tid);
+        localStorage.setItem("tid", tid);
+        localStorage.setItem("orderId", partnerOrderId);
+        localStorage.setItem("productId", reservationInfo.productId.toString());
+        handleReservationSave(partnerOrderId);
+        window.open(response.data.data.next_redirect_pc_url, '_blank');
+      })
+    } catch(error) {
+      console.error(error);
     }
-    
   }
+
+  const handleReservationSave = async (orderId: String) => {
+    try {
+      const response = await axios.post(`http://localhost:4040/api/v1/reservations`, {
+        productId: reservationInfo.productId,
+        subProductId: reservationInfo.subProductId,
+        person: reservationInfo.person,
+        totalPrice: reservationInfo.price,
+        startDate: reservationInfo.startDate,
+        endDate: reservationInfo.endDate,
+        orderId: orderId
+      }, {
+        headers: {
+          Authorization: `Bearer ${cookies.token}`
+        }
+      });
+  
+      // 서버 응답 확인
+      console.log("Response:", response);
+      console.log("Response Data:", response.data);
+  
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
   
   return (
     <>
@@ -122,10 +165,10 @@ const endDate = parseDateString(reservationInfo.endDate);
             </PageTitleDiv>
             <SubTitle>예약자 정보</SubTitle>
             <InputLabel> 예약자 이름
-            <InputField value={user?.name} readOnly/>
+            <InputField value={user?.userName} readOnly/>
             </InputLabel>
             <InputLabel> 휴대폰 번호
-            <InputField value={user?.phoneNumber} readOnly/>
+            <InputField value={user?.userPhone} readOnly/>
             </InputLabel>
           </GroupDiv>
 
@@ -141,10 +184,11 @@ const endDate = parseDateString(reservationInfo.endDate);
 
           <GroupDiv>
           <SubTitle>결제 수단</SubTitle>
-          <KaKaoImg src={KaKaoPay} alt="payment" />
+          <KaKaoImg src={KaKaoPay} alt="payment"/>
           </GroupDiv>
+
           <GroupDiv style={{border:"none"}}>
-            <Button onClick={reservationSubmit}>예약하기</Button>
+            <Button onClick={paymentHandler}>결제 하기</Button>
           </GroupDiv>
         </RightDiv>
 

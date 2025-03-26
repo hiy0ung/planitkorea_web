@@ -25,9 +25,20 @@ import AppContainer from "./layouts/AppContainer";
 import MainContainer from "./layouts/MainContainer";
 import { useCookies } from "react-cookie";
 import useAuthStore from "./stores/use.auth.store";
+<<<<<<< HEAD:src/App.tsx
 import ResetPasswordPage from "./pages/user/findPassword/ResetPasswordPage";
 import SnsSuccess from "./pages/user/login/SnsSuccess";
 import AuthRedirectHandler from "./pages/user/signup/AuthRedirectHandler";
+=======
+import ResetPasswordPage from "./pages/Login/findPassword/ResetPasswordPage";
+import SnsSuccess from "./pages/Login/login/SnsSuccess";
+import AuthRedirectHandler from "./pages/Login/signup/AuthRedirectHandler";
+import WishList from "./pages/MyPage/WishList";
+import AllProductPage from "./pages/Product/AllProductPage";
+import DetailProduct from "./pages/Product/DetailProduct";
+import axios from "axios";
+import PaymentSuccess from "./pages/Product/PaymentSuccess";
+>>>>>>> 10b48d9 (250327):PlanItKorea/src/App.tsx
 
 
 
@@ -39,6 +50,17 @@ function App() {
   useEffect(() => {
     if (cookies.token) {
       login(cookies.token);
+<<<<<<< HEAD:src/App.tsx
+=======
+      axios.get('http://localhost:4040/api/v1/users', {
+        headers: {
+          Authorization: `Bearer ${cookies.token}`
+        }
+      }).then((response) => {
+        setUserId(response.data.data.userId);
+        localStorage.setItem("userId", response.data.data.userId);
+      })
+>>>>>>> 10b48d9 (250327):PlanItKorea/src/App.tsx
     } else {
       logout();
     }
@@ -98,6 +120,7 @@ function App() {
 
             {/* <Route path="/allProductPage" element={<AllProductPage />} />
             <Route path="/paymentPage" element={<PaymentPage />} />
+            <Route path="/kakaoPay/success" element={<PaymentSuccess />} />
             <Route path="/detailProduct/:productId" element={<DetailProduct />} />
             <Route path="/allProductPage/:category?" element={<AllProductPage />} /> */}
           </Routes>

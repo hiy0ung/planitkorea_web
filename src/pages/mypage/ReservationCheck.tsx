@@ -116,7 +116,7 @@ useEffect(() => {
                     </ReserVationProductDiv>
 
                     <ReserVationDetail>
-                      <ReservationNumber>NO: {item.id}</ReservationNumber>
+                      <ReservationNumber>NO: {item.orderId}</ReservationNumber>
                       <ProductName>{item.productName}</ProductName>
                       <DateDivWrap>
                         <DateColumn>
