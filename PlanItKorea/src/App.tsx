@@ -32,6 +32,7 @@ import WishList from "./pages/MyPage/WishList";
 import AllProductPage from "./pages/Product/AllProductPage";
 import DetailProduct from "./pages/Product/DetailProduct";
 import axios from "axios";
+import PaymentSuccess from "./pages/Product/PaymentSuccess";
 
 
 
@@ -49,6 +50,7 @@ function App() {
         }
       }).then((response) => {
         setUserId(response.data.data.userId);
+        localStorage.setItem("userId", response.data.data.userId);
       })
     } else {
       logout();
@@ -109,6 +111,7 @@ function App() {
 
             <Route path="/allProductPage" element={<AllProductPage />} />
             <Route path="/paymentPage" element={<PaymentPage />} />
+            <Route path="/kakaoPay/success" element={<PaymentSuccess />} />
             <Route path="/detailProduct/:productId" element={<DetailProduct />} />
             <Route path="/allProductPage/:category?" element={<AllProductPage />} />
           </Routes>
