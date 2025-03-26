@@ -86,6 +86,7 @@ export default function Reservation({
 
     const reservationInfo = {
       productId: product.productId,
+      subProductId: selectSubProduct?.subProductId,
       productName: product.productName,
       img: Array.isArray(product.productImages)
         ? product.productImages
