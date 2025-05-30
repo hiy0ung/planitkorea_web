@@ -15,7 +15,7 @@ import { ProductName } from "./AllProductSt";
 import DatePicker from "react-datepicker";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCalendar, faWonSign } from "@fortawesome/free-solid-svg-icons";
-import { GroupLine } from "../CustomerService/customerSt";
+import { GroupLine } from "../customerService/customerSt";
 import { Button } from "@mui/material";
 import { useCookies } from "react-cookie";
 import { useNavigate } from "react-router-dom";

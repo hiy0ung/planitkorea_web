@@ -34,14 +34,9 @@ export default function Home() {
     }
   }, [])
 
-<<<<<<< HEAD:src/pages/home/Home.tsx
-  const handleProductClick = (id: number) => {
-    navigate(`/detailProduct/${id}`);
-=======
   const handleProductClick = (productId: number) => {
     console.log(productId);
     navigate(`/detailProduct/${productId}`);
->>>>>>> 4f785e4 (20250317 shy):PlanItKorea/src/pages/home/Home.tsx
     window.scrollTo(0, 0);
   };
 

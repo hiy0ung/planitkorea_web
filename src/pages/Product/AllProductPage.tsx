@@ -9,7 +9,7 @@ import {
   ProductImg,
   ProductName,
   PageDiv,
-} from "../Product/AllProductSt";
+} from "../product/AllProductSt";
 import ReactPaginate from "react-paginate";
 import { Checkbox } from "@mui/material";
 import { Facilities, Product, WishListResponseDto } from "../../types/type";

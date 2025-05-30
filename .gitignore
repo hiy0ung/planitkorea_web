@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # macOS
 .DS_Store
 
@@ -12,11 +13,29 @@ yarn-error.log*
 # env
 .env
 .env.*
+=======
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+/node_modules
+/.pnp
+.pnp.js
+
+# testing
+/coverage
+
+# production
+/build
+
+# misc
+.DS_Store
+>>>>>>> 4ab1ddc (chore:프로젝트 구조 정리 및 파일 이동)
 .env.local
 .env.development.local
 .env.test.local
 .env.production.local
 
+<<<<<<< HEAD
 # TypeScript
 *.tsbuildinfo
 
@@ -28,3 +47,11 @@ coverage/
 .idea/
 *.swp
 *.swo
+=======
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+#API KEY
+.env
+>>>>>>> 4ab1ddc (chore:프로젝트 구조 정리 및 파일 이동)
