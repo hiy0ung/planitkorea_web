@@ -1,5 +1,5 @@
 import React, { ChangeEvent, useEffect, useState } from "react";
-import { ContentDiv } from "./customerSt";
+import { ContentDiv } from "../customerService/customerSt";
 import { ModalText } from "../Login/SignSt";
 import { InquiryRequest } from "../../types/type";
 import Modal, { ModalButton, Overlay } from "../../component/Modal";
@@ -23,9 +23,9 @@ import {
   Select,
   SelectCategoryDiv,
   TitleDiv,
-} from "./InquirySt";
+} from "../customerService/InquirySt";
 import axios from "axios";
-import { Error } from "../MyPage/MyPageSt";
+import { Error } from "../mypage/MyPageSt";
 import { useCookies } from "react-cookie";
 
 export default function InquiryCRUD() {

@@ -25,7 +25,7 @@ export default function ReviewSection({ productId }: ReviewProps) {
   const token = cookies.token;
 
   useEffect(() => {
-    axios.get(`http://localhost:4040/api/v1/reviews/auth/${productId}`)
+    axios.get(`http://localhost:4040/api/v1/reviews/${productId}`)
       .then((response) => {
         setRenderReview(response.data?.data || []); 
       })

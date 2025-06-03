@@ -2,32 +2,13 @@ import React, { useEffect, useState } from "react";
 import { NewUser, User } from "../../types/type";
 import { set } from "date-fns";
 import axios from "axios";
-import { Button } from "../CustomerService/InquirySt";
-import {
-  AllDiv,
-  Box,
-  Card,
-  Error,
-  GroupLine,
-  Header,
-  IdInput,
-  Label,
-  Loading,
-  MainBody,
-  MainDiv,
-  MainInner,
-  NaviBox,
-  NavInnerBox,
-  NavInnerDiv,
-  NavTitle,
-  PageTitle,
-  WithDrawalButton,
-  WithdrawalDiv,
-  WithdrawalInput,
-} from "./MyPageSt";
+import { Button } from "../customerService/InquirySt";
+
 import { NavLink, useNavigate } from "react-router-dom";
 import useAuthStore from "../../stores/use.auth.store";
 import { useCookies } from "react-cookie";
+import { AllDiv, Error, GroupLine, IdInput, Label, Loading, MainBody, MainDiv, MainInner, NaviBox, NavInnerBox, NavInnerDiv, NavTitle, PageTitle, WithDrawalButton, WithdrawalDiv, WithdrawalInput, Header } from "../mypage/MyPageSt";
+import { Box, Card } from "@mui/material";
 
 type UpdateData = {
   userName: string;

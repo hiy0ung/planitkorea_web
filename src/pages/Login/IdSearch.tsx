@@ -100,7 +100,7 @@ export default function IdSearch() {
     }
     if (valid) {
       try {
-        await axios.get(`http://localhost:4040/api/v1/auth/users/user-id`, {
+        await axios.get(`http://localhost:4040/api/v1/users/find-id`, {
           params: findData
         }).then((response) => {
           const data = response.data.data;

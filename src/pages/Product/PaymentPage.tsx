@@ -19,7 +19,7 @@ import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { PersonBar, PriceBar, ProductName, ReservationBar } from "./DetailSt";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCalendar, faWonSign } from "@fortawesome/free-solid-svg-icons";
-import { GroupLine } from "../CustomerService/customerSt";
+import { GroupLine } from "../customerService/customerSt";
 import { GetUserDto, NewUser, Reservation, User } from "../../types/type";
 import axios from "axios";
 import { format } from "date-fns";
