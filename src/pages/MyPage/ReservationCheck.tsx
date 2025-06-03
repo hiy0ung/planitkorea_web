@@ -64,9 +64,37 @@ useEffect(() => {
   console.log(reservation);
 }, [reservation])
 
-  const reservationClick = (id: number) => {
-    navigate(`/detailProduct/${id}`);
+  const reservationClick = (reservationId: number) => {
+    navigate(`/detailProduct/${reservationId}`);
   };
+
+  const handleCancelReservation = async (reservationId: number) => {
+  if (!window.confirm("정말 예약을 취소하시겠습니까?")) return;
+
+  try {
+    await axios.delete(
+      `http://localhost:4040/api/v1/reservations/${reservationId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${cookies.token}`,
+        },
+      }
+    );
+
+    // 취소 후 예약 목록 새로 불러오기
+    const updated = await axios.get("http://localhost:4040/api/v1/reservations", {
+      headers: {
+        Authorization: `Bearer ${cookies.token}`,
+      },
+    });
+    setReservation(updated.data.data);
+    alert("예약이 취소되었습니다.");
+  } catch (error) {
+    console.error("예약 취소 실패:", error);
+    alert("예약 취소에 실패했습니다.");
+  }
+};
+
 
   return (
     <>
@@ -100,7 +128,7 @@ useEffect(() => {
             <>
                 <MapUl>
               {reservation.map((item) => (
-                <MainLi key={item.id}>
+                <MainLi key={item.reservationId}>
                   <ReservationMainInner>
                     <ReserVationProductDiv
                       onClick={() => reservationClick(item.productId)}
@@ -151,7 +179,7 @@ useEffect(() => {
                     </ReserVationDetail>
 
                     <PriceDiv>
-                      <CancelBtn>예약 취소</CancelBtn>
+                      <CancelBtn onClick={() => handleCancelReservation(item.reservationId)}>예약 취소</CancelBtn>
                       <PriceBox>
                         <DetailLabelRe>가격</DetailLabelRe>
                         <PriceBack>

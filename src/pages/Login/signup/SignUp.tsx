@@ -120,7 +120,7 @@ export default function SignUp() {
   const userIdDuplicationCheck = async () => {
     try {
       const response = await axios.post(
-        `http://localhost:4040/api/v1/auth/signUp/search/userId`,
+        `http://localhost:4040/api/v1/auth/sign-up/search/user-id`,
         { userId: signUpData.userId }
       );
   
@@ -154,7 +154,7 @@ export default function SignUp() {
   const userEmailDuplicationCheck = async () => {
     try {
       const response = await axios.post(
-        `http://localhost:4040/api/v1/auth/signUp/search/userEmail`,
+        `http://localhost:4040/api/v1/auth/sign-up/search/user-email`,
         { userEmail: signUpData.userEmail }
       );
       if (response.data.data.duplicatedStatus) {
@@ -339,7 +339,7 @@ export default function SignUp() {
       console.log(signUpData);
       try {
         const response = await axios.post(
-          `http://localhost:4040/api/v1/auth/signUp`,
+          `http://localhost:4040/api/v1/auth/sign-up`,
           signUpData
         );
         if (response.data.data) {

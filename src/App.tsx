@@ -7,10 +7,17 @@ import Footer from "./component/Footer";
 import CustomerBar from "./component/CustomerBar";
 
 import IndexHome from "./pages/home/Home";
+<<<<<<< HEAD
 import Login from "./pages/user/login/Login";
 import SignUp from "./pages/user/signup/SignUp";
 import IdSearch from "./pages/user/IdSearch";
 import PasswordSearch from "./pages/user/findPassword/PasswordSearch";
+=======
+import Login from "./pages/Login/login/Login";
+import SignUp from "./pages/Login/signup/SignUp";
+import IdSearch from "./pages/Login/IdSearch";
+import PasswordSearch from "./pages/Login/findPassword/PasswordSearch";
+>>>>>>> cc4521b (refactor: 변수명 수정)
 import MyPageMain from "./pages/mypage/MyPageMain";
 import FrequentlyQuestion from "./pages/customerService/FrequentlyQuestion";
 import InquiryCRUD from "./pages/customerService/InquiryCRUD";
@@ -29,8 +36,13 @@ import ResetPasswordPage from "./pages/Login/findPassword/ResetPasswordPage";
 import SnsSuccess from "./pages/Login/login/SnsSuccess";
 import AuthRedirectHandler from "./pages/Login/signup/AuthRedirectHandler";
 import WishList from "./pages/mypage/WishList";
+<<<<<<< HEAD
 import AllProductPage from "./pages/product/AllProductPage";
 import DetailProduct from "./pages/product/DetailProduct";
+=======
+import AllProductPage from "./pages/Product/AllProductPage";
+import DetailProduct from "./pages/Product/DetailProduct";
+>>>>>>> cc4521b (refactor: 변수명 수정)
 import axios from "axios";
 import PaymentSuccess from "./pages/product/PaymentSuccess";
 

@@ -3,6 +3,7 @@ import { NewUser, User } from "../../types/type";
 import { set } from "date-fns";
 import axios from "axios";
 import { Button } from "../customerService/InquirySt";
+<<<<<<< HEAD
 import {
   AllDiv,
   Box,
@@ -25,9 +26,14 @@ import {
   WithdrawalDiv,
   WithdrawalInput,
 } from "../mypage/MyPageSt";
+=======
+
+>>>>>>> cc4521b (refactor: 변수명 수정)
 import { NavLink, useNavigate } from "react-router-dom";
 import useAuthStore from "../../stores/use.auth.store";
 import { useCookies } from "react-cookie";
+import { AllDiv, Error, GroupLine, IdInput, Label, Loading, MainBody, MainDiv, MainInner, NaviBox, NavInnerBox, NavInnerDiv, NavTitle, PageTitle, WithDrawalButton, WithdrawalDiv, WithdrawalInput, Header } from "../mypage/MyPageSt";
+import { Box, Card } from "@mui/material";
 
 type UpdateData = {
   userName: string;

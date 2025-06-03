@@ -83,7 +83,7 @@ export interface Reservation {
 
 //& 신 예약 정보 타입
 export type NewReservation = {
-  id: number;
+  reservationId: number;
   userId: number;
   productId: number;
   subProductId: number;

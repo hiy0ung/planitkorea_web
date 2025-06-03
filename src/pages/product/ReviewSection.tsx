@@ -27,11 +27,25 @@ export default function ReviewSection({ productId, reviews, setReviews }: Review
 //     setReviewDate(formattedDate);
 //   }, []);
 
+<<<<<<< HEAD
 //   const fetchReviews = async () => {
 //     try {
 //       const reviewResponse = await axios.get("http://localhost:3001/reviews", {
 //         params: { productId },
 //       });
+=======
+  useEffect(() => {
+    axios.get(`http://localhost:4040/api/v1/reviews/${productId}`)
+      .then((response) => {
+        setRenderReview(response.data?.data || []); 
+      })
+      .catch((error) => {
+        console.error("리뷰 데이터를 불러오는데 실패했습니다.", error);
+        setRenderReview([]); 
+      });
+  }, [productId]);
+  
+>>>>>>> cc4521b (refactor: 변수명 수정)
 
 //       const sortedReviews = reviewResponse.data.sort((a: Review, b: Review) => {
 //         return new Date(b.date).getTime() - new Date(a.date).getTime();
