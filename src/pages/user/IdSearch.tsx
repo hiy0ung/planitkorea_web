@@ -100,7 +100,11 @@ export default function IdSearch() {
     }
     if (valid) {
       try {
+<<<<<<< HEAD
         await axios.get(`http://localhost:4040/api/v1/auth/users/user-id`, {
+=======
+        await axios.get(`http://localhost:4040/api/v1/users/find-id`, {
+>>>>>>> ac70c48 (refactor: 폴더명변경)
           params: findData
         }).then((response) => {
           const data = response.data.data;

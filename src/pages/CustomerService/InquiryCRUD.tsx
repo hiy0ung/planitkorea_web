@@ -1,10 +1,14 @@
 import React, { ChangeEvent, useEffect, useState } from "react";
 import { ContentDiv } from "../customerService/customerSt";
 <<<<<<< HEAD
+<<<<<<< HEAD
 import { ModalText } from "../user/SignSt";
 =======
 import { ModalText } from "../Login/SignSt";
 >>>>>>> cc4521b (refactor: 변수명 수정)
+=======
+import { ModalText } from "../user/SignSt";
+>>>>>>> ac70c48 (refactor: 폴더명변경)
 import { InquiryRequest } from "../../types/type";
 import Modal, { ModalButton, Overlay } from "../../component/Modal";
 import { NavLink, useLocation, useParams } from "react-router-dom";

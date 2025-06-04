@@ -120,7 +120,11 @@ export default function SignUp() {
   const userIdDuplicationCheck = async () => {
     try {
       const response = await axios.post(
+<<<<<<< HEAD
         `http://localhost:4040/api/v1/auth/signUp/search/userId`,
+=======
+        `http://localhost:4040/api/v1/auth/sign-up/search/user-id`,
+>>>>>>> ac70c48 (refactor: 폴더명변경)
         { userId: signUpData.userId }
       );
   
@@ -154,7 +158,11 @@ export default function SignUp() {
   const userEmailDuplicationCheck = async () => {
     try {
       const response = await axios.post(
+<<<<<<< HEAD
         `http://localhost:4040/api/v1/auth/signUp/search/userEmail`,
+=======
+        `http://localhost:4040/api/v1/auth/sign-up/search/user-email`,
+>>>>>>> ac70c48 (refactor: 폴더명변경)
         { userEmail: signUpData.userEmail }
       );
       if (response.data.data.duplicatedStatus) {
@@ -339,7 +347,11 @@ export default function SignUp() {
       console.log(signUpData);
       try {
         const response = await axios.post(
+<<<<<<< HEAD
           `http://localhost:4040/api/v1/auth/signUp`,
+=======
+          `http://localhost:4040/api/v1/auth/sign-up`,
+>>>>>>> ac70c48 (refactor: 폴더명변경)
           signUpData
         );
         if (response.data.data) {

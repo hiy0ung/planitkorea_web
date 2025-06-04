@@ -60,7 +60,11 @@ export default function PasswordSearch() {
     if (valid && !isButtonDisabled) {
       try {
         setIsButtonDisabled(true);
+<<<<<<< HEAD
         const response = await axios.post(`http://localhost:4040/api/v1/auth/users/mails/password`, mailData)
+=======
+        const response = await axios.post(`http://localhost:4040/api/v1/users/mails/password`, mailData)
+>>>>>>> ac70c48 (refactor: 폴더명변경)
         if(!!response.data.result) {
           setHasSendMail(true);
           setIsModalOpen(true);
