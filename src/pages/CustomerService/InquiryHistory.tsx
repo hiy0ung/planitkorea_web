@@ -180,10 +180,7 @@ export default function InquiryHistory() {
                       <AcContentDiv>
                         <ImgDiv>
                           {inquiryDetail.inquiryImage && (
-                            <Img
-                              src={`http://localhost:4040/image/${inquiryDetail.inquiryImage}`}
-                              alt="Inquiry Image"
-                            />
+                            <Img src={inquiryDetail.inquiryImage} alt="Inquiry Image" />
                           )}
                         </ImgDiv>
                         {inquiryDetail.inquiryContent}
