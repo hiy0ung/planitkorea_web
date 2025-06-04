@@ -7,10 +7,10 @@ import Footer from "./component/Footer";
 import CustomerBar from "./component/CustomerBar";
 
 import IndexHome from "./pages/home/Home";
-import Login from "./pages/Login/login/Login";
-import SignUp from "./pages/Login/signup/SignUp";
-import IdSearch from "./pages/Login/IdSearch";
-import PasswordSearch from "./pages/Login/findPassword/PasswordSearch";
+import Login from "./pages/user/login/Login";
+import SignUp from "./pages/user/signup/SignUp";
+import IdSearch from "./pages/user/IdSearch";
+import PasswordSearch from "./pages/user/findPassword/PasswordSearch";
 import MyPageMain from "./pages/mypage/MyPageMain";
 import FrequentlyQuestion from "./pages/customerService/FrequentlyQuestion";
 import InquiryCRUD from "./pages/customerService/InquiryCRUD";
@@ -20,19 +20,19 @@ import ReservationCheck from "./pages/mypage/ReservationCheck";
 // import WishList from "./pages/MyPage/WishList";
 // import AllProductPage from "./pages/Product/AllProductPage";
 // import DetailProduct from "./pages/Product/DetailProduct"
-import PaymentPage from "./pages/Product/PaymentPage";
+import PaymentPage from "./pages/product/PaymentPage";
 import AppContainer from "./layouts/AppContainer";
 import MainContainer from "./layouts/MainContainer";
 import { useCookies } from "react-cookie";
 import useAuthStore from "./stores/use.auth.store";
-import ResetPasswordPage from "./pages/Login/findPassword/ResetPasswordPage";
-import SnsSuccess from "./pages/Login/login/SnsSuccess";
-import AuthRedirectHandler from "./pages/Login/signup/AuthRedirectHandler";
+import ResetPasswordPage from "./pages/user/findPassword/ResetPasswordPage";
+import SnsSuccess from "./pages/user/login/SnsSuccess";
+import AuthRedirectHandler from "./pages/user/signup/AuthRedirectHandler";
 import WishList from "./pages/mypage/WishList";
-import AllProductPage from "./pages/Product/AllProductPage";
-import DetailProduct from "./pages/Product/DetailProduct";
+import AllProductPage from "./pages/product/AllProductPage";
+import DetailProduct from "./pages/product/DetailProduct";
 import axios from "axios";
-import PaymentSuccess from "./pages/Product/PaymentSuccess";
+import PaymentSuccess from "./pages/product/PaymentSuccess";
 
 
 

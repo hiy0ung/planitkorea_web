@@ -1,6 +1,6 @@
 import React, { ChangeEvent, useEffect, useState } from "react";
 import { ContentDiv } from "../customerService/customerSt";
-import { ModalText } from "../Login/SignSt";
+import { ModalText } from "../user/SignSt";
 import { InquiryRequest } from "../../types/type";
 import Modal, { ModalButton, Overlay } from "../../component/Modal";
 import { NavLink, useLocation, useParams } from "react-router-dom";

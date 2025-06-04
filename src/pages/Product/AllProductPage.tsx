@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { GroupLine } from "../Login/SignSt";
+import { GroupLine } from "../user/SignSt";
 import {
   AllDiv,
   AllProductDiv,
@@ -9,7 +9,7 @@ import {
   ProductImg,
   ProductName,
   PageDiv,
-} from "../Product/AllProductSt";
+} from "../product/AllProductSt";
 import ReactPaginate from "react-paginate";
 import { Checkbox } from "@mui/material";
 import { Facilities, Product, WishListResponseDto } from "../../types/type";

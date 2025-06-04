@@ -18,7 +18,7 @@ import {
   ProductDiv,
   ProductImg,
   ProductName,
-} from "../Product/AllProductSt";
+} from "../product/AllProductSt";
 import { Checkbox } from "@mui/material";
 import { Favorite, FavoriteBorder } from "@mui/icons-material";
 import ReactPaginate from "react-paginate";
