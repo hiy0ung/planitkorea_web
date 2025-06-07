@@ -171,6 +171,12 @@ export const GroupName = styled.h3`
   margin: 30px 0;
 `;
 
+export const ReviewGroupName = styled.h3`
+  font-weight: bold;
+  font-size: 18px;
+  margin-top: 30px;
+`;
+
 export const ReservationBarDiv = styled.div`
   display: flex;
   flex-direction: column;

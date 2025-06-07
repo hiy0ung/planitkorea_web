@@ -80,7 +80,7 @@ export default function Home() {
         </GroupLine>
         <MostUsedBox>
         {products.map(product => (
-          <MostUsed key={product.id} onClick={() => handleProductClick(product.id)}>
+          <MostUsed key={product.productId} onClick={() => handleProductClick(product.productId)}>
             <ProductImg src={`http://localhost:4040/image/${product.productImage}`} alt="숙소 이미지"/>
             <ProductDetail>
               <CityWarp>

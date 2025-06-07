@@ -28,13 +28,6 @@
 ---
 
 ## 🔗 데모
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-- [화면 구현](./public/yumyum_화면구현.png)
->>>>>>> 427a7a9 (docs: README 추가)
-=======
->>>>>>> 6fdacf8 (docs: README 수정)
 - [배포 링크]()
 
 ---
@@ -78,7 +71,7 @@
 ### 클론 및 폴더 이동
 ```bash
 git clone https://github.com/hiy0ung/planitkorea_web.git
-cd planitkorea_was
+cd planitkorea_web
 ```
 
 ### 개발 서버 실행

@@ -9,17 +9,13 @@ import {
   ProductImg,
   ProductName,
 } from "../product/AllProductSt";
-<<<<<<< HEAD
-import { Card, Checkbox } from "@mui/material";
-=======
 import { Checkbox } from "@mui/material";
->>>>>>> ac70c48 (refactor: 폴더명변경)
 import { Favorite, FavoriteBorder } from "@mui/icons-material";
 import ReactPaginate from "react-paginate";
 import { Wishlist } from "../../types/type";
 import axios from "axios";
 import { useCookies } from "react-cookie";
-import { AllDiv, AllProductDiv, Error, GroupLine, NaviBox, NavInnerBox, NavInnerDiv, NavTitle } from "../mypage/MyPageSt";
+import { AllDiv, AllProductDiv, Card, Error, GroupLine, NaviBox, NavInnerBox, NavInnerDiv, NavTitle } from "../mypage/MyPageSt";
 
 const ITEMS_PER_PAGE = 9;
 

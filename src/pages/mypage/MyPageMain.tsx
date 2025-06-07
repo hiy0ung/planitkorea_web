@@ -3,32 +3,6 @@ import { NewUser, User } from "../../types/type";
 import { set } from "date-fns";
 import axios from "axios";
 import { Button } from "../customerService/InquirySt";
-<<<<<<< HEAD
-import {
-  AllDiv,
-  Box,
-  Card,
-  Error,
-  GroupLine,
-  Header,
-  IdInput,
-  Label,
-  Loading,
-  MainBody,
-  MainDiv,
-  MainInner,
-  NaviBox,
-  NavInnerBox,
-  NavInnerDiv,
-  NavTitle,
-  PageTitle,
-  WithDrawalButton,
-  WithdrawalDiv,
-  WithdrawalInput,
-} from "../mypage/MyPageSt";
-=======
-
->>>>>>> cc4521b (refactor: 변수명 수정)
 import { NavLink, useNavigate } from "react-router-dom";
 import useAuthStore from "../../stores/use.auth.store";
 import { useCookies } from "react-cookie";

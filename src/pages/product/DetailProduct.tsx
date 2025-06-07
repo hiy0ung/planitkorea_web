@@ -34,9 +34,9 @@ import {
 } from "./DetailSt";
 import MapIcon from "@mui/icons-material/Map";
 import ImageSlider from "./sliderImg/ImageSlider";
-import NaverMap from "../../component/NaverMap";
 import Reservation from "./Reservation";
 import ReviewSection from "./ReviewSection";
+import NaverMap from "../../component/NaverMap";
 
 export default function DetailProduct() {
   const { productId } = useParams();
@@ -73,11 +73,6 @@ export default function DetailProduct() {
         setProduct(response.data.data);
 
         filterSubProducts(response.data.data.subProducts, person);
-
-        // if (response.data.data.productAddress) {
-        //   const point = await convertAddressToPoint(response.data.data.productAddress);
-        //   setMapPoint(point);
-        // }
       } catch (error) {
         setError("서버 오류가 발생했습니다.");
       }
@@ -109,34 +104,6 @@ export default function DetailProduct() {
   const isSelectable = (subProduct: SubProduct) => {
     return subProduct.subPerson == person;
   };
-
-  // const convertAddressToPoint = async (address: string): Promise<Point> => {
-  //   const clientId = process.env.REACT_APP_NAVER_CLIENT_ID;
-  //   const clientSecret = process.env.REACT_APP_NAVER_CLIENT_SECRET;
-
-  //   try {
-  //     const response = await axios.get("https://naveropenapi.apigw.ntruss.com/map-geocode/v2/geocode", {
-  //       params: { query: address },
-  //       headers: {
-  //         "X-NCP-APIGW-API-KEY-ID": clientId,
-  //         "X-NCP-APIGW-API-KEY": clientSecret,
-  //       },
-  //     });
-
-  //     if (response.data.addresses.length > 0) {
-  //       return {
-  //         lat: parseFloat(response.data.addresses[0].y),
-  //         lng: parseFloat(response.data.addresses[0].x),
-  //       };
-  //     } else {
-  //       console.warn("주소 변환 실패");
-  //       return { lat: 37.5665, lng: 126.9780 };
-  //     }
-  //   } catch (error) {
-  //     console.error("Geocoding API 오류:", error);
-  //     return { lat: 37.5665, lng: 126.9780 };
-  //   }
-  // };
 
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
@@ -175,7 +142,7 @@ export default function DetailProduct() {
             </ProductName>
             <Address>{product?.productAddress}</Address>
             <MapDiv>
-              {/* <NaverMap point={mapPoint ?? { lat: 37.5665, lng: 126.9780 }} /> */}
+              <NaverMap address={product?.productAddress ? product.productAddress : "서울"}/>
             </MapDiv>
             <div>
               <SubProductName>객실</SubProductName>
@@ -230,8 +197,6 @@ export default function DetailProduct() {
         {/* 리뷰 */}
         <ReviewSection
           productId={productId!}
-          reviews={reviews}
-          setReviews={setReviews}
         />
       </AllDiv>
 
