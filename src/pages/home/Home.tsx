@@ -81,7 +81,7 @@ export default function Home() {
         <MostUsedBox>
         {products.map(product => (
           <MostUsed key={product.productId} onClick={() => handleProductClick(product.productId)}>
-            <ProductImg src={`http://localhost:4040/image/${product.productImage}`} alt="숙소 이미지"/>
+            <ProductImg src={product.productImage} alt="숙소 이미지"/>
             <ProductDetail>
               <CityWarp>
             <ProductCity>{product.productRegion} - </ProductCity>
