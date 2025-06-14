@@ -70,6 +70,7 @@ useEffect(() => {
 
   const handleCancelReservation = async (reservationId: number) => {
   if (!window.confirm("정말 예약을 취소하시겠습니까?")) return;
+  console.log("reservationId" + reservationId)
 
   try {
     await axios.delete(
@@ -135,7 +136,7 @@ useEffect(() => {
                     >
                       <ReserVationProductImgDiv>
                         {item.productImage ? (
-                          <ProductImage src={`http://localhost:4040/image/${item.productImage}`}/>
+                          <ProductImage src={item.productImage}/>
                         ): (
                           <ProductImage src={"/images/logo.png"}/>
                         )}

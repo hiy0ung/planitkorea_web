@@ -71,7 +71,7 @@ export default function MyPageMain() {
       setIsEditing(false);
     } catch (error) {
       console.error(error);
-      setError("유저 업데이트 실패패")
+      setError("유저 업데이트 실패")
     }
   };
 

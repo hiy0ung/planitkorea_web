@@ -66,6 +66,7 @@ export default function PaymentSuccess() {
     try {
       axios.get(`http://localhost:4040/api/v1/products/${productId}`)
       .then((response) => {
+        console.log("숙소: " + response.data.data);
         setProductData(response.data.data);
       })
     } catch(error) {
@@ -83,7 +84,7 @@ export default function PaymentSuccess() {
         </TitleDiv>
         <InnerDiv>
           <ImgDiv>
-            <ProductImg src={`http://localhost:4040/image/${productData?.productImages[0]}`}/>
+            <ProductImg src={`http://localhost:4040/file/${productData?.productImages[0]}`}/>
           </ImgDiv>
 
           <InfoDiv>
