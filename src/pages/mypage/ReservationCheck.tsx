@@ -36,6 +36,7 @@ import axios from "axios";
 import { NewReservation } from "../../types/type";
 import { useCookies } from "react-cookie";
 import { format } from "date-fns";
+import { API_BASE_URL } from "../../apis";
 
 export default function ReservationCheck() {
   const [cookies] = useCookies(["token"]);
@@ -46,7 +47,7 @@ export default function ReservationCheck() {
   useEffect(() => {
     try {
       axios
-        .get("http://localhost:4040/api/v1/reservations", {
+        .get(`${API_BASE_URL}/reservations`, {
           headers: {
             Authorization: `Bearer ${cookies.token}`,
           },
@@ -74,7 +75,7 @@ useEffect(() => {
 
   try {
     await axios.delete(
-      `http://localhost:4040/api/v1/reservations/${reservationId}`,
+      `${API_BASE_URL}/reservations/${reservationId}`,
       {
         headers: {
           Authorization: `Bearer ${cookies.token}`,
@@ -83,7 +84,7 @@ useEffect(() => {
     );
 
     // 취소 후 예약 목록 새로 불러오기
-    const updated = await axios.get("http://localhost:4040/api/v1/reservations", {
+    const updated = await axios.get(`${API_BASE_URL}/reservations`, {
       headers: {
         Authorization: `Bearer ${cookies.token}`,
       },

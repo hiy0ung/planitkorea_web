@@ -38,7 +38,7 @@ import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import Modal, { ModalButton, Overlay } from "../../../component/Modal";
 import axios from "axios";
 import { DuplicationError, DuplicationSuccess, NewUser, User } from "../../../types/type";
-import { SIGN_IN_SNS_API } from "../../../apis";
+import { API_BASE_URL, SIGN_IN_SNS_API } from "../../../apis";
 
 // 회원가입 정규식
 // 아이디 8~14자의 영문, 숫자 포함 입력
@@ -120,7 +120,7 @@ export default function SignUp() {
   const userIdDuplicationCheck = async () => {
     try {
       const response = await axios.post(
-        `http://localhost:4040/api/v1/auth/sign-up/search/user-id`,
+        `${API_BASE_URL}/auth/sign-up/search/user-id`,
         { userId: signUpData.userId }
       );
   
@@ -154,7 +154,7 @@ export default function SignUp() {
   const userEmailDuplicationCheck = async () => {
     try {
       const response = await axios.post(
-        `http://localhost:4040/api/v1/auth/sign-up/search/user-email`,
+        `${API_BASE_URL}/auth/sign-up/search/user-email`,
         { userEmail: signUpData.userEmail }
       );
       if (response.data.data.duplicatedStatus) {
@@ -339,7 +339,7 @@ export default function SignUp() {
       console.log(signUpData);
       try {
         const response = await axios.post(
-          `http://localhost:4040/api/v1/auth/sign-up`,
+          `${API_BASE_URL}/auth/sign-up`,
           signUpData
         );
         if (response.data.data) {

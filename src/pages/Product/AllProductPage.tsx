@@ -18,6 +18,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useCookies } from "react-cookie";
 import ProductFilter from "./ProductFilter";
+import { API_BASE_URL } from "../../apis";
 
 const ITEMS_PER_PAGE = 9;
 
@@ -76,7 +77,7 @@ export default function AllProductPage() {
 
     try {
       const response = await axios.get(
-        `http://localhost:4040/api/v1/products/search`,
+        `${API_BASE_URL}/products/search`,
         {
           params: {
             cityName,
@@ -94,7 +95,7 @@ export default function AllProductPage() {
 
   const fetchPopularRegionProducts = async (city: string) => {
     try {
-      const response = await axios.get(`http://localhost:4040/api/v1/products`, {
+      const response = await axios.get(`${API_BASE_URL}/products`, {
         params: { popularRegion: city },
       });
       setProducts(response.data.data || []);
@@ -106,7 +107,7 @@ export default function AllProductPage() {
   const fetchWishList = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:4040/api/v1/wishlist`, {
+        `${API_BASE_URL}/wishlist`, {
           headers: { Authorization: `Bearer ${token}` },
         });
 
@@ -154,12 +155,12 @@ export default function AllProductPage() {
         }
         if (!wishListItem) return;
 
-        await axios.delete(`http://localhost:4040/api/v1/wishlist/${wishListItem.wishListId}`, { headers: { Authorization: `Bearer ${token}` }});
+        await axios.delete(`${API_BASE_URL}/wishlist/${wishListItem.wishListId}`, { headers: { Authorization: `Bearer ${token}` }});
 
         setWishList((prev) => prev.filter((item) => item.productId !== productId));
         setUserWishList((prev) => prev.filter((id) => id !== productId));
       } else {
-        const response = await axios.post(`http://localhost:4040/api/v1/wishlist?productId=${productId}`, 
+        const response = await axios.post(`${API_BASE_URL}/wishlist?productId=${productId}`, 
         {},
         { headers: { Authorization: `Bearer ${token}` }}
         );

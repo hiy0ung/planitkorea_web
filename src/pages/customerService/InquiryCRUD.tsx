@@ -27,6 +27,7 @@ import {
 import axios from "axios";
 import { Error } from "../mypage/MyPageSt";
 import { useCookies } from "react-cookie";
+import { API_BASE_URL } from "../../apis";
 
 export default function InquiryCRUD() {
   const [previews, setPreviews] = useState<string[]>([]);
@@ -59,7 +60,7 @@ export default function InquiryCRUD() {
       const fetchInquiry = async () => {
         try {
           const response = await axios.get(
-            `http://localhost:4040/api/v1/inquiries/${inquiryState}`,
+            `${API_BASE_URL}/inquiries/${inquiryState}`,
             { headers: { Authorization: `Bearer ${token}` }}
           );
           setInquiry(response.data.data);
@@ -120,7 +121,7 @@ const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
       }
 
       const response = await axios.post(
-        `http://localhost:4040/api/v1/inquiries`, 
+        `${API_BASE_URL}/inquiries`, 
         formData, 
         { 
           headers: { 
@@ -182,7 +183,7 @@ const handleUpdate = async (e: React.MouseEvent<HTMLButtonElement>) => {
 
 
       const response = await axios.put(
-        `http://localhost:4040/api/v1/inquiries/${inquiryId}`, 
+        `${API_BASE_URL}/inquiries/${inquiryId}`, 
         formData,
         {
           headers: { 

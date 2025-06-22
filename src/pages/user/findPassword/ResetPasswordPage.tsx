@@ -5,6 +5,7 @@ import Modal, { ModalButton } from '../../../component/Modal'
 import { useLocation } from 'react-router-dom'
 import { useCookies } from 'react-cookie'
 import axios from 'axios'
+import { API_BASE_URL } from '../../../apis'
 
 type ResetPassword = {
   newPassword: string;
@@ -76,7 +77,7 @@ export default function ResetPasswordPage() {
 
     if(isPasswordMatch) {
       try {
-        await axios.put("http://localhost:4040/api/v1/users/password", {
+        await axios.put(`${API_BASE_URL}/users/password`, {
             newPassword: resetData.newPassword,
           }, {
             headers: {

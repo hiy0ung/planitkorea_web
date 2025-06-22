@@ -33,6 +33,7 @@ import AllProductPage from "./pages/product/AllProductPage";
 import DetailProduct from "./pages/product/DetailProduct";
 import axios from "axios";
 import PaymentSuccess from "./pages/product/PaymentSuccess";
+import { API_BASE_URL } from "./apis";
 
 
 
@@ -44,7 +45,7 @@ function App() {
   useEffect(() => {
     if (cookies.token) {
       login(cookies.token);
-      axios.get('http://localhost:4040/api/v1/users', {
+      axios.get(`${API_BASE_URL}/users`, {
         headers: {
           Authorization: `Bearer ${cookies.token}`
         }

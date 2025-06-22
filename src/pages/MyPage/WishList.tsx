@@ -16,6 +16,7 @@ import { Wishlist } from "../../types/type";
 import axios from "axios";
 import { useCookies } from "react-cookie";
 import { AllDiv, AllProductDiv, Card, Error, GroupLine, NaviBox, NavInnerBox, NavInnerDiv, NavTitle } from "../mypage/MyPageSt";
+import { API_BASE_URL } from "../../apis";
 
 const ITEMS_PER_PAGE = 9;
 
@@ -51,7 +52,7 @@ export default function WishList() {
     }
     try {
       const response = await axios.get(
-        `http://localhost:4040/api/v1/wishlist`,
+        `${API_BASE_URL}/wishlist`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -69,7 +70,7 @@ export default function WishList() {
   const deleteWishList = async (wishListId: number) => {
     try {
       await axios.delete(
-        `http://localhost:4040/api/v1/wishlist/${wishListId}`,
+        `${API_BASE_URL}/wishlist/${wishListId}`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
       setWishList((prev) =>

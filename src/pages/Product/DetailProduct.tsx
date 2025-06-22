@@ -37,6 +37,7 @@ import ImageSlider from "./sliderImg/ImageSlider";
 import Reservation from "./Reservation";
 import ReviewSection from "./ReviewSection";
 import NaverMap from "../../component/NaverMap";
+import { API_BASE_URL } from "../../apis";
 
 export default function DetailProduct() {
   const { productId } = useParams();
@@ -68,7 +69,7 @@ export default function DetailProduct() {
     const fetchProductDetail = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:4040/api/v1/products/${productId}`
+          `${API_BASE_URL}/products/${productId}`
         );
         setProduct(response.data.data);
 

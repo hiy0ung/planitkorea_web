@@ -8,6 +8,7 @@ import useAuthStore from "../../stores/use.auth.store";
 import { useCookies } from "react-cookie";
 import { AllDiv, Error, GroupLine, IdInput, Label, Loading, MainBody, MainDiv, MainInner, NaviBox, NavInnerBox, NavInnerDiv, NavTitle, PageTitle, WithDrawalButton, WithdrawalDiv, WithdrawalInput, Header } from "../mypage/MyPageSt";
 import { Box, Card } from "@mui/material";
+import { API_BASE_URL } from "../../apis";
 
 type UpdateData = {
   userName: string;
@@ -33,7 +34,7 @@ export default function MyPageMain() {
 
   useEffect(() => {
     try {
-      axios.get(`http://localhost:4040/api/v1/users`, {
+      axios.get(`${API_BASE_URL}/users`, {
         headers: {
           Authorization: `Bearer ${cookies.token}`,
         },
@@ -63,7 +64,7 @@ export default function MyPageMain() {
 
   const handleUpdate = async () => {
     try {
-      await axios.put(`http://localhost:4040/api/v1/users`, updateData ,{
+      await axios.put(`${API_BASE_URL}/users`, updateData ,{
         headers: {
           Authorization: `Bearer ${cookies.token}`
         },
@@ -79,7 +80,7 @@ export default function MyPageMain() {
     setLoading(true);
 
     try {
-      await axios.delete('http://localhost:4040/api/v1/users', {
+      await axios.delete(`${API_BASE_URL}/users`, {
         headers: {
           Authorization: `Bearer ${cookies.token}`,
         },

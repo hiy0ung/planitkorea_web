@@ -28,6 +28,7 @@ import {
   InquiryDetail,
   InquiryList,
 } from "../../types/type";
+import { API_BASE_URL } from "../../apis";
 
 export default function InquiryHistory() {
   const [expanded, setExpanded] = useState<number | false>(false);
@@ -55,7 +56,7 @@ export default function InquiryHistory() {
   const fetchInquiryList = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:4040/api/v1/inquiries`,
+        `${API_BASE_URL}/inquiries`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
       console.log(response.data.data);
@@ -75,7 +76,7 @@ export default function InquiryHistory() {
   const fetchInquiryDetail = async (inquiryId: number) => {
     try {
       const response = await axios.get(
-        `http://localhost:4040/api/v1/inquiries/${inquiryId}`,
+        `${API_BASE_URL}/inquiries/${inquiryId}`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
@@ -99,7 +100,7 @@ export default function InquiryHistory() {
     console.log(inquiryId);
     try {
       const response = await axios.delete(
-        `http://localhost:4040/api/v1/inquiries/${inquiryId}`,
+        `${API_BASE_URL}/inquiries/${inquiryId}`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
 

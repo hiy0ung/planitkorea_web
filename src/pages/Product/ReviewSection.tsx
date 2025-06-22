@@ -7,6 +7,7 @@ import ReactPaginate from "react-paginate";
 import { ResponseReviewDto } from "../../types/type";
 import useAuthStore from "../../stores/use.auth.store";
 import axios from "axios";
+import { API_BASE_URL } from "../../apis";
 
 interface ReviewProps {
   productId: string;
@@ -25,7 +26,7 @@ export default function ReviewSection({ productId }: ReviewProps) {
   const token = cookies.token;
 
   useEffect(() => {
-    axios.get(`http://localhost:4040/api/v1/reviews/${productId}`)
+    axios.get(`${API_BASE_URL}/reviews/${productId}`)
       .then((response) => {
         setRenderReview(response.data?.data || []); 
       })
@@ -38,7 +39,7 @@ export default function ReviewSection({ productId }: ReviewProps) {
 
   const handleReviewPost = async() => {
     try {
-      await axios.post(`http://localhost:4040/api/v1/reviews`, {
+      await axios.post(`${API_BASE_URL}/reviews`, {
         productId: productId,
         reviewCommend: comment
       }, {

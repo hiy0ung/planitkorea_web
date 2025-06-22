@@ -8,6 +8,7 @@ import { ContentDiv, ContentInnerDiv, PageDiv } from "../customerService/custome
 import axios from "axios";
 import { Announcement } from "../../types/type";
 import ReactPaginate from "react-paginate";
+import { API_BASE_URL } from "../../apis";
 
 const ITEMS_PER_PAGE = 5;
 
@@ -22,7 +23,7 @@ export default function Notification() {
   const fetchQuestion = async () => {
     const boardType = "자주묻는질문"
     try {
-      const response = await axios.get(`http://localhost:4040/api/v1/boards/type/${boardType}`);
+      const response = await axios.get(`${API_BASE_URL}/boards/type/${boardType}`);
   
       const frequentlyQuestionResponse: Announcement[] = response.data.data;
   

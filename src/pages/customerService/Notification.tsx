@@ -9,6 +9,7 @@ import axios from "axios";
 import ReactPaginate from "react-paginate";
 import "../../styles/pagination.css";
 import { Announcement } from "../../types/type";
+import { API_BASE_URL } from "../../apis";
 
 const ITEMS_PER_PAGE = 5;
 
@@ -21,7 +22,7 @@ const Notification: React.FC = () => {
     const boardType = "공지사항"
     try {
       const response = await axios.get(
-          `http://localhost:4040/api/v1/boards/type/${boardType}`
+          `${API_BASE_URL}/boards/type/${boardType}`
         );
 
       const notificationResponse: Announcement[] = response.data.data;

@@ -25,6 +25,7 @@ import axios from "axios";
 import { format } from "date-fns";
 import { useCookies } from "react-cookie";
 import { v4 as uuidv4 } from "uuid";
+import { API_BASE_URL, BASE_URL, FRONT_DOMAIN } from "../../apis";
 
 export default function PaymentPage() {
   const navigate = useNavigate();
@@ -36,7 +37,7 @@ export default function PaymentPage() {
 
   useEffect(() => {
     try {
-      axios.get(`http://localhost:4040/api/v1/users`, {
+      axios.get(`${API_BASE_URL}/users`, {
         headers: {
           Authorization: `Bearer ${cookies.token}`
         }
@@ -90,7 +91,7 @@ export default function PaymentPage() {
   const paymentHandler = async() => {
     const partnerOrderId = uuidv4(); 
     try {
-      await axios.post(`http://localhost:4040/api/v1/kakaoPay/request`, {
+      await axios.post(`${API_BASE_URL}/kakaoPay/request`, {
         cid: "TC0ONETIME",
         partner_order_id: partnerOrderId,
         partner_user_id: user?.userId,
@@ -99,9 +100,9 @@ export default function PaymentPage() {
         quantity: 1,
         total_amount: reservationInfo.price,
         tax_free_amount: 0,
-        approval_url: "http://localhost:3000/kakaoPay/success",
-        fail_url: "http://localhost:4040/kakaoPay/fail",
-        cancel_url: "http://localhost:4040/kakaoPay/cancel"
+        approval_url: `${FRONT_DOMAIN}/kakaoPay/success`,
+        fail_url: `${BASE_URL}/kakaoPay/fail`,
+        cancel_url: `${BASE_URL}/kakaoPay/cancel`
         
       }, {
         headers: {
@@ -123,7 +124,7 @@ export default function PaymentPage() {
 
   const handleReservationSave = async (orderId: String) => {
     try {
-      const response = await axios.post(`http://localhost:4040/api/v1/reservations`, {
+      const response = await axios.post(`${API_BASE_URL}/reservations`, {
         productId: reservationInfo.productId,
         subProductId: reservationInfo.subProductId,
         person: reservationInfo.person,

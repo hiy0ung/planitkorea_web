@@ -17,6 +17,7 @@ import { Logo, LogoDIv, LogoName } from "../../../styles/logo";
 import Modal from "../../../component/Modal";
 import { NavLink } from "react-router-dom";
 import axios from "axios";
+import { API_BASE_URL } from "../../../apis";
 
 type MailDto = {
   userId: string;
@@ -60,7 +61,7 @@ export default function PasswordSearch() {
     if (valid && !isButtonDisabled) {
       try {
         setIsButtonDisabled(true);
-        const response = await axios.post(`http://localhost:4040/api/v1/users/mails/password`, mailData)
+        const response = await axios.post(`${API_BASE_URL}/users/mails/password`, mailData)
         if(!!response.data.result) {
           setHasSendMail(true);
           setIsModalOpen(true);

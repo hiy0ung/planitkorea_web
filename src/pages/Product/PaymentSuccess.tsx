@@ -5,6 +5,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import { AllDiv, BottomL, BottomR, ImgDiv, InfoBottom, InfoDiv, InfoInner, InnerDiv, MyPageBtn, ProductImg, ProductTitle, ReservationNumber, ReservationNumberInner, ReservationsTitle, Title, TitleDiv } from './PaymentSuccessSt';
 import { NewReservation, ProductDetail } from '../../types/type';
 import { format } from 'date-fns';
+import { API_BASE_URL, BASE_URL } from '../../apis';
 
 export default function PaymentSuccess() {
   const [cookies] = useCookies(["token"]);
@@ -23,7 +24,7 @@ export default function PaymentSuccess() {
   useEffect(() => {
     if (pgToken && tid) {
   
-      axios.post(`http://localhost:4040/api/v1/kakaoPay/success`, {
+      axios.post(`${API_BASE_URL}/kakaoPay/success`, {
         cid: "TC0ONETIME",
         tid: tid,
         partner_order_id: orderId,
@@ -49,7 +50,7 @@ export default function PaymentSuccess() {
 
   useEffect(() => {
     try {
-      axios.get(`http://localhost:4040/api/v1/reservations/${orderId}`, {
+      axios.get(`${API_BASE_URL}/reservations/${orderId}`, {
         headers: {
           Authorization : `Bearer ${cookies.token}`
         }
@@ -64,7 +65,7 @@ export default function PaymentSuccess() {
 
   useEffect(() => {
     try {
-      axios.get(`http://localhost:4040/api/v1/products/${productId}`)
+      axios.get(`${API_BASE_URL}/products/${productId}`)
       .then((response) => {
         console.log("숙소: " + response.data.data);
         setProductData(response.data.data);
@@ -84,7 +85,7 @@ export default function PaymentSuccess() {
         </TitleDiv>
         <InnerDiv>
           <ImgDiv>
-            <ProductImg src={`http://localhost:4040/file/${productData?.productImages[0]}`}/>
+            <ProductImg src={`${BASE_URL}/file/${productData?.productImages[0]}`}/>
           </ImgDiv>
 
           <InfoDiv>

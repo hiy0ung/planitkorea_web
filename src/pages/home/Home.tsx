@@ -15,6 +15,7 @@ import gapyeong from "../../assets/images/region/gapyeong.jpg";
 import gyengju from "../../assets/images/region/gyengju.jpg";
 import jeju from "../../assets/images/region/jeju.jpg";
 import seoul from "../../assets/images/region/seoul.jpg";
+import { API_BASE_URL } from "../../apis";
 
 
 
@@ -25,7 +26,7 @@ export default function Home() {
 
   useEffect(() => {
     try {
-      axios.get(`http://localhost:4040/api/v1/products/top5`)
+      axios.get(`${API_BASE_URL}/products/top5`)
       .then((response) => {
         setProducts(response.data.data);
       })

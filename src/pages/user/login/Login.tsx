@@ -29,7 +29,7 @@ import { useCookies } from "react-cookie";
 import { ErorrMsg, LoginInfo, LoginSuccessResponse } from "../../../types/type";
 import kakaoLogo from '../../../assets/images/kakaoLogo.png';
 import naverLogo from '../../../assets/images/naverLogo.png';
-import { SIGN_IN_SNS_API } from "../../../apis";
+import { API_BASE_URL, SIGN_IN_SNS_API } from "../../../apis";
 
 const OptionDiv = styled.div`
   display: flex;
@@ -94,7 +94,7 @@ export default function Login() {
 
     try {
       const response = await axios.post(
-        `http://localhost:4040/api/v1/auth/login`,
+        `${API_BASE_URL}/auth/login`,
         loginInfo
       );
       console.log("로그인 응답: ", response.data.data);

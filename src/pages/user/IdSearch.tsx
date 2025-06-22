@@ -16,6 +16,7 @@ import { Logo, LogoDIv, LogoName } from "../../styles/logo";
 import Modal from "../../component/Modal";
 import { NavLink } from "react-router-dom";
 import axios from "axios";
+import { API_BASE_URL } from "../../apis";
 
 type FindUserId = {
   userName: string;
@@ -100,7 +101,7 @@ export default function IdSearch() {
     }
     if (valid) {
       try {
-        await axios.get(`http://localhost:4040/api/v1/users/find-id`, {
+        await axios.get(`${API_BASE_URL}/users/find-id`, {
           params: findData
         }).then((response) => {
           const data = response.data.data;
