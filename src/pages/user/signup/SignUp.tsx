@@ -75,7 +75,7 @@ export default function SignUp() {
     userPhone: "",
     userEmail: "",
     snsId: snsId,
-    joinPath: joinPath ? joinPath : "Home"
+    joinPath: joinPath ? joinPath : "home"
   });
 
   const [idError, setIdError] = useState<string>("");
@@ -345,6 +345,7 @@ export default function SignUp() {
         if (response.data.data) {
           console.log(response.data.data);
           setIsModalOpen(true);
+          console.log(setIsModalOpen);
         }
       } catch (error) {
         console.error("회원정보 저장 실패", error);
