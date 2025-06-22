@@ -2,6 +2,7 @@
   "name": "planitkorea",
   "version": "1.0.0",
   "private": true,
+  "homepage": "http://54.180.236.165:3000",
   "dependencies": {
     "@emotion/react": "^11.13.0",
     "@emotion/styled": "^11.13.0",
