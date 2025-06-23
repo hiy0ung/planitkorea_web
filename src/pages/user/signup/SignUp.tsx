@@ -64,6 +64,9 @@ export default function SignUp() {
       snsId: snsId || prev.snsId,
       joinPath: joinPath || prev.joinPath
     }));
+
+    const page = snsId && joinPath ? 1 : 0;
+    setPage(page);
   }, [snsId, joinPath]); 
 
   const [signUpData, setSignUpData] = useState<NewUser>({
